@@ -1,9 +1,15 @@
-import { Button } from '@nextui-org/react'
+import AllProject from "@/components/AllProject";
+import Banner from "@/components/Banner";
+import Button from "@/components/Button";
+import FeaturedProject from "@/components/FeaturedProject";
+
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button title='button'/>
+    <main className="flex w-full h-full flex-col  sm:px-[77px]">
+      <Banner/>
+      <FeaturedProject/>
+      <AllProject/>
     </main>
   )
 }

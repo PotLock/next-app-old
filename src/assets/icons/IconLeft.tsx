@@ -1,0 +1,13 @@
+import * as React from "react";
+
+export interface IIconLeftProps {}
+
+export default function IconLeft(props: IIconLeftProps) {
+  return (
+    <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.99 3H16V5H3.99V8L0 4L3.99 0V3Z" fill="#151A23"/>
+</svg>
+
+    
+  );
+}

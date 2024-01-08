@@ -11,12 +11,12 @@ const Banner = () => {
           <div className='text-sm font-medium text-[#292929]'>
           Transforming Funding for Public Goods. 
           </div>
-            <div className='sm:text-[56px]  '>
+            <div className='sm:text-6xl  text-4xl  '>
             Discover Impact Projects, <br/>
 Donate Directly, Or Get Automatic <br/> Referral Fees For Raising Donations.
             </div>
 
-            <div className='flex  gap-6 mt-4 w-full sm:w-[300px]'>
+            <div className='flex  gap-6 mt-4   w-[300px]'>
                 <Button color='primary'> Donate Randomly</Button>
                 <Button color='peach'> Create Project</Button>
 

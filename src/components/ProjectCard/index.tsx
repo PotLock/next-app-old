@@ -30,7 +30,7 @@ const ProjectCard = () => {
         <div>Raised</div>
       </div>
       <div className='w-[100px]'>
-      <Button color='normal'>Add to cart</Button>
+      <Button color='' >Add to cart</Button>
 
       </div>
     </div>

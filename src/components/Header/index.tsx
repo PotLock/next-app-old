@@ -2,13 +2,9 @@
 
 import IconLogo from '@/assets/icons/IconLogo';
 import IconMenu from '@/assets/icons/IconMenu';
+import { MENUITEMS } from '@/constant';
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem} from "@nextui-org/react";
 import React from 'react'
-const menuItems = [
-    "POTS",
-    "PROJECTS",
-    "FEED", 
-  ];
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -31,7 +27,7 @@ const Header = () => {
         justify='end' >
 
           {
-            menuItems.map((item, index) =>
+            MENUITEMS.map((item, index) =>
             <NavbarItem key={index} className="hidden sm:flex gap-4">
             <Link color="foreground" href="#">
             {item}
@@ -57,7 +53,7 @@ const Header = () => {
         <NavbarMenu
          className='w-full h-full bg-[white] flex items-center justify-center gap-10'
         >
-          {menuItems.map((item, index) => (
+          {MENUITEMS.map((item, index) => (
             <NavbarMenuItem 
            
             key={index}>

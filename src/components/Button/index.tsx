@@ -12,15 +12,15 @@ export default function Button({
   color?: string 
 } & ButtonHTMLAttributes<HTMLButtonElement>) {
   const renderColor = (color: string) => {
-    switch (color ) {
+    switch (color) {
       case 'primary':
         return 'bg-[#DD3345]'
-      case 'normal':
-        return 'bg-white '
       case 'peach':  
         return 'bg-[#FEF6EE]'
       default:
-        break
+        return 'bg-[#FFFFFF]'
+        
+        
     }
   }
 

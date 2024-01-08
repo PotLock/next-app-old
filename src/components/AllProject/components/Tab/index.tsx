@@ -19,6 +19,7 @@ const TabAllProject = () => {
         {
             TABS.map((t) => 
             <div 
+            key={t.id}
             onClick={() => handleTag(t.label)}
             className={`${tab === t.label && 'gap-2 bg-[#FEF6EE]' } p-2 rounded border text-sm flex items-center  cursor-pointer`}>
                 {tab === t.label && <IconCheckYellow/> }

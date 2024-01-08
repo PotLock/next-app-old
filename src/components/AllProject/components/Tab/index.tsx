@@ -8,7 +8,7 @@ const TabAllProject = () => {
     const [tab, setTab] = useState('DeFi')
     const handleTag = (label: any) => {
         setTab(label)
-        console.log("🚀 ~ file: index.tsx:26 ~ handleTag ~ label:", label)
+       
 
     }
   return (

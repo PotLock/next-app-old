@@ -40,7 +40,7 @@ const Search = () => {
 
   const handleFilter = (label: any) => {
     setFilter(label)
-    console.log("🚀 ~ file: index.tsx:44 ~ handleFilter ~ label:", label)
+   
 
   }
 

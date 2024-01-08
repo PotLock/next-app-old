@@ -25,7 +25,7 @@ const FeaturedProject = () => {
     }
 
 </div> */}
-<div className='grid grid-cols-1 sm:flex sm:items-center sm:justify-between mx-4 sm:mx-0'>
+<div className='grid grid-cols-1 sm:flex sm:items-center sm:justify-between mx-4 sm:mx-0 gap-y-8'>
 {
         PROJECTS.map((project, index) =>
          <>

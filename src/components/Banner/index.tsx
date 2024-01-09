@@ -1,5 +1,6 @@
+import { Button } from '@nextui-org/react'
 import React from 'react'
-import Button from '../Button'
+
 
 
 const Banner = () => {
@@ -17,8 +18,13 @@ Donate Directly, Or Get Automatic <br/> Referral Fees For Raising Donations.
             </div>
 
             <div className='flex  gap-6 mt-4   w-[300px]'>
-                <Button color='primary'> Donate Randomly</Button>
-                <Button color='peach'> Create Project</Button>
+         
+        <Button className='w-full py-3 font-medium text-[#FFFFFF] text-sm bg-[#DD3345] border border-black rounded-md shadow-[0px_2px_2px]' >
+        Donate Randomly
+        </Button>
+        <Button className='w-full py-3 font-medium text-sm bg-[#FEF6EE] border border-black rounded-md shadow-[0px_2px_2px]' >
+        Create Project
+        </Button>
 
 
     </div>

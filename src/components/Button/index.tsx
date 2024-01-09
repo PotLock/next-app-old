@@ -26,7 +26,7 @@ export default function Button({
 
   return (
     <button
-      className={`w-full py-3 text-sm ${renderColor(color)} rounded-md shadow-[0px_2px_0px_3px] ${color === 'disable' ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+      className={`w-full py-3 text-sm ${renderColor(color)} rounded-md shadow-[0px_2px_2px] border border-black ${color === 'disable' ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       type={type}
       {...props}
     >

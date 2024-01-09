@@ -5,7 +5,7 @@ import {Card, CardHeader, CardBody, Image, CardFooter, Button} from "@nextui-org
 import React from 'react'
 
 
-const ProjectCard = () => {
+const ProjectCard = ({title, content}: any) => {
   return (
     <Card className="w-[408px] flex-col flex border border-[#292929] rounded-sm ">
       <div  className="w-full relative rounded-sm">
@@ -26,10 +26,10 @@ const ProjectCard = () => {
       </div>
     <CardBody className='p-6 flex gap-[6px] flex-col'>
       <div className='font-semibold text-[17px]'>
-      RevitFi
+       {title || 'RevitFi'}
       </div>
       <div className='text-[17px]'>
-      Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure.
+      {content ||'Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure.'}
       </div>
       <div className='flex gap-2'>
         <div className='p-2 border rounded shadow-[0px_1px_1px]'>Defi</div>

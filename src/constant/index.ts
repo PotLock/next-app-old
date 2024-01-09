@@ -26,6 +26,27 @@ export const MENUITEMS = [
         title: 'RevitFi 6',
         content:'6 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure'
     },
+    {
+      title: 'RevitFi 7',
+      content:'7 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure'
+  },
+  {
+      title: 'RevitFi 8',
+      content:'8 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure'
+  },
+  {
+      title: 'RevitFi 9',
+      content:'9 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure'
+  },{
+      title: 'RevitFi 10',
+      content:'10 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure'
+  },{
+      title: 'RevitFi 11',
+      content:'11 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure'
+  },{
+      title: 'RevitFi 12',
+      content:'12 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure'
+  },
     
   ]
 

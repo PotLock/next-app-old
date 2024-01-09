@@ -12,7 +12,7 @@ const Header = () => {
    
       <Navbar 
       maxWidth='full'
-      className='px-4  sm:px-[77px] pt-[20px] pb-[10px] flex items-center   '
+      className="bg-[url('/background.png')] bg-cover bg-no-repeat px-4  sm:px-[77px] pt-[20px] pb-[10px] flex items-center"
       isBordered
       onMenuOpenChange={setIsMenuOpen}>
         <NavbarContent justify='start'>

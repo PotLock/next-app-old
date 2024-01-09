@@ -39,7 +39,7 @@ const AllProject = () => {
 
 <div className='grid grid-cols-1 sm:grid-cols-3 gap-x-32 gap-y-8 mx-4 sm:mx-0'>
     {
-        PROJECTS.map((project) =><ProjectCard/> )
+        PROJECTS.map((project, index) =><div key={index}><ProjectCard/> </div>)
     }
 
 </div>

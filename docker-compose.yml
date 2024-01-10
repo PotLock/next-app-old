@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  api:
+    container_name: potlock-webapp
+    build: 
+      context: .
+      dockerfile: Dockerfile.base
+    restart: on-failure
+    volumes:
+      - ./:/webapps
+      - ./log/:/var/log/apps/
+    ports:
+      - 7005:3000
+    env_file:
+      - .env
+
+    command: supervisord -n -c /etc/supervisor/supervisord.conf

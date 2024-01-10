@@ -5,7 +5,11 @@ import {Card, CardHeader, CardBody, Image, CardFooter, Button} from "@nextui-org
 import React from 'react'
 
 
-const ProjectCard = ({title, content}: any) => {
+const ProjectCard = ({title, content, onOpen}: {
+  title: string,
+  content: string,
+  onOpen:() => void
+}) => {
   return (
     <Card className="w-[408px] flex-col flex border border-[#292929] rounded-sm ">
       <div  className="w-full relative rounded-sm">
@@ -43,7 +47,9 @@ const ProjectCard = ({title, content}: any) => {
         <div>Raised</div>
       </div>
       <div className='w-[100px]'>
-      <Button className='border rounded-md shadow-[0px_2px_2px] py-3 px-4 text-sm' >Add to cart</Button>
+      <Button 
+      onPress={onOpen}
+      className='border rounded-md shadow-[0px_2px_2px] py-3 px-4 text-sm' >Add to cart</Button>
       </div>
     </CardFooter>
     </Card>

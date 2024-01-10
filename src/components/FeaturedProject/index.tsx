@@ -5,9 +5,11 @@ import IconLeft from '@/assets/icons/IconLeft'
 import IconRight from '@/assets/icons/IconRight'
 import { PROJECTS } from '@/constant'
 import Pagination from './components/Panigation'
+import { useDisclosure } from '@nextui-org/react'
+import DonateProjectModel from '@/views/HomePage/Donate/DonateProjectModal'
 
 const FeaturedProject = () => {
-
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3; // Adjust the number of items per page as needed
 
@@ -18,7 +20,7 @@ const FeaturedProject = () => {
       const slicedData = PROJECTS.slice(startIndex, endIndex);
   
       return slicedData.map((item, index) => (
-        <div key={index}><ProjectCard title={item.title} content={item.content}/></div>
+        <div key={index}><ProjectCard onOpen={onOpen} title={item.title} content={item.content}/></div>
       ));
     };
     // Function to handle page change
@@ -27,7 +29,7 @@ const FeaturedProject = () => {
     };
   return (
     <div className='flex flex-col w-full h-full mb-[120px] gap-5'>
-
+<DonateProjectModel isOpen={isOpen} onOpenChange={onOpenChange}/>
 <div className='flex  justify-between mx-4 sm:mx-0'>
 <div className='font-semibold text-[22px] '>Featured projects</div>
 <Pagination data={PROJECTS} itemsPerPage={itemsPerPage} onPageChange={handlePageChange} />

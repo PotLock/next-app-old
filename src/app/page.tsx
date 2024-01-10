@@ -1,7 +1,7 @@
 import AllProject from "@/components/AllProject";
 import Banner from "@/components/Banner";
-import Button from "@/components/Button";
 import FeaturedProject from "@/components/FeaturedProject";
+import { Button } from "@nextui-org/react";
 
 export default function Home() {
   return (

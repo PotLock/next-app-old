@@ -1,12 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 
-export interface ICartPageProps {
-}
+export interface ICartPageProps {}
 
-export default function CartPage (props: ICartPageProps) {
-  return (
-    <div>
-      
-    </div>
-  );
+export default function CartPage(props: ICartPageProps) {
+  return <div></div>;
 }

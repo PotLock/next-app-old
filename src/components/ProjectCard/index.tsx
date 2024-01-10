@@ -6,9 +6,9 @@ import React from 'react'
 
 
 const ProjectCard = ({title, content, onOpen}: {
-  title: string,
-  content: string,
-  onOpen:() => void
+  title?: string,
+  content?: string,
+  onOpen?:() => void
 }) => {
   return (
     <Card className="w-[408px] flex-col flex border border-[#292929] rounded-sm ">

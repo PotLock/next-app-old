@@ -1,4 +1,7 @@
+import IconNear from '../../../assets/images/IconNear.png'
+import IconLogoCart from '../../../assets/images/Logo.png'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
+import Image from 'next/image'
 import React from 'react'
 
 const ModelCart = ({isOpen,
@@ -22,30 +25,53 @@ classNames={{
 <ModalContent>
   {(onClose) => (
     <>
-      <ModalHeader className=" bg-white rounded-t-xl border-b">
-        <div className='w-full mt-7 flex items-center justify-between'>
-        <div className='text-sm'>Donation cart</div>
-<div className='flex items-center gap-1'>
-<div className='text-sm'>0 </div>
-<div className='text-[#7b7b7b] text-sm font-normal'>projects</div>
-</div>
+      <ModalHeader className=" bg-white rounded-t-xl">
+        <div className='w-full  flex  flex-col '>
+        <div className='text-[17px]'>Donation cart</div>
         </div>
 
       </ModalHeader>
-      <ModalBody className='bg-white py-7'>
-        <div className='text-center'> 
-        Get shopping! 💸
+      <ModalBody className='bg-white   '>
+<div className='text-[#7b7b7b] text-sm font-normal p-3  border-b'>2 projects</div>
+  
+        <div className='flex w-full items-center justify-center gap-3 border-b p-3 '>
+          <Image  alt='' src={IconLogoCart}/>
+          <div className='w-3/4 '>
+            <div className='text-sm font-semibold'>DecntralMedia</div>
+            <div className='text-sm truncate '>
+            Seamless infrastructure for hosting hybrid crypto events good
+            </div>
+          </div>
+          <div className='flex gap-2 items-center justify-center'>
+            <div className='font-semibold'>100</div>
+            
+        <Image alt='' src={IconNear}/>
+          </div>
+        </div>
+
+        <div className='flex w-full items-center justify-center gap-3 border-b p-3 '>
+          <Image  alt='' src={IconLogoCart}/>
+          <div className='w-3/4 '>
+            <div className='text-sm font-semibold'>DecntralMedia</div>
+            <div className='text-sm truncate '>
+            Seamless infrastructure for hosting hybrid crypto events good
+            </div>
+          </div>
+          <div className='flex gap-2 items-center justify-center'>
+            <div className='font-semibold'>100</div>
+            
+        <Image alt='' src={IconNear}/>
+          </div>
         </div>
         
       </ModalBody>
-      <ModalFooter className='bg-white flex flex-col w-full rounded-b-xl gap-5'>
-        <Button  className='border-none bg-[#e5e5e5] py-4 px-6 rounded-md shadow-[0px_2px_2px]'>
-        Proceed to donate
-        </Button>
-        <Button className='border-none bg-[#dd3344] py-4 px-6 rounded-md shadow-[0px_2px_2px]' >
-        Proceed to donate
-        </Button>
+      <ModalFooter className='bg-white rounded-b-xl '>
+                
+                <Button className='border-none bg-[#dd3344] py-3 px-4 rounded-md shadow-[0px_2px_2px]' >
+                <p className='text-[#FFFFFF]'>Proceed to donate</p>
+                </Button>
       </ModalFooter>
+     
     </>
   )}
 </ModalContent>

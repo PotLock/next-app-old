@@ -17,89 +17,18 @@ import {
   IconArrowDown,
   IconArrowUp,
   IconCoinT,
+  IconCoinX,
   IconDelete,
 } from "@/assets/icons";
+import { DATA_CART, OPTIONS } from "@/constant/cart";
 
 export interface ICartPageProps {}
 
 export default function CartPage(props: ICartPageProps) {
-  let options = [
-    {
-      label: (
-        <div className="flex gap-2">
-          <IconCoinT /> NEAR
-        </div>
-      ),
-      value: "1",
-    },
-    { label: "City 2", value: "2" },
-    { label: "City 3", value: "3" },
-  ];
-  const [itemCart, setItemsCart] = useState([
-    {
-      id: 1,
-      checked: false,
-      status: "Direct donation",
-      title: "DecntalMedia",
-      showBreakDown: false,
-      des: "Grants for open-source projects primarily focused on developing on top -of, or advancing the broader Ethereum and/or Web3 industry. Applications submitted by November 8th are guaranteed to be reviewed before the start of the round.",
-      breakdown: [
-        {
-          id: 1,
-          title: "Project allocation (92.5%)",
-          value: 46.25,
-        },
-        {
-          id: 2,
-          title: "Protocol fees (5%)",
-          value: 1.25,
-        },
-        {
-          id: 3,
-          title: "Referral fees (2.5%)",
-          value: 20.25,
-        },
-        {
-          id: 4,
-          title: "Chef fees (5%)",
-          value: 5.25,
-        },
-      ],
-    },
-    {
-      id: 2,
-      status: "Matching round 2 NDC Grassroots",
-      title: "Title 2",
-      checked: false,
-      showBreakDown: false,
-      des: "Grants for open-source projects primarily focused on developing on top -of, or advancing the broader Ethereum and/or Web3 industry. Applications submitted by November 8th are guaranteed to be reviewed before the start of the round.",
-      breakdown: [
-        {
-          id: 1,
-          title: "Project allocation (92.5%)",
-          value: 46.25,
-        },
-        {
-          id: 2,
-          title: "Protocol fees (5%)",
-          value: 1.25,
-        },
-        {
-          id: 3,
-          title: "Referral fees (2.5%)",
-          value: 20.25,
-        },
-        {
-          id: 4,
-          title: "Chef fees (5%)",
-          value: 5.25,
-        },
-      ],
-    },
-  ]);
+  const [itemCart, setItemsCart] = useState(DATA_CART);
 
   const [selectedCity, setSelectedCity] = useState(
-    new Set([options[0]["value"]]),
+    new Set([OPTIONS[0]["value"]]),
   );
   const [showBreakdown, setShowBreakdown] = useState(false);
 
@@ -107,18 +36,17 @@ export default function CartPage(props: ICartPageProps) {
     setSelectedCity(new Set([e.target.value]));
   };
 
-  const handleHideShowBreakdown = (id: number) => {
+  const handleHideShowBreakdown = (id: number, index: number) => {
     const newItems = [...itemCart];
-    const currentIndex = newItems.findIndex((newItem) => newItem.id === id);
-    newItems[currentIndex] = {
-      ...newItems[currentIndex],
-      showBreakDown: !newItems[currentIndex].showBreakDown,
+    newItems[index] = {
+      ...newItems[index],
+      showBreakDown: !newItems[index].showBreakDown,
     };
     setItemsCart(newItems);
   };
 
   return (
-    <div className="flex w-full max-lg:flex-wrap-reverse">
+    <div className="flex w-full max-lg:flex-wrap-reverse p-[42px] max-lg:p-[24px]">
       <div className="w-[45%] mr-[140px] max-lg:mr-0 max-lg:w-full max-lg:mt-[24px]">
         <div className="">
           <div className="text-[44px] font-normal pb-[21px]">
@@ -238,18 +166,15 @@ export default function CartPage(props: ICartPageProps) {
               <div>Selected</div>
             </div>
           </div>
-          {itemCart?.map((item) => (
+          {itemCart?.map((item, index) => (
             <div key={item.id} className="w-[100%] flex border-b-2 mt-[21px]">
               <div className="flex justify-center items-start pt-2 w-[10%]">
                 <Checkbox
                   isSelected={item.checked}
                   onChange={(e) => {
                     const newItems = [...itemCart];
-                    const currentIndex = newItems.findIndex(
-                      (newItem) => newItem.id === item.id,
-                    );
-                    newItems[currentIndex] = {
-                      ...newItems[currentIndex],
+                    newItems[index] = {
+                      ...newItems[index],
                       checked: e.target.checked,
                     };
                     setItemsCart(newItems);
@@ -284,7 +209,7 @@ export default function CartPage(props: ICartPageProps) {
                       className="w-[25%] max-lg:w-[45%]"
                       radius="none"
                       size="sm"
-                      items={options}
+                      items={OPTIONS}
                       selectedKeys={selectedCity}
                       onChange={handleSelectionChange}
                       renderValue={(items) => {
@@ -323,10 +248,10 @@ export default function CartPage(props: ICartPageProps) {
                     <button
                       className="flex gap-2 justify-end"
                       onClick={() => {
-                        handleHideShowBreakdown(item.id);
+                        handleHideShowBreakdown(item.id, index);
                       }}
                     >
-                      {/* <p className="font-medium">Show breakdown</p> */}
+                      <p className="font-medium">Show breakdown</p>
                       <IconArrowDown />
                     </button>
                   ) : (
@@ -334,7 +259,7 @@ export default function CartPage(props: ICartPageProps) {
                       <button
                         className="flex gap-2 justify-end"
                         onClick={() => {
-                          handleHideShowBreakdown(item.id);
+                          handleHideShowBreakdown(item.id, index);
                         }}
                       >
                         <p className="font-medium">Hide breakdown</p>

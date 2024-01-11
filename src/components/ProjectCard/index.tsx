@@ -11,17 +11,17 @@ const ProjectCard = ({title, content, onOpen}: {
   onOpen?:() => void
 }) => {
   return (
-    <Card className="w-[408px] flex-col flex border border-[#292929] rounded-sm ">
-      <div  className="w-full relative rounded-sm">
+    <Card className=" w-[360px] sm:w-[408px] flex-col flex border border-[#292929] ">
+      <div  className="w-full relative">
          <Image
+         radius='none'
           alt="Card background"
           className="object-cover "
           src="/ProjectImage.png"
-          width={408}
           height={150}
         />
           <Image
-          alt="Card background"
+          alt="Card icon"
           className="ml-6 absolute -bottom-5 rounded-full border-2 border-white"
           src="/ProjectLogo.png"
           width={40}
@@ -46,11 +46,12 @@ const ProjectCard = ({title, content, onOpen}: {
         <div className='font-semibold text-[17px]'>$24.00</div>
         <div>Raised</div>
       </div>
-      <div className='w-[100px]'>
+      
       <Button 
+      variant="bordered"
       onPress={onOpen}
-      className='border rounded-md shadow-[0px_2px_2px] py-3 px-4 text-sm' >Add to cart</Button>
-      </div>
+       >Add to cart</Button>
+      
     </CardFooter>
     </Card>
   )

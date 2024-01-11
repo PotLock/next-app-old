@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
-import ProjectCard from "../ProjectCard";
-import Search from "../Search";
+import ProjectCard from "../../../components/ProjectCard";
+import Search from "./components/Search";
 import TabAllProject from "./components/Tab";
 import { useDisclosure } from "@nextui-org/react";
 import { PROJECTS } from "@/constant";

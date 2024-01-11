@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import ProjectCard from "../ProjectCard";
+import ProjectCard from "../../../components/ProjectCard";
 
 import { PROJECTS } from "@/constant";
 import Pagination from "./components/Panigation";

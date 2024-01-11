@@ -13,11 +13,12 @@ import {
   Button,
   Image,
 } from "@nextui-org/react";
-import IconDelete from "@/assets/icons/IconDelete";
-import IconArrowDown from "@/assets/icons/IconArrowDown";
-import IconArrowUp from "@/assets/icons/IconArrowUp";
-import IconCoinT from "@/assets/icons/IconsCoinT";
-import IconCoinX from "@/assets/icons/IconCoinX";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconCoinT,
+  IconDelete,
+} from "@/assets/icons";
 
 export interface ICartPageProps {}
 

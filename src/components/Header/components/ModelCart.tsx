@@ -1,22 +1,29 @@
-import IconNear from '../../../assets/images/IconNear.png'
-import IconLogoCart from '../../../assets/images/Logo.png'
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
-import Image from 'next/image'
-import React from 'react'
+import IconNear from "../../../assets/images/IconNear.png";
+import IconLogoCart from "../../../assets/images/Logo.png";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@nextui-org/react";
+import Image from "next/image";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const ModelCart = ({isOpen,
-    onOpenChange
-
-}: {isOpen: boolean,
-    onOpenChange:() => void
+const ModelCart = ({
+  isOpen,
+  onOpenChange,
+}: {
+  isOpen: boolean;
+  onOpenChange: () => void;
 }) => {
-  const router = useRouter()
-
+  const router = useRouter();
   const handleRouter = () => {
-    router.push("/cart")
-    onOpenChange(!isOpen)
-  }
+    router.push("/cart");
+  };
+
   return (
     <Modal
       className="absolute right-10 top-10"
@@ -78,6 +85,7 @@ const ModelCart = ({isOpen,
               <Button
                 className="border-none bg-[#dd3344] py-3 px-4 rounded-md shadow-[0px_2px_2px]"
                 onClick={handleRouter}
+                onPress={onClose}
               >
                 <p className="text-[#FFFFFF]">Proceed to donate</p>
               </Button>
@@ -87,6 +95,6 @@ const ModelCart = ({isOpen,
       </ModalContent>
     </Modal>
   );
-}
+};
 
-export default ModelCart
+export default ModelCart;

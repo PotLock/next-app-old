@@ -12,19 +12,30 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
+import NearIcon from "../../../assets/icons/NearIcon.svg";
 import IconNear from "../../../assets/images/IconNear.png";
 import IconArrowDown from "@/assets/icons/IconArrowDown";
 import IconEdit from "@/assets/icons/IconEdit";
 import Image from "next/image";
+import IconLogoCart from "../../../assets/images/Logo.png";
 import IconArrowDownFull from "@/assets/icons/IconArrowDownFull";
+import DonationRandomlyModelFinal from "../DonationRandomly/DonationRandomlyModalFinal";
 
 const DonateProjectModel = ({
   isOpen,
   onOpenChange,
+  onClose,
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
+  onClose: () => void;
 }) => {
+  const {
+    isOpen: isOpenFinal,
+    onOpen: onOpenFinal,
+    onOpenChange: OnOpenChangeFinal,
+  } = useDisclosure();
+
   const [openNote, setOpenNote] = useState<boolean>(false);
   const [openBreakDown, setOpenBreakDown] = useState<boolean>(false);
 
@@ -37,6 +48,11 @@ const DonateProjectModel = ({
 
   return (
     <>
+      <DonationRandomlyModelFinal
+        title="Donate project"
+        isOpen={isOpenFinal}
+        onOpenChange={OnOpenChangeFinal}
+      />
       <Modal
         backdrop="opaque"
         isOpen={isOpen}
@@ -48,21 +64,28 @@ const DonateProjectModel = ({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center text-[17px]">
-                Donate Randomly
+                Donate to project
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Randomly donate to an approved project on our public good
-                  registry and figure out who you supported after
-                </p>
+                <div className="flex w-full items-center  gap-3 border-b py-3 ">
+                  <Image alt="" src={IconLogoCart} />
+                  <div className="">
+                    <div className="text-sm font-semibold">DecntralMedia</div>
+                    <div className="text-sm">
+                      Seamless infrastructure for hosting hybrid crypto events
+                      good registry and figure out who you supported after
+                    </div>
+                  </div>
+                </div>
+
                 <p className=" font-medium">Amount</p>
                 <div className="border rounded-md flex items-center justify-between ">
-                  
                   <Dropdown>
                     <DropdownTrigger>
                       <Button
-                        className="p-4 border flex gap-6 items-center"
-                        variant="bordered"
+                        className="p-4  rounded-md  flex gap-6 items-center"
+                        variant="light"
+                        radius="none"
                       >
                         <div className="flex gap-2 items-center">
                           <Image src={IconNear} alt="" />
@@ -72,10 +95,7 @@ const DonateProjectModel = ({
                         <IconArrowDownFull />
                       </Button>
                     </DropdownTrigger>
-                    <DropdownMenu
-                      className="bg-white border "
-                      aria-label="Static Actions"
-                    >
+                    <DropdownMenu aria-label="Static Actions">
                       <DropdownItem className="" key="new">
                         NEAR
                       </DropdownItem>
@@ -85,12 +105,14 @@ const DonateProjectModel = ({
                   <div className="mx-4 text-[#7B7B7B]">0</div>
                 </div>
 
-               
                 <div className="text-[#7B7B7B] text-[11px] flex items-center justify-between">
                   <p>1 NEAR = $4.16 USD</p>
                   <div className="flex gap-2">
                     <p>Account balance:</p>
-                    <p>Max</p>
+                    <div className="flex  items-center">
+                      <Image width={14} height={14} src={IconNear} alt="" />
+                      <p>--Max</p>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-end justify-end">
@@ -100,22 +122,34 @@ const DonateProjectModel = ({
                   </button>
                 </div>
                 {!!openBreakDown && (
-                  <div className="text-[#7B7B7B] bg-[#DBDBDB]  border p-4 rounded-lg flex gap-3 flex-col">
+                  <div className="text-[#7B7B7B] bg-[#DBDBDB]  border p-4 rounded-md flex gap-3 flex-col">
                     <div className="flex w-full items-center justify-between">
                       <p>Project allocation (92.5%) </p>
-                      <p>46.25</p>
+                      <div className="flex items-center gap-2">
+                        <p>46.25</p>
+                        <Image width={20} height={20} src={IconNear} alt="" />
+                      </div>
                     </div>
                     <div className="flex w-full items-center justify-between">
                       <p>Project allocation (92.5%) </p>
-                      <p>46.25</p>
+                      <div className="flex items-center gap-2">
+                        <p>46.25</p>
+                        <Image width={20} height={20} src={IconNear} alt="" />
+                      </div>
                     </div>
                     <div className="flex w-full items-center justify-between">
                       <p>Project allocation (92.5%) </p>
-                      <p>46.25</p>
+                      <div className="flex items-center gap-2">
+                        <p>46.25</p>
+                        <Image width={20} height={20} src={IconNear} alt="" />
+                      </div>
                     </div>
                     <div className="flex w-full items-center justify-between">
                       <p>Project allocation (92.5%) </p>
-                      <p>46.25</p>
+                      <div className="flex items-center gap-2">
+                        <p>46.25</p>
+                        <Image width={20} height={20} src={IconNear} alt="" />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -134,7 +168,7 @@ const DonateProjectModel = ({
                       <textarea
                         placeholder="Add a note for the project"
                         rows={6}
-                        className="w-full border rounded-md p-4"
+                        className="w-full border rounded-md p-4 resize-none"
                       />
                       <div className="flex justify-end w-full">
                         <p className="text-[#7B7B7B] ">0/320</p>
@@ -144,8 +178,14 @@ const DonateProjectModel = ({
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button className="border-none bg-[#dd3344] py-3 px-4 rounded-md shadow-[0px_2px_2px]">
-                  <p className="text-white font-medium text-sm">Donate </p>
+                <Button
+                  onPress={() => {
+                    onClose();
+                    onOpenFinal();
+                  }}
+                  color="danger"
+                >
+                  Donate
                 </Button>
               </ModalFooter>
             </>

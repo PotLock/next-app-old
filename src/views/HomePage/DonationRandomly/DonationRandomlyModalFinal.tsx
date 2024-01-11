@@ -23,7 +23,7 @@ const DonationRandomlyModelFinal = ({
   isOpen,
   onOpenChange,
 }: {
-  title: string,
+  title: string;
   isOpen: boolean;
   onOpenChange: () => void;
 }) => {

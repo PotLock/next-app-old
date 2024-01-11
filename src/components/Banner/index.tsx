@@ -3,9 +3,11 @@ import { ITEMSBANNER } from "@/constant";
 import DonationRandomlyModel from "@/views/HomePage/DonationRandomly/DonationRandomlyModal";
 import DonationRandomlyModelFinal from "@/views/HomePage/DonationRandomly/DonationRandomlyModalFinal";
 import { Button, useDisclosure } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const Banner = () => {
+  const route = useRouter()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   return (
@@ -29,7 +31,9 @@ const Banner = () => {
           <Button color="danger" onPress={onOpen}>
             Donate Randomly
           </Button>
-          <Button variant="bordered">Create Project</Button>
+          <Button 
+          onClick={() => route.push('/create-project')}
+          variant="bordered">Create Project</Button>
         </div>
         <div className="flex sm:flex-row flex-col items-center">
           {ITEMSBANNER.map((item) => (

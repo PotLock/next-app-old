@@ -1,15 +1,13 @@
-import AllProject from "@/components/AllProject";
-import Banner from "@/components/Banner";
-import FeaturedProject from "@/components/FeaturedProject";
-import CartPage from "./cart/page";
-
+import AllProject from "@/views/HomePage/AllProject";
+import Banner from "@/views/HomePage/Banner";
+import FeaturedProject from "@/views/HomePage/FeaturedProject";
 
 export default function Home() {
   return (
     <main className="bg-[url('/background.png')] bg-cover bg-no-repeat flex w-full h-full flex-col  sm:px-[77px]">
-      <Banner/>
-      <FeaturedProject/>
-      <AllProject/>
-          </main>
-  )
+      <Banner />
+      <FeaturedProject />
+      <AllProject />
+    </main>
+  );
 }

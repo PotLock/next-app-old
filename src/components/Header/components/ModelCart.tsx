@@ -1,5 +1,3 @@
-import IconNear from "../../../assets/images/IconNear.png";
-import IconLogoCart from "../../../assets/images/Logo.png";
 import {
   Button,
   Modal,
@@ -9,8 +7,9 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import Image from "next/image";
-import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import IconNear from "../../../assets/images/IconNear.png";
+import IconLogoCart from "../../../assets/images/Logo.png";
 
 const ModelCart = ({
   isOpen,
@@ -86,8 +85,9 @@ const ModelCart = ({
                 className="border-none bg-[#dd3344] py-3 px-4 rounded-md shadow-[0px_2px_2px]"
                 onClick={handleRouter}
                 onPress={onClose}
+                color="danger"
               >
-                <p className="text-[#FFFFFF]">Proceed to donate</p>
+                Proceed to donate
               </Button>
             </ModalFooter>
           </>

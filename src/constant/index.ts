@@ -67,3 +67,18 @@ export const MENUITEMS = [
       
     }
   ];
+
+  export const ITEMSBANNER = [
+    {
+      number:'69',
+      title:'Unique Donors'
+    },
+    {
+      number:'$2027.23',
+      title:'Donated'
+    },
+    {
+      number:'269',
+      title:'Donations'
+    },
+  ]

@@ -55,14 +55,16 @@ const Search = () => {
         placeholder="Search (9) projects..."
       />
       <Dropdown>
-        <DropdownTrigger className="absolute inset-y-0 end-0  flex items-center justify-center gap-3  cursor-pointer px-6">
-          <Button variant="bordered">
+        <DropdownTrigger>
+          <Button
+          className="absolute inset-y-1.5 end-0  flex items-center justify-center gap-3  cursor-pointer px-6"
+          variant="light">
             <div>{filter}</div>
             <IconFilter />
           </Button>
         </DropdownTrigger>
         <DropdownMenu
-          className="border mr-20 bg-white"
+          className=""
           aria-label="Dynamic Actions"
           items={items}
         >
@@ -73,7 +75,7 @@ const Search = () => {
               className="hover:bg-[#F0F0F0]"
               aria-label="Action event example"
             >
-              <div className="flex  items-center justify-between text-sm ">
+              <div className="flex  items-center justify-between text-sm  gap-x-14">
                 <div className="flex gap-3 items-center font-medium">
                   {item.label === filter ? (
                     <IconCheck />

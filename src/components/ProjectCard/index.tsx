@@ -33,10 +33,10 @@ const ProjectCard = ({
         />
         <Image
           alt="Card icon"
-          className="ml-6 absolute -bottom-5 rounded-full border-2 border-white"
+          className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover"
           src="/ProjectLogo.png"
-          width={40}
-          height={40}
+          width={60}
+          height={60}
         />
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">

@@ -5,7 +5,7 @@ import React from "react";
 
 import CreateProjectTab from "./components/CreateProjectTab";
 
-const TabCreateProject = () => {
+const TabsCreateProject = () => {
   return (
     <div className="px-[186px] w-full text-sm">
       <Tabs aria-label="Options">
@@ -27,4 +27,4 @@ const TabCreateProject = () => {
   );
 };
 
-export default TabCreateProject;
+export default TabsCreateProject;

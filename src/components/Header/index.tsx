@@ -8,7 +8,7 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
+
   Button,
   NavbarMenuToggle,
   NavbarMenu,
@@ -18,6 +18,7 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 import ModelCart from "./components/ModelCart";
+import Link from "next/link";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -25,19 +26,21 @@ const Header = () => {
   return (
     <Navbar
       maxWidth="full"
-      className="bg-[url('/background.png')] bg-cover bg-no-repeat px-4  sm:px-[77px] pt-[20px] pb-[10px] flex items-center"
+      className="bg-cover bg-no-repeat px-4  sm:px-[77px] pt-[20px] pb-[10px] flex items-center"
       isBordered
       onMenuOpenChange={setIsMenuOpen}
     >
       <ModelCart isOpen={isOpen} onOpenChange={onOpenChange} />
 
       <NavbarContent justify="start">
-        <NavbarBrand className="flex gap-2">
+        <NavbarBrand >
+          <Link href="/" className="flex gap-2">
           <div className="mb-1">
             <IconLogo />
           </div>
-
           <p className="font-bold text-inherit">POTLOCK</p>
+          </Link>
+         
         </NavbarBrand>
       </NavbarContent>
 
@@ -65,7 +68,7 @@ const Header = () => {
       <NavbarMenu className="w-full h-full bg-[white] flex items-center justify-center gap-10">
         {MENUITEMS.map((item, index) => (
           <NavbarMenuItem key={index}>
-            <Link className="w-full font-semibold text-4xl" href="#" size="lg">
+            <Link className="w-full font-semibold text-4xl" href="#" >
               {item}
             </Link>
           </NavbarMenuItem>

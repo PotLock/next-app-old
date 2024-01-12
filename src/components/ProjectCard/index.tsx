@@ -8,6 +8,7 @@ import {
   Image,
   CardFooter,
   Button,
+  Divider,
 } from "@nextui-org/react";
 import React from "react";
 
@@ -21,7 +22,7 @@ const ProjectCard = ({
   onOpen?: () => void;
 }) => {
   return (
-    <Card className=" w-[360px] sm:w-[408px] flex-col flex border border-[#292929] ">
+    <Card className=" w-[360px] sm:w-[408px] ">
       <div className="w-full relative">
         <Image
           radius="none"
@@ -39,8 +40,8 @@ const ProjectCard = ({
         />
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">
-        <div className="font-semibold text-[17px]">{title || "RevitFi"}</div>
-        <div className="text-[17px]">
+        <div className="font-semibold">{title || "RevitFi"}</div>
+        <div >
           {content ||
             "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
         </div>
@@ -54,9 +55,10 @@ const ProjectCard = ({
           </div>
         </div>
       </CardBody>
-      <CardFooter className="flex justify-between py-4 px-6 border-t border-[#292929] items-center">
+      <Divider  />
+      <CardFooter className="flex justify-between py-4 px-6 items-center">
         <div className="flex gap-2">
-          <div className="font-semibold text-[17px]">$24.00</div>
+          <div className="font-semibold ">$24.00</div>
           <div>Raised</div>
         </div>
 

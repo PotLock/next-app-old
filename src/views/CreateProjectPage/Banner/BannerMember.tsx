@@ -33,9 +33,9 @@ const BannerMember = () => {
   };
 
   return (
-    <div className="px-[76px] py-12 w-full gap-2 flex flex-col">
+    <div className="px-4 sm:px-[76px] py-12 w-full gap-10 sm:gap-2 flex flex-col">
       <AddTeamMemberModal isOpen={isOpen} onOpenChange={onOpenChange} />
-      <div className="relative w-full  h-[280px]">
+      <div className="relative w-full  sm:h-[280px] h-[200px]">
 
         {/* change banner */}
         {!!bannerImage ? (
@@ -44,7 +44,7 @@ const BannerMember = () => {
             onMouseLeave={() => setIsHoveredBanner(false)}
             src={URL.createObjectURL(bannerImage)}
             alt=""
-            className="cursor-pointer w-full h-full object-contain"
+            className="cursor-pointer w-full sm:h-full object-cover h-[200px] "
           />
         ) : (
           <Image
@@ -52,7 +52,7 @@ const BannerMember = () => {
             onMouseLeave={() => setIsHoveredBanner(false)}
             src={Banner}
             alt=""
-            className="cursor-pointer"
+            className="cursor-pointer w-full sm:h-full object-cover h-[200px]"
           />
         )}
 
@@ -64,7 +64,7 @@ const BannerMember = () => {
             alt=""
             className={`${
               !isHoveredBanner && "hidden"
-            } absolute top-0 cursor-pointer`}
+            } absolute top-0 cursor-pointer w-full sm:h-full h-[200px] object-cover`}
           />
           <input
             type="file"
@@ -80,17 +80,16 @@ const BannerMember = () => {
             src={URL.createObjectURL(avatarImage)}
            
             alt=""
-            className="absolute -bottom-10 left-24 cursor-pointer rounded-full object-fill w-[88px] h-[88px] "
+            className="absolute -bottom-10 left-3 sm:left-24  rounded-full cursor-pointer w-16 h-16 sm:w-[88px] sm:h-[88px]"
             onMouseEnter={() => setIsHoveredAvatar(true)}
             onMouseLeave={() => setIsHoveredAvatar(false)}
           />
         ) : (
           <Image
             src={Profile}
-            width={88}
-            height={88}
+            
             alt=""
-            className="absolute -bottom-10 left-24 cursor-pointer "
+            className="absolute -bottom-10 left-3 sm:left-24 rounded-full cursor-pointer w-16 h-16 sm:w-[88px] sm:h-[88px]"
             onMouseEnter={() => setIsHoveredAvatar(true)}
             onMouseLeave={() => setIsHoveredAvatar(false)}
           />
@@ -106,7 +105,7 @@ const BannerMember = () => {
             onMouseLeave={() => setIsHoveredAvatar(false)}
             className={`${
               !isHoveredAvatar && "hidden"
-            } absolute -bottom-10 left-24 cursor-pointer`}
+            } absolute  -bottom-10 left-3 sm:left-24  rounded-full cursor-pointer w-16 h-16 sm:w-[88px] sm:h-[88px]`}
           />
           <input
             type="file"
@@ -122,7 +121,7 @@ const BannerMember = () => {
         <Button onPress={onOpen} variant="light">
           <div className="text-[#DD3345] font-medium"> Add team members</div>
         </Button>
-        <AvatarGroup>
+        <AvatarGroup className="cursor-pointer">
           <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
           <Avatar src="https://i.pravatar.cc/150?u=a04258a2462d826712d" />
           <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />

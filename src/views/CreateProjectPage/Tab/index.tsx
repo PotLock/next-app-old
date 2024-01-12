@@ -7,7 +7,7 @@ import CreateProjectTab from "./components/CreateProjectTab";
 
 const TabsCreateProject = () => {
   return (
-    <div className="px-[186px] w-full text-sm">
+    <div className="px-4 sm:px-[186px] w-full text-sm mb-14">
       <Tabs aria-label="Options">
         <Tab key="create-project" title="Create Project">
           <CreateProjectTab />

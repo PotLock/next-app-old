@@ -23,12 +23,14 @@ const CreateProjectTab = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [onSmartContract, setOnSmartContract] = useState(false);
   const [onFundingSources, setOnFundingSources] = useState(false);
+  const [onDao, setOnDao] = useState(false);
+
   return (
     <div className="flex flex-col w-full h-full">
       <AddFundingModal isOpen={isOpen} onOpenChange={onOpenChange} />
 
-      <div className="w-full h-full flex">
-        <div className="w-1/2 gap-4 flex flex-col">
+      <div className="w-full h-full flex flex-col sm:flex-row gap-4">
+        <div className="w-full sm:w-1/2 gap-4 flex flex-col">
           <div className="font-semibold">Project details</div>
           <div>
             Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc.
@@ -36,7 +38,18 @@ const CreateProjectTab = () => {
           </div>
           <div className="text-[#DB521B]">Required</div>
         </div>
-        <div className="w-1/2 gap-6 flex flex-col">
+        <div className="w-full sm:w-1/2 gap-6 flex flex-col">
+        <Checkbox onClick={()=> setOnDao(!onDao)}>Register as DAO</Checkbox>
+        {
+          !!onDao && (
+            <div className="flex flex-col gap-2">
+            <div className="font-medium">DAO Address</div>
+            <Input size="sm" type="text" placeholder="Placeholder" />
+          </div>
+          )
+
+        }
+      
           <div className="flex flex-col gap-2">
             <div className="font-medium">Project name</div>
             <Input size="sm" type="text" placeholder="Placeholder" />
@@ -76,15 +89,15 @@ const CreateProjectTab = () => {
       {!!onSmartContract && (
         <>
           <Divider className="my-4" />
-          <div className="w-full h-full flex">
-            <div className="w-1/2 gap-4 flex flex-col">
+          <div className="w-full h-full flex flex-col sm:flex-row gap-4">
+            <div className="w-full sm:w-1/2 gap-4 flex flex-col">
               <div className="font-semibold">Smart Contracts</div>
               <div>
                 Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc.
                 Viverra arcu eu sed consequat.{" "}
               </div>
             </div>
-            <div className="w-1/2 gap-6 flex flex-col">
+            <div className="w-full sm:w-1/2 gap-6 flex flex-col">
               <div className="flex flex-col gap-2">
                 <div className="flex gap-1">
                   <div className="font-medium">
@@ -130,8 +143,8 @@ const CreateProjectTab = () => {
       {!!onFundingSources && (
         <>
           <Divider className="my-4" />
-          <div className="w-full h-full flex">
-            <div className="w-1/2 gap-4 flex flex-col">
+          <div className="w-full h-full flex flex-col sm:flex-row gap-4">
+            <div className="w-full sm:w-1/2 gap-4 flex flex-col">
               <div className="font-semibold">Funding Sources</div>
               <div>
                 <Button onPress={onOpen} color="danger" variant="light">
@@ -140,10 +153,10 @@ const CreateProjectTab = () => {
                 </Button>
               </div>
             </div>
-            <div className="w-1/2 gap-6 flex flex-col">
+            <div className="w-full sm:w-1/2 gap-6 flex flex-col">
               <div className="flex gap-1">
                 <div className="font-medium">$2027.23</div>
-                <div className="text-[#7B7B7B]">Donated</div>
+                <div className="text-[#7B7B7B]">Total Funding</div>
               </div>
             </div>
           </div>
@@ -151,8 +164,8 @@ const CreateProjectTab = () => {
       )}
 
       <Divider className="my-4" />
-      <div className="w-full h-full flex">
-        <div className="w-1/2 gap-4 flex flex-col">
+      <div className="w-full h-full flex flex-col sm:flex-row gap-4">
+        <div className=" w-full sm:w-1/2 gap-4 flex flex-col">
           <div className="font-semibold">Social links</div>
           <div>
             Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc.
@@ -160,7 +173,7 @@ const CreateProjectTab = () => {
           </div>
           <div>Optional</div>
         </div>
-        <div className="w-1/2 gap-6 flex flex-col">
+        <div className="w-full sm:w-1/2 gap-6 flex flex-col">
           {URLINFOR.map((url) => (
             <div key={url.label} className="flex flex-col gap-2">
               <div>{url.label}</div>

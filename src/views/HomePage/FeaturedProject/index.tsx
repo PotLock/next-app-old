@@ -19,13 +19,14 @@ const FeaturedProject = () => {
     const slicedData = PROJECTS.slice(startIndex, endIndex);
 
     return slicedData.map((item, index) => (
-      <div key={index}>
+      
         <ProjectCard
+        key={index}
           onOpen={onOpen}
           title={item.title}
           content={item.content}
         />
-      </div>
+      
     ));
   };
   // Function to handle page change
@@ -48,9 +49,13 @@ const FeaturedProject = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between mx-8 sm:mx-0 gap-y-3">
+
+      <div className="flex items-center justify-center ">
+      <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between sm:mx-0 gap-y-3 gap-x-8">
         {getCurrentPageItems()}
       </div>
+      </div>
+      
     </div>
   );
 };

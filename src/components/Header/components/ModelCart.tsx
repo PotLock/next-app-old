@@ -22,16 +22,9 @@ const ModelCart = ({
   const route = useRouter();
 
   return (
-    <Modal
-      className="absolute right-10 top-10"
-      backdrop="opaque"
+    <Modal 
       isOpen={isOpen}
-      hideCloseButton
-      onOpenChange={onOpenChange}
-      classNames={{
-        backdrop:
-          "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
-      }}
+      onOpenChange={onOpenChange}   
     >
       <ModalContent>
         {(onClose) => (

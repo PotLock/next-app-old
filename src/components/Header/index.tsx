@@ -14,6 +14,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   useDisclosure,
+  Badge,
 } from "@nextui-org/react";
 import React from "react";
 import ModelCart from "./components/ModelCart";
@@ -28,9 +29,14 @@ const Header = () => {
       isBordered
       onMenuOpenChange={setIsMenuOpen}
     >
+      <ModelCart isOpen={isOpen} onOpenChange={onOpenChange} />
+
       <NavbarContent justify="start">
-        <NavbarBrand>
-          <IconLogo />
+        <NavbarBrand className="flex gap-2">
+          <div className="mb-1">
+            <IconLogo />
+          </div>
+
           <p className="font-bold text-inherit">POTLOCK</p>
         </NavbarBrand>
       </NavbarContent>
@@ -45,17 +51,9 @@ const Header = () => {
         ))}
 
         <NavbarItem>
-          <Button
-            className="flex font-medium text-sm py-[8px] border-none bg-[#292929] text-white px-[12px] rounded-md  items-center justify-center gap-3"
-            onPress={onOpen}
-          >
-            <div>CART</div>
-            <div className="rounded-full w-4 h-4 bg-[#F86B3F] text-white flex items-center justify-center text-[11px]">
-              4
-            </div>
-          </Button>
-
-          <ModelCart isOpen={isOpen} onOpenChange={onOpenChange} />
+          <Badge content="5" color="warning" variant="solid">
+            <Button onPress={onOpen}>CART</Button>
+          </Badge>
         </NavbarItem>
       </NavbarContent>
 

@@ -11,13 +11,13 @@ const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   return (
     
-    <div className="flex flex-col w-full h-full mb-[120px] ">
+    <div className="flex flex-col w-full h-full mb-[120px] gap-5 ">
       <DonateProjectModel
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
       />
-      <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between mb-[40px] mx-4 sm:mx-0 gap-1">
+      <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="font-semibold text-sm sm:text-[22px]">ALL PROJECTS</div>
         <div className="flex ">
           <div className="flex gap-2  py-1 px-4 border border-[#F4B37D] bg-[#FEF6EE] text-[11px] sm:text-sm">
@@ -34,17 +34,19 @@ const AllProject = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col gap-[20px]  mb-[40px] ">
+      <div className="w-full flex flex-col gap-[20px]  ">
         <Search />
 
         <TabAllProject />
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8 mx-8 sm:mx-0 ">
+      <div className="flex items-center justify-center">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8">
         {PROJECTS.map((project, index) => (
           <ProjectCard key={index} onOpen={onOpen} />
         ))}
       </div>
+      </div>
+      
     </div>
   );
 };

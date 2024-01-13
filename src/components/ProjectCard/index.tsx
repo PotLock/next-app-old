@@ -60,7 +60,7 @@ const ProjectCard = ({
           <div>Raised</div>
         </div>
 
-        <Button variant="bordered" onPress={onOpen}>
+        <Button  onPress={onOpen}>
           Add to cart
         </Button>
       </CardFooter>

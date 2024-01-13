@@ -1,5 +1,3 @@
-import IconNear from "../../../assets/images/IconNear.png";
-import IconLogoCart from "../../../assets/images/Logo.png";
 import {
   Button,
   Modal,
@@ -10,7 +8,8 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import IconNear from "../../../assets/images/IconNear.png";
+import IconLogoCart from "../../../assets/images/Logo.png";
 
 const ModelCart = ({
   isOpen,
@@ -19,7 +18,10 @@ const ModelCart = ({
   isOpen: boolean;
   onOpenChange: () => void;
 }) => {
-  const route = useRouter();
+  const router = useRouter();
+  const handleRouter = () => {
+    router.push("/cart");
+  };
 
   return (
     <Modal 
@@ -73,7 +75,9 @@ const ModelCart = ({
             </ModalBody>
             <ModalFooter className="bg-white rounded-b-xl ">
               <Button
-                onClick={() => route.push("/donation-cart")}
+                className="border-none bg-[#dd3344] py-3 px-4 rounded-md shadow-[0px_2px_2px]"
+                onClick={handleRouter}
+                onPress={onClose}
                 color="danger"
               >
                 Proceed to donate

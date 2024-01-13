@@ -8,7 +8,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-
   Button,
   NavbarMenuToggle,
   NavbarMenu,
@@ -33,21 +32,23 @@ const Header = () => {
       <ModelCart isOpen={isOpen} onOpenChange={onOpenChange} />
 
       <NavbarContent justify="start">
-        <NavbarBrand >
+        <NavbarBrand>
           <Link href="/" className="flex gap-2">
-          <div className="mb-1">
-            <IconLogo />
-          </div>
-          <p className="font-bold text-inherit">POTLOCK</p>
+            <div className="mb-1">
+              <IconLogo />
+            </div>
+            <p className="font-bold text-inherit">POTLOCK</p>
           </Link>
-         
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="w-full" justify="end">
         {MENUITEMS.map((item, index) => (
           <NavbarItem key={index} className="hidden sm:flex gap-4">
-            <Link color="foreground" href="/demo">
+            <Link
+              color="foreground"
+              href={item === "PROJECTS" ? "/project/home" : " /demo"}
+            >
               {item}
             </Link>
           </NavbarItem>
@@ -68,7 +69,7 @@ const Header = () => {
       <NavbarMenu className="w-full h-full bg-[white] flex items-center justify-center gap-10">
         {MENUITEMS.map((item, index) => (
           <NavbarMenuItem key={index}>
-            <Link className="w-full font-semibold text-4xl" href="#" >
+            <Link className="w-full font-semibold text-4xl" href="#">
               {item}
             </Link>
           </NavbarMenuItem>

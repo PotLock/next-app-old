@@ -17,3 +17,8 @@ export { default as IconShare } from "./IconShare";
 export { default as IconSuccessful } from "./IconSuccessful";
 export { default as IconArrowDownFull } from "./IconArrowDownFull";
 export { default as IconProject } from "./IconProject";
+export { default as IconTwitter } from "./IconTwitter";
+export { default as IconTelegram } from "./IconTelegram";
+export { default as IconWebsite } from "./IconWebsite";
+export { default as IconNear } from "./IconNear";
+export { default as IconGithub } from "./IconGithub";

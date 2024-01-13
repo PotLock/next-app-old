@@ -24,17 +24,12 @@ const ModelCart = ({
   };
 
   return (
-    <Modal 
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}   
-    >
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className=" bg-white rounded-t-xl">
-              <div className="w-full  flex  flex-col ">
-                <div className="text-[17px]">Donation cart</div>
-              </div>
+            <ModalHeader>
+              <div>Donation cart</div>
             </ModalHeader>
             <ModalBody className="bg-white   ">
               <div className="text-[#7b7b7b] text-sm font-normal p-3  border-b">

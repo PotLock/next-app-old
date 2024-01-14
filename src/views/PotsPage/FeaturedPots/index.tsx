@@ -16,7 +16,7 @@ const FeaturedPots = () => {
 
     return slicedData.map((item, index) => (
       
-        <PotCard/>
+        <PotCard key={index}/>
       
     ));
   };

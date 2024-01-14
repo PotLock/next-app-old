@@ -8,7 +8,7 @@ const PotCard = () => {
    
       <div className="flex flex-col">
         <p className="text-md">GameNetWeb3 Grant: Forging the Future of Web3 Gaming</p>
-        <p className="text-small text-default-500">Welcome to the GameNetWeb3 Grant project, where we're paving the way for the future of gaming by weaving together Web3 technology and innovative networking. Our vision is to establish a dynamic network that fosters collaboration, connectivity, and growth among Web3 game developers, enthusiasts, and players.</p>
+        <p className="text-small text-default-500">Welcome to the GameNetWeb3 Grant project, where we&apos;re paving the way for the future of gaming by weaving together Web3 technology and innovative networking. Our vision is to establish a dynamic network that fosters collaboration, connectivity, and growth among Web3 game developers, enthusiasts, and players.</p>
       </div>
     </CardHeader>
     <Divider/>

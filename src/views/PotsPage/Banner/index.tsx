@@ -1,7 +1,10 @@
+'use client'
 import { Button } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const BannerPots = () => {
+  const route = useRouter()
   return (
     <div className="w-full  flex items-center justify-center my-24 ">
       
@@ -15,7 +18,10 @@ const BannerPots = () => {
         </div>
 
         <div className=" w-full flex  gap-6  mt-4 justify-center items-center">
-          <Button color="danger">
+          <Button 
+          onClick={() => route.push('/deploy-pot')}
+          color="danger">
+            
           Deploy Pot
           </Button>
           <Button 

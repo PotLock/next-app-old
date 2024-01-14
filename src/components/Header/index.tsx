@@ -19,10 +19,13 @@ import {
 import React from "react";
 import ModelCart from "./components/ModelCart";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const currenPath = usePathname()
+  console.log("🚀 ~ Header ~ currenPath:", currenPath)
   return (
     <Navbar
       maxWidth="full"
@@ -45,13 +48,14 @@ const Header = () => {
       </NavbarContent>
 
       <NavbarContent className="w-full" justify="end">
+      <NavbarItem className="hidden sm:flex gap-4">
         {MENUITEMS.map((item, index) => (
-          <NavbarItem key={index} className="hidden sm:flex gap-4">
-            <Link color="foreground" href="/demo">
-              {item}
+         
+            <Link  key={index}  href={item.href}>
+              <p className={`${currenPath === item.href && 'font-semibold'}`}>{item.title}</p>
             </Link>
-          </NavbarItem>
         ))}
+          </NavbarItem>
 
         <NavbarItem>
           <Badge content="5" color="warning" variant="solid">
@@ -68,8 +72,8 @@ const Header = () => {
       <NavbarMenu className="w-full h-full bg-[white] flex items-center justify-center gap-10">
         {MENUITEMS.map((item, index) => (
           <NavbarMenuItem key={index}>
-            <Link className="w-full font-semibold text-4xl" href="#" >
-              {item}
+            <Link className={`w-full font-semibold text-4xl`} href="#" >
+              {item.title}
             </Link>
           </NavbarMenuItem>
         ))}

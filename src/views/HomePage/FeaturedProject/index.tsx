@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
 import { PROJECTS } from "@/constant";
-import Pagination from "./components/Panigation";
+
 import { useDisclosure } from "@nextui-org/react";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
+import Pagination from "@/components/Panigation";
 
 const FeaturedProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();

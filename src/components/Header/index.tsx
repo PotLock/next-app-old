@@ -8,7 +8,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-
   Button,
   NavbarMenuToggle,
   NavbarMenu,
@@ -24,8 +23,8 @@ import { usePathname } from "next/navigation";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const currenPath = usePathname()
-  console.log("🚀 ~ Header ~ currenPath:", currenPath)
+  const currenPath = usePathname();
+  console.log("🚀 ~ Header ~ currenPath:", currenPath);
   return (
     <Navbar
       maxWidth="full"
@@ -36,26 +35,26 @@ const Header = () => {
       <ModelCart isOpen={isOpen} onOpenChange={onOpenChange} />
 
       <NavbarContent justify="start">
-        <NavbarBrand >
+        <NavbarBrand>
           <Link href="/" className="flex gap-2">
-          <div className="mb-1">
-            <IconLogo />
-          </div>
-          <p className="font-bold text-inherit">POTLOCK</p>
+            <div className="mb-1">
+              <IconLogo />
+            </div>
+            <p className="font-bold text-inherit">POTLOCK</p>
           </Link>
-         
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="w-full" justify="end">
-      <NavbarItem className="hidden sm:flex gap-4">
         {MENUITEMS.map((item, index) => (
-         
-            <Link  key={index}  href={item.href}>
-              <p className={`${currenPath === item.href && 'font-semibold'}`}>{item.title}</p>
+          <NavbarItem key={index} className="hidden sm:flex gap-4">
+            <Link href={item.href}>
+              <p className={`${currenPath === item.href && "font-semibold"}`}>
+                {item.title}
+              </p>
             </Link>
-        ))}
           </NavbarItem>
+        ))}
 
         <NavbarItem>
           <Badge content="5" color="warning" variant="solid">
@@ -72,7 +71,7 @@ const Header = () => {
       <NavbarMenu className="w-full h-full bg-[white] flex items-center justify-center gap-10">
         {MENUITEMS.map((item, index) => (
           <NavbarMenuItem key={index}>
-            <Link className={`w-full font-semibold text-4xl`} href="#" >
+            <Link className={`${currenPath === item.href && "font-semibold"} w-full  text-4xl`} href={item.href}>
               {item.title}
             </Link>
           </NavbarMenuItem>

@@ -21,12 +21,12 @@ const AllPots = () => {
           <Divider orientation="vertical" />
           <div className="flex gap-2  py-1 px-4 text-[11px] sm:text-sm">
             <div className="font-semibold">$2027.23</div>
-            <div>Donated</div>
+            <div>Unique Donors</div>
           </div>
           <Divider orientation="vertical" />
           <div className="flex gap-2  py-1 pl-4 text-[11px] sm:text-sm">
             <div className="font-semibold">$2027.23</div>
-            <div>Donated</div>
+            <div>Donations</div>
           </div>
         </div>
       </div>

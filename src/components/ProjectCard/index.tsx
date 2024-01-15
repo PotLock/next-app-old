@@ -1,6 +1,4 @@
-// import Image from 'next/image'
-import ProjectImg from "../../assets/images/ProjectImage.png";
-import ProjectLogo from "../../assets/images/ProjectLogo.png";
+
 import {
   Card,
   CardHeader,
@@ -13,23 +11,47 @@ import {
 import React from "react";
 
 const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
+  const img = `https://nftstorage.link/ipfs/${data?.profileImageUrl}`;
+
+  console.log("🚀 ~ img:", data?.name, img);
+
   return (
-    <Card className=" w-[360px] sm:w-[408px] min-h-[397px]">
+    <Card className=" w-[360px] sm:w-[408px] ">
       <div className="w-full relative">
-        <Image
-          radius="none"
-          alt="Card background"
-          className="object-cover "
-          src="/ProjectImage.png"
-          height={150}
-        />
-        <Image
-          alt="Card icon"
-          className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover"
-          src="/ProjectLogo.png"
-          width={60}
-          height={60}
-        />
+        {data?.bannerImageUrl !== "" ? (
+          <Image
+            radius="none"
+            alt="Card background"
+            className="object-fill h-[150px] w-[360px] sm:w-[408px] "
+            src={`https://nftstorage.link/ipfs/${data?.bannerImageUrl}`}
+            
+          />
+        ) : (
+          <Image
+            radius="none"
+            alt="Card background"
+            className="object-fill h-[150px] w-[360px] sm:w-[408px] "
+            src="/ProjectImage.png"
+          />
+        )}
+
+        {data?.profileImageUrl !== "" ? (
+          <Image
+            alt="Card icon"
+            className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
+            src={`https://nftstorage.link/ipfs/${data?.profileImageUrl}`}
+           width={60}
+           height={60}
+          />
+        ) : (
+          <Image
+            alt="Card icon"
+            className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
+            src="/ProjectLogo.png"
+            width={60}
+           height={60}
+          />
+        )}
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">
         <div className="font-semibold">{data?.name || "RevitFi"}</div>
@@ -42,9 +64,8 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
         <div className="flex gap-2">
           {data?.tags?.map((tag: any, index: any) => (
             <div
-              key={index}
-              className="p-2 border rounded shadow-[0px_1px_1px]"
-            >
+            key={index}
+            className="p-2 border rounded shadow-[0px_1px_1px]">
               {tag || "Tag"}
             </div>
           ))}

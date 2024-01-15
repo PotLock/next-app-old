@@ -38,27 +38,27 @@ export const DATA_NAVBAR = [
   {
     id: 1,
     name: "Home",
-    url: "/social/home",
+    url: "/project/home",
   },
   {
     id: 2,
     name: "Social feed",
-    url: "/social/feed",
+    url: "/project/feed",
   },
   {
     id: 3,
     name: "Pots",
-    url: "/social/pots",
+    url: "/project/pots",
   },
   {
     id: 4,
     name: "Attestations",
-    url: "/social/attestations",
+    url: "/project/attestations",
   },
   {
     id: 5,
     name: "Funding raised",
-    url: "/social/raised",
+    url: "/project/raised",
   },
 ];
 
@@ -173,5 +173,28 @@ export const DATA_OVERVIEW = [
         // icons: <IconNear />,
       },
     ],
+  },
+];
+
+export const DATA_ITEMS_SEARCH = [
+  {
+    key: "all",
+    label: "All posts",
+    subLabel: 4,
+  },
+  {
+    key: "photos",
+    label: "Photos",
+    subLabel: 4,
+  },
+  {
+    key: "videos",
+    label: "Videos",
+    subLabel: 5,
+  },
+  {
+    key: "text",
+    label: "Text",
+    subLabel: 3,
   },
 ];

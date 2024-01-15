@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ProjectPage>{children}</ProjectPage>
+        <div className="flex flex-col-reverse">
+          <ProjectPage>{children}</ProjectPage>
+        </div>
       </body>
     </html>
   );

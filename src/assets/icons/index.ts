@@ -22,3 +22,7 @@ export { default as IconTelegram } from "./IconTelegram";
 export { default as IconWebsite } from "./IconWebsite";
 export { default as IconNear } from "./IconNear";
 export { default as IconGithub } from "./IconGithub";
+export { default as IconDots } from "./IconDots";
+export { default as IconLike } from "./IconLike";
+export { default as IconComment } from "./IconComment";
+export { default as IconRepost } from "./IconRepost";

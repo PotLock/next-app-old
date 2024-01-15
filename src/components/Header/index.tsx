@@ -24,7 +24,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const currenPath = usePathname();
- 
+
   return (
     <Navbar
       maxWidth="full"
@@ -71,7 +71,12 @@ const Header = () => {
       <NavbarMenu className="w-full h-full bg-[white] flex items-center justify-center gap-10">
         {MENUITEMS.map((item, index) => (
           <NavbarMenuItem key={index}>
-            <Link className={`${currenPath === item.href && "font-semibold"} w-full  text-4xl`} href={item.href}>
+            <Link
+              className={`${
+                currenPath === item.href && "font-semibold"
+              } w-full  text-4xl`}
+              href={item.href}
+            >
               {item.title}
             </Link>
           </NavbarMenuItem>

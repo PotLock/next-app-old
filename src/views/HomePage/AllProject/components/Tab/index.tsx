@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import IconCheckYellow from "@/assets/icons/IconCheckYellow";
 import { TABS } from "@/constant";
 
-const TabAllProject = () => {
-  const [tab, setTab] = useState("DeFi");
-  const handleTag = (label: any) => {
-    setTab(label);
-  };
+const TagAllProject = ({
+  tab,
+  handleTag,
+}: {
+  tab: string;
+  handleTag: (label: string) => void;
+}) => {
   return (
     <div className="flex w-full flex-row gap-3 items-center justify-start mx-4 sm:mx-0">
       <div>Tags:</div>
@@ -29,4 +31,4 @@ const TabAllProject = () => {
   );
 };
 
-export default TabAllProject;
+export default TagAllProject;

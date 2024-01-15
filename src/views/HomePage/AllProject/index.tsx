@@ -14,19 +14,23 @@ import { useSearchParams } from "next/navigation";
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [projects, setProjects] = useState<any[]>([]);
+  const [tempProjects, setTempProjects] = useState<any[]>([]);
   const [data, setData] = useState<any>();
-  const [searchFilter, setSearchFilter] = useState({ page: 1, limit: 9 });
+  const [searchFilter, setSearchFilter] = useState({ page: 1, limit: 1000 });
   const search = useSearchParams();
   const sort = search.get("sort");
   const title = search.get("title");
+  const [tab, setTab] = useState("");
 
   const getApiProject = async () => {
     try {
       const res = await searchProjectName({ ...searchFilter, sort, title });
       if (!!res)
         if (sort || title) {
+          setTempProjects(res.data);
           setProjects(res.data);
         } else {
+          setTempProjects([...projects, ...res.data]);
           setProjects([...projects, ...res.data]);
         }
     } catch (error) {}
@@ -35,6 +39,22 @@ const AllProject = () => {
   const handleSearch = async (name: any) => {
     const res = await searchProjectName(name.length ? name : undefined);
     setProjects(res.data);
+  };
+
+  const handleTag = (label: string) => {
+    const filterProjectsByTag = (label: string) => {
+      return tempProjects.filter((project) => project.tags.includes(label));
+    };
+
+    const filteredProjects = filterProjectsByTag(label);
+
+    if (tab === label) {
+      setProjects(tempProjects);
+      setTab("");
+    } else {
+      setProjects(filteredProjects);
+      setTab(label);
+    }
   };
 
   const getDataDetail = async () => {
@@ -82,7 +102,7 @@ const AllProject = () => {
       </div>
       <div className="w-full flex flex-col gap-[20px]  ">
         <Search onSearch={setSearchFilter} />
-        <TabAllProject />
+        <TabAllProject tab={tab} handleTag={handleTag} />
       </div>
       <div className="flex items-center justify-center">
         <InfiniteScroll

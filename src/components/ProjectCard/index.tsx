@@ -10,7 +10,7 @@ import React from "react";
 
 const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
   const openModal = () => {
-    localStorage.setItem("receipientId: ", data.project_id);
+    localStorage.setItem("receipientId", data?.project_id);
     onOpen();
   };
 

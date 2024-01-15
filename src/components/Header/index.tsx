@@ -24,7 +24,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const currenPath = usePathname();
-  console.log("🚀 ~ Header ~ currenPath:", currenPath);
+ 
   return (
     <Navbar
       maxWidth="full"

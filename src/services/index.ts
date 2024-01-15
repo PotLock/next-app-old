@@ -9,4 +9,9 @@ export const getProjectGeneral = () => {
 export const getProject = () => {
     return axiosInstance.get(`/project`);
   };
+
+  export const searchProjectName = (name: any) => {
+    return axiosInstance.get(`/project?title=${name}`);
+  };
+  
   

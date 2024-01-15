@@ -7,17 +7,25 @@ import { useDisclosure } from "@nextui-org/react";
 import { PROJECTS } from "@/constant";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import Search from "@/components/Search";
-import { getProject } from "@/services";
+import { getProject, searchProjectName } from "@/services";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [projects, setProjects] = useState<any[]>([]);
+  const [projectsSearch, setProjectsSearch] = useState<any[]>([]);
+
   const [hasMore, setHasMore] = useState(true);
 
   const getApiProject = async () => {
     const res = await getProject();
+    console.log("🚀 ~ getApiProject ~ res:", res.data)
     if (!!res) setProjects(res.data);
+  };
+
+  const handleSearch = async (name: any) => {
+      const res= await searchProjectName(name);
+      setProjects(res.data)
   };
 
   useEffect(() => {
@@ -48,13 +56,13 @@ const AllProject = () => {
         </div>
       </div>
       <div className="w-full flex flex-col gap-[20px]  ">
-        <Search />
+        <Search onSearch={handleSearch} onProject={getApiProject} />
 
         <TabAllProject />
       </div>
       <div className="flex items-center justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8">
-          {PROJECTS.map((project, index) => (
+          {projects.map((project, index) => (
             <ProjectCard key={index} onOpen={onOpen} data={project} />
           ))}
         </div>

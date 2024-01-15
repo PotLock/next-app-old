@@ -37,19 +37,37 @@ const items = [
     subLabel: "Donations ",
   },
 ];
-const Search = () => {
+const Search = ({onSearch, onProject} : any) => {
   const [filter, setFilter] = useState("All projects");
+  const [name, setName] = useState<any>()
+  console.log("🚀 ~ Search ~ name:", name)
 
   const handleFilter = (label: any) => {
     setFilter(label);
   };
 
+
+  const handleSearch = (name: any) => {
+     if(!!name)
+     {
+     onSearch(name);
+
+     }
+     else {
+      onProject
+     }
+    
+  };
   return (
     <div className="relative mx-4 sm:mx-0">
       <div className="absolute inset-y-0 start-0 flex items-center px-6 pointer-events-none">
         <IconSearch />
       </div>
       <input
+      onChange={(e) => handleSearch(e.target.value)
+      
+      }
+      
         type="search"
         className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
         placeholder="Search (9) projects..."

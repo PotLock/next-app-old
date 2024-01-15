@@ -23,7 +23,7 @@ const AllProject = () => {
   const getApiProject = async () => {
     try {
       const res = await searchProjectName({ ...searchFilter, sort, title });
-      if (!!res) setProjects([...projects, ...res.data]);
+      if (!!res) setProjects(res.data);
     } catch (error) {}
   };
 

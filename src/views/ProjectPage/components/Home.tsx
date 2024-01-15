@@ -1,116 +1,56 @@
 "use client";
+import { ProjectDetail } from "@/app/project/[id]/page";
 import { DATA_ABOUT, DATA_OVERVIEW } from "@/constant/project";
-import React from "react";
+import React, { useContext } from "react";
 
 export interface IContentProps {}
 
-export default function HomePage({data}: any) {
+export default function HomePage() {
+  const { data } = useContext(ProjectDetail);
   return (
     <div>
       <div className="text-[14px] text-[#7B7B7B] font-medium py-[24px]">
         About
       </div>
       <div className="w-full flex gap-[40px] pb-[24px]">
-      <div
-           
-            className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]"
-          >
-            <div className="text-[32px] font-normal">{data?.totalContributed}</div>
-            <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
+        <div className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]">
+          <div className="text-[32px] font-normal">
+            ${data?.totalContributed}
+          </div>
+          <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
             Contributed
-            </div>
           </div>
-          <div
-           
-            className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]"
-          >
-            <div className="text-[32px] font-normal">$0</div>
-            <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
+        </div>
+        <div className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]">
+          <div className="text-[32px] font-normal">$0</div>
+          <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
             Donors
-            </div>
           </div>
-          <div
-           
-            className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]"
-          >
-            <div className="text-[32px] font-normal">$0</div>
-            <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
+        </div>
+        <div className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]">
+          <div className="text-[32px] font-normal">
+            ${data?.totalReferralFees}
+          </div>
+          <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
             Total matched
-            </div>
           </div>
-        {/* {DATA_ABOUT?.map((item) => (
-          <div
-            key={item?.id}
-            className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]"
-          >
-            <div className="text-[32px] font-normal">{item.value}</div>
-            <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
-              {item.text}
-            </div>
-          </div>
-        ))} */}
+        </div>
       </div>
       <div className="w-full">
-      <div  className="flex py-[24px]">
-            <div className="w-[35%] pr-[40px] text-[#292929] text-[17px] font-semibold">
-              {data?.name}
-            </div>
-            <div className="w-[65%] text-[#7B7B7B] text-[17px] font-normal">
-              {data?.description}
-              {/* {item?.title === "Team members" && (
-                <div className="flex gap-[40px]">
-                  {item.user?.map((item) => (
-                    <div className="flex flex-col items-center" key={item.id}>
-                  
-                      <div className="mt-[16px]">{item.userName}</div>
-                    </div>
-                  ))}
-                </div>
-              )} */}
-              <div className="w-full flex justify-between gap-[40px] pb-[24px]">
-                {/* {item.socials?.map((item) => (
-                  <div
-                    key={item?.id}
-                    className="w-[33%] flex items-end gap-2 p-[12px] rounded-md bg-[#FEF6EE]"
-                  >
-                   
-                    <div className="text-[14px] font-normal">{item.name}</div>
-                  </div>
-                ))} */}
-              </div>
-            </div>
+        <div className="flex py-[24px]">
+          <div className="w-[35%] pr-[40px] text-[#292929] text-[17px] font-semibold">
+            Overview
           </div>
-        {/* {DATA_OVERVIEW?.map((item) => (
-          <div key={item.id} className="flex py-[24px]">
-            <div className="w-[35%] pr-[40px] text-[#292929] text-[17px] font-semibold">
-              {item.title}
-            </div>
-            <div className="w-[65%] text-[#7B7B7B] text-[17px] font-normal">
-              {item?.content}
-              {item?.title === "Team members" && (
-                <div className="flex gap-[40px]">
-                  {item.user?.map((item) => (
-                    <div className="flex flex-col items-center" key={item.id}>
-                  
-                      <div className="mt-[16px]">{item.userName}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="w-full flex justify-between gap-[40px] pb-[24px]">
-                {item.socials?.map((item) => (
-                  <div
-                    key={item?.id}
-                    className="w-[33%] flex items-end gap-2 p-[12px] rounded-md bg-[#FEF6EE]"
-                  >
-                   
-                    <div className="text-[14px] font-normal">{item.name}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="w-[65%] text-[#7B7B7B] text-[17px] font-normal">
+            {data?.description}
           </div>
-        ))} */}
+        </div>
+        <div className="flex py-[24px]">
+          <div className="w-[35%] pr-[40px] text-[#292929] text-[17px] font-semibold">
+            Team members
+          </div>
+          <div className="w-[65%] text-[#7B7B7B] text-[17px] font-normal"></div>
+        </div>
       </div>
     </div>
   );

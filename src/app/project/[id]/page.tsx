@@ -1,33 +1,33 @@
 "use client";
 import { getProjectDetail } from "@/services";
+import ProjectPage from "@/views/ProjectPage/Project";
 import HomePage from "@/views/ProjectPage/components/Home";
 import { useParams } from "next/navigation";
-import React, { ReactElement } from "react";
+import React, { ReactElement, createContext } from "react";
 
 export interface IHomeProps {}
+export const ProjectDetail = createContext<any>(null);
 
 export default function Home(props: IHomeProps) {
   const { id } = useParams();
-  console.log("🚀 ~ Home ~ id:", id)
-
   const [projectDetail, setProjectDetail] = React.useState<any>();
 
-
-
-  const getProjectDetailApi = async() => {
+  const getProjectDetailApi = async () => {
     const res = await getProjectDetail(id);
-    console.log("🚀 ~ getProjectDetailApi ~ res:", res?.data)
-    
-    if(!!res) setProjectDetail(res?.data);
-  }
+    if (!!res) setProjectDetail(res?.data);
+  };
 
   React.useEffect(() => {
-    getProjectDetailApi()
+    getProjectDetailApi();
   }, []);
+
   return (
     <div>
-      
-      <HomePage  data={projectDetail}/>
+      <ProjectDetail.Provider value={{ data: projectDetail }}>
+        <ProjectPage>
+          <HomePage />
+        </ProjectPage>
+      </ProjectDetail.Provider>
     </div>
   );
 }

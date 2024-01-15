@@ -6,6 +6,7 @@ import {
   Button,
   Divider,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
@@ -14,8 +15,16 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
     onOpen();
   };
 
+const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
+
+  const router = useRouter();
   return (
-    <Card className=" w-[360px] sm:w-[408px] ">
+    <div
+    onClick={() => router.push(`/project/${data?.id}`)}
+    >
+ <Card 
+   
+    className=" w-[360px] sm:w-[408px] cursor-pointer ">
       <div className="w-full relative">
         {data?.bannerImageUrl !== "" ? (
           <Image
@@ -81,7 +90,10 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
         <Button onPress={openModal}>Donate</Button>
       </CardFooter>
     </Card>
+    </div>
+   
   );
-};
+}
+}
 
-export default ProjectCard;
+export default ProjectCard

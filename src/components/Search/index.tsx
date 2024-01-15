@@ -3,71 +3,68 @@ import IconCheck from "@/assets/icons/IconCheck";
 import IconFilter from "@/assets/icons/IconFilter";
 import IconSearch from "@/assets/icons/IconSearch";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 const items = [
   {
-    key: "all",
+    key: "dateCreated",
     label: "All projects",
     subLabel: "",
   },
   {
-    key: "new",
+    key: "dateCreated",
     label: "New to Old",
     subLabel: "Time",
   },
   {
-    key: "old",
+    key: "-dateCreated",
     label: "Old to New",
     subLabel: "Time",
   },
   {
-    key: "most",
+    key: "dateCreated",
     label: "Most to Least",
     subLabel: "Donations ",
   },
   {
-    key: "Least",
+    key: "dateCreated",
     label: "Least to Most",
     subLabel: "Donations ",
   },
 ];
-const Search = ({onSearch, onProject} : any) => {
+const Search = ({ onSearch }: any) => {
   const [filter, setFilter] = useState("All projects");
-  const [name, setName] = useState<any>()
-  console.log("🚀 ~ Search ~ name:", name)
+  const [search, setSearch] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleFilter = (label: any) => {
     setFilter(label);
+    const sort = items.find((item) => item.label === label);
+    router.push(pathname + `?sort=${sort?.key}&title=${search}`, {
+      scroll: false,
+    });
   };
-
 
   const handleSearch = (name: any) => {
-     if(!!name)
-     {
-     onSearch(name);
-
-     }
-     else {
-      onProject
-     }
-    
+    setSearch(name);
+    const sort = items.find((item) => item.label === filter);
+    router.push(pathname + `?sort=${sort}&title=${name}`, { scroll: false });
   };
+
   return (
     <div className="relative mx-4 sm:mx-0">
       <div className="absolute inset-y-0 start-0 flex items-center px-6 pointer-events-none">
         <IconSearch />
       </div>
       <input
-      onChange={(e) => handleSearch(e.target.value)
-      
-      }
-      
+        onChange={(e) => handleSearch(e.target.value)}
         type="search"
         className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
         placeholder="Search (9) projects..."
@@ -75,17 +72,14 @@ const Search = ({onSearch, onProject} : any) => {
       <Dropdown>
         <DropdownTrigger>
           <Button
-          className="absolute inset-y-1.5 end-0  flex items-center justify-center gap-3  cursor-pointer px-6"
-          variant="light">
+            className="absolute inset-y-1.5 end-0  flex items-center justify-center gap-3  cursor-pointer px-6"
+            variant="light"
+          >
             <div>{filter}</div>
             <IconFilter />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu
-          className=""
-          aria-label="Dynamic Actions"
-          items={items}
-        >
+        <DropdownMenu className="" aria-label="Dynamic Actions" items={items}>
           {(item) => (
             <DropdownItem
               key={item.key}

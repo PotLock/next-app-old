@@ -5,11 +5,13 @@ export const getProjectGeneral = () => {
 };
 
 export const getProject = () => {
-    return axiosInstance.get(`/project`);
-  };
+  return axiosInstance.get(`/project`);
+};
 
-  export const searchProjectName = (name: any) => {
-    return axiosInstance.get(`/project?title=${name}`);
-  };
-  
-  
+export const searchProjectName = ({ page, limit, sort, title }: any) => {
+  return axiosInstance.get(
+    `/project?${title ? "title=" + title : ""}&page=${
+      page ?? 1
+    }&limit=${limit}&sort=${sort}`,
+  );
+};

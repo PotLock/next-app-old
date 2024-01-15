@@ -1,13 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
-import { PROJECTS } from "@/constant";
-
-import { useDisclosure } from "@nextui-org/react";
-import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import Pagination from "@/components/Panigation";
-import { getProject, getProjectGeneral } from "@/services";
+import { getProject } from "@/services";
+import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
+import { useDisclosure } from "@nextui-org/react";
 
 const FeaturedProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -16,14 +14,8 @@ const FeaturedProject = () => {
 
   const [projects, setProjects] = useState<any[]>([]);
 
-  const getApiProjectGeneral = async () => {
-    const res1 = await getProjectGeneral();
-    console.log("🚀 ~ getApiProjectGeneral ~ res:", res1);
-  };
-
   const getApiProject = async () => {
     const res = await getProject();
-
     let items = [];
     for (let i = 0; i < res?.data.length; i++) {
       if (
@@ -37,7 +29,6 @@ const FeaturedProject = () => {
         items.push(res?.data[i]);
       }
     }
-
     setProjects(items);
   };
 
@@ -57,7 +48,6 @@ const FeaturedProject = () => {
   };
 
   useEffect(() => {
-    // getApiProjectGeneral();
     getApiProject();
   }, []);
 

@@ -12,57 +12,73 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 
-const ProjectCard = ({
- data,
-  onOpen,
-}: {
-  data: any
-  onOpen?: () => void;
-}) => {
+const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
+  const img = `https://nftstorage.link/ipfs/${data?.profileImageUrl}`;
+
+  console.log("🚀 ~ img:", data?.name, img);
+
   return (
- 
     <Card className=" w-[360px] sm:w-[408px] ">
       <div className="w-full relative">
-        <Image
-          radius="none"
-          alt="Card background"
-          className="object-cover "
-          src="/ProjectImage.png"
-          height={150}
-        />
-        <Image
-          alt="Card icon"
-          className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover"
-          src="/ProjectLogo.png"
-          width={60}
-          height={60}
-        />
+        {data?.bannerImageUrl !== "" ? (
+          <Image
+            radius="none"
+            alt="Card background"
+            className="object-fill h-[150px] w-[360px] sm:w-[408px] "
+            src={`https://nftstorage.link/ipfs/${data?.bannerImageUrl}`}
+          />
+        ) : (
+          <Image
+            radius="none"
+            alt="Card background"
+            className="object-fill h-[150px] w-[360px] sm:w-[408px] "
+            src="/ProjectImage.png"
+          />
+        )}
+
+        {data?.profileImageUrl !== "" ? (
+          <Image
+            alt="Card icon"
+            className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
+            src={
+              `https://nftstorage.link/ipfs/${data?.profileImageUrl}` ||
+              "/ProjectLogo.png"
+            }
+          />
+        ) : (
+          <Image
+            alt="Card icon"
+            className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
+            src="/ProjectLogo.png"
+          />
+        )}
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">
         <div className="font-semibold">{data?.name || "RevitFi"}</div>
-        <div className=" h-[60px] " >
+        <div className=" h-[60px] ">
           <p className="line-clamp-2 overflow-ellipsis">
-          {data?.description ||
-            "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
+            {data?.description ||
+              "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
           </p>
-          
         </div>
         <div className="flex gap-2">
-          {
-            data?.tags?.map((tag: any, index: any) =>  <div className="p-2 border rounded shadow-[0px_1px_1px]">{tag ||'Tag'}</div>)
-          }
+          {data?.tags?.map((tag: any, index: any) => (
+            <div
+            key={index}
+            className="p-2 border rounded shadow-[0px_1px_1px]">
+              {tag || "Tag"}
+            </div>
+          ))}
         </div>
       </CardBody>
-      <Divider  />
+      <Divider />
       <CardFooter className="flex justify-between py-4 px-6 items-center">
         <div className="flex gap-2">
           <div className="font-semibold ">$24.00</div>
           <div>Raised</div>
         </div>
 
-        <Button  onPress={onOpen}>
-          Donate
-        </Button>
+        <Button onPress={onOpen}>Donate</Button>
       </CardFooter>
     </Card>
   );

@@ -11,6 +11,7 @@ import {
   Divider,
 } from "@nextui-org/react";
 import React from "react";
+import { Wallet } from "@/configs/nearWallet";
 
 const ProjectCard = ({
   title,
@@ -21,6 +22,21 @@ const ProjectCard = ({
   content?: string;
   onOpen?: () => void;
 }) => {
+  const temp = async () => {
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+    await wallet.startUp();
+    await wallet.callMethod({
+      contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
+      method: "donate",
+      args: {
+        recipient_id: "magicbuild.near",
+      },
+    });
+  };
+
   return (
     <Card className=" w-[360px] sm:w-[408px] ">
       <div className="w-full relative">
@@ -41,7 +57,7 @@ const ProjectCard = ({
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">
         <div className="font-semibold">{title || "RevitFi"}</div>
-        <div >
+        <div>
           {content ||
             "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
         </div>
@@ -55,14 +71,14 @@ const ProjectCard = ({
           </div>
         </div>
       </CardBody>
-      <Divider  />
+      <Divider />
       <CardFooter className="flex justify-between py-4 px-6 items-center">
         <div className="flex gap-2">
           <div className="font-semibold ">$24.00</div>
           <div>Raised</div>
         </div>
 
-        <Button  onPress={onOpen}>
+        <Button onPress={onOpen} onClick={temp}>
           Add to cart
         </Button>
       </CardFooter>

@@ -1,7 +1,6 @@
 "use client";
 import IconLogo from "@/assets/icons/IconLogo";
 import IconMenu from "@/assets/icons/IconMenu";
-import wallet from "@/configs/near.config";
 import { MENUITEMS } from "@/constant";
 import {
   Badge,
@@ -15,15 +14,60 @@ import {
   NavbarMenuToggle,
   useDisclosure,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ModelCart from "./components/ModelCart";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Wallet } from "@/configs/nearWallet";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const currenPath = usePathname();
+  const currentPath = usePathname();
+  const [account, setAccount] = useState<string | null>(null);
+
+  const handleSignIn = async () => {
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+    await wallet
+      .startUp()
+      .then(() => {
+        wallet.signIn();
+      })
+      .then(() => {
+        const accountId = wallet.accountId;
+        if (accountId) {
+          localStorage.setItem("accountId", accountId);
+        }
+      });
+  };
+
+  const handleSignOut = async () => {
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+    await wallet
+      .startUp()
+      .then(() => {
+        wallet.signOut();
+      })
+      .then(() => {
+        const accountId = wallet.accountId;
+        if (accountId) {
+          localStorage.setItem("accountId", accountId);
+        }
+      });
+  };
+
+  useEffect(() => {
+    const accountId = localStorage.getItem("accountId");
+    if (accountId) {
+      setAccount(accountId);
+    }
+  }, []);
 
   return (
     <Navbar
@@ -49,7 +93,7 @@ const Header = () => {
         {MENUITEMS.map((item, index) => (
           <NavbarItem key={index} className="hidden sm:flex gap-4">
             <Link href={item.href}>
-              <p className={`${currenPath === item.href && "font-semibold"}`}>
+              <p className={`${currentPath === item.href && "font-semibold"}`}>
                 {item.title}
               </p>
             </Link>
@@ -60,9 +104,15 @@ const Header = () => {
           <Badge content="5" color="warning" variant="solid">
             <Button onClick={onOpen}>CART</Button>
           </Badge>
-          <Button className="ml-5" color="primary" onClick={wallet}>
-            Login
-          </Button>
+          {account ? (
+            <Button className="ml-5" color="primary" onClick={handleSignOut}>
+              {account}
+            </Button>
+          ) : (
+            <Button className="ml-5" color="primary" onClick={handleSignIn}>
+              Log in
+            </Button>
+          )}
         </NavbarItem>
       </NavbarContent>
 
@@ -76,7 +126,7 @@ const Header = () => {
           <NavbarMenuItem key={index}>
             <Link
               className={`${
-                currenPath === item.href && "font-semibold"
+                currentPath === item.href && "font-semibold"
               } w-full  text-4xl`}
               href={item.href}
             >

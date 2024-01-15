@@ -12,6 +12,6 @@ export const searchProjectName = ({ page, limit, sort, title }: any) => {
   return axiosInstance.get(
     `/project?${title ? "title=" + title : ""}&page=${
       page ?? 1
-    }&limit=${limit}&sort=${sort}`,
+    }&limit=${limit}&${sort ? "sort=" + sort : ""}`,
   );
 };

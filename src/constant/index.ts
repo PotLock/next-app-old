@@ -1,7 +1,20 @@
 export const MENUITEMS = [
-    "POTS",
-    "PROJECTS",
-    "FEED", 
+  {
+    title: "POTS",
+    href:"/pots"
+    
+  },
+  {
+    title: "PROJECTS",
+    href:"#"
+    
+  },
+  {
+    title: "FEED",
+    href:"#"
+    
+  },
+  
   ];
 
   export const PROJECTS = [

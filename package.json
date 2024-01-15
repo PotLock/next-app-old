@@ -26,6 +26,8 @@
     "@near-wallet-selector/wallet-connect": "^8.9.2",
     "@near-wallet-selector/welldone-wallet": "^8.9.2",
     "@nextui-org/react": "^2.2.9",
+    "@reduxjs/toolkit": "^2.0.1",
+    "@types/redux-logger": "^3.0.12",
     "axios": "^1.6.5",
     "framer-motion": "^10.17.9",
     "husky": "^8.0.3",
@@ -35,7 +37,9 @@
     "prettier": "^3.1.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-infinite-scroll-component": "^6.1.0"
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-redux": "^9.1.0",
+    "redux-logger": "^3.0.6"
   },
   "devDependencies": {
     "@types/node": "^20",

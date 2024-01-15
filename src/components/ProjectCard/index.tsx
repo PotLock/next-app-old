@@ -7,9 +7,13 @@ import {
   Divider,
 } from "@nextui-org/react";
 import React from "react";
-import { Wallet } from "@/configs/nearWallet";
 
-const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
+const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
+  const openModal = () => {
+    localStorage.setItem("receipientId: ", data.project_id);
+    onOpen();
+  };
+
   return (
     <Card className=" w-[360px] sm:w-[408px] min-h-[397px]">
       <div className="w-full relative">
@@ -38,7 +42,10 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
         </div>
         <div className="flex gap-2">
           {data?.tags?.map((tag: any, index: any) => (
-            <div className="p-2 border rounded shadow-[0px_1px_1px]">
+            <div
+              key={index}
+              className="p-2 border rounded shadow-[0px_1px_1px]"
+            >
               {tag || "Tag"}
             </div>
           ))}
@@ -51,7 +58,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
           <div>Raised</div>
         </div>
 
-        <Button onPress={onOpen}>Donate</Button>
+        <Button onPress={openModal}>Donate</Button>
       </CardFooter>
     </Card>
   );

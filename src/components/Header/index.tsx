@@ -24,24 +24,16 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const currentPath = usePathname();
-  const [account, setAccount] = useState<string | null>(null);
+  const [account, setAccount] = useState<any | null>(null);
 
   const handleSignIn = async () => {
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
       network: "mainnet",
     });
-    await wallet
-      .startUp()
-      .then(() => {
-        wallet.signIn();
-      })
-      .then(() => {
-        const accountId = wallet.accountId;
-        if (accountId) {
-          localStorage.setItem("accountId", accountId);
-        }
-      });
+    await wallet.startUp().then(() => {
+      wallet.signIn();
+    });
   };
 
   const handleSignOut = async () => {
@@ -49,24 +41,25 @@ const Header = () => {
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
       network: "mainnet",
     });
-    await wallet
-      .startUp()
-      .then(() => {
-        wallet.signOut();
-      })
-      .then(() => {
-        const accountId = wallet.accountId;
-        if (accountId) {
-          localStorage.setItem("accountId", accountId);
-        }
-      });
+    await wallet.startUp().then(() => {
+      wallet.signOut();
+    });
   };
 
   useEffect(() => {
-    const accountId = localStorage.getItem("accountId");
-    if (accountId) {
-      setAccount(accountId);
-    }
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+
+    const startUpWallet = async () => {
+      await wallet.startUp();
+      const accountId = wallet.accountId;
+      if (accountId) {
+        setAccount(wallet.accountId);
+      }
+    };
+    startUpWallet();
   }, []);
 
   return (

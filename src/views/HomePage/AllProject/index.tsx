@@ -98,7 +98,7 @@ const AllProject = () => {
           hasMore={true} // Replace with a condition based on your data source
           loader={<p>No more data to load.</p>}
           endMessage={<p>No more data to load.</p>}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8 min-h-[400px]"
           // inverse={true}
         >
           {projects.map((project, index) => (

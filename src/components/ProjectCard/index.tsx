@@ -1,7 +1,5 @@
-
 import {
   Card,
-  CardHeader,
   CardBody,
   Image,
   CardFooter,
@@ -10,7 +8,12 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 
-const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
+const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
+  const openModal = () => {
+    localStorage.setItem("receipientId: ", data.project_id);
+    onOpen();
+  };
+
   return (
     <Card className=" w-[360px] sm:w-[408px] ">
       <div className="w-full relative">
@@ -60,8 +63,9 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
         <div className="flex gap-2">
           {data?.tags?.map((tag: any, index: any) => (
             <div
-            key={index}
-            className="p-2 border rounded shadow-[0px_1px_1px]">
+              key={index}
+              className="p-2 border rounded shadow-[0px_1px_1px]"
+            >
               {tag || "Tag"}
             </div>
           ))}
@@ -74,7 +78,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
           <div>Raised</div>
         </div>
 
-        <Button onPress={onOpen}>Donate</Button>
+        <Button onPress={openModal}>Donate</Button>
       </CardFooter>
     </Card>
   );

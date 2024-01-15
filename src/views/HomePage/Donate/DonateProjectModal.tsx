@@ -20,6 +20,8 @@ import Image from "next/image";
 import IconLogoCart from "../../../assets/images/Logo.png";
 import IconArrowDownFull from "@/assets/icons/IconArrowDownFull";
 import DonationRandomlyModelFinal from "../DonationRandomly/DonationRandomlyModalFinal";
+import { Wallet } from "@/configs/nearWallet";
+import { utils } from "near-api-js";
 
 const DonateProjectModel = ({
   isOpen,
@@ -44,6 +46,25 @@ const DonateProjectModel = ({
   };
   const handleOpenNote = () => {
     setOpenNote(!openNote);
+  };
+
+  const donate = async () => {
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+    await wallet.startUp();
+    await wallet.callMethod({
+      contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
+      method: "donate",
+      args: {
+        // recipient_id: localStorage.getItem("receipientId"),
+        // message: "",
+        // referrer_id: "",
+        recipient_id: "magicbuild.near",
+      },
+      deposit: "9000000000000000000000",
+    });
   };
 
   return (
@@ -180,8 +201,9 @@ const DonateProjectModel = ({
               <ModalFooter>
                 <Button
                   onPress={() => {
-                    onClose();
-                    onOpenFinal();
+                    // onClose();
+                    // onOpenFinal();
+                    donate();
                   }}
                   color="danger"
                 >

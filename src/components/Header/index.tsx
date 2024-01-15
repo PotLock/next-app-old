@@ -1,19 +1,19 @@
 "use client";
-
 import IconLogo from "@/assets/icons/IconLogo";
 import IconMenu from "@/assets/icons/IconMenu";
+import wallet from "@/configs/near.config";
 import { MENUITEMS } from "@/constant";
 import {
+  Badge,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   Button,
-  NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
+  NavbarMenuToggle,
   useDisclosure,
-  Badge,
 } from "@nextui-org/react";
 import React from "react";
 import ModelCart from "./components/ModelCart";
@@ -60,6 +60,9 @@ const Header = () => {
           <Badge content="5" color="warning" variant="solid">
             <Button onClick={onOpen}>CART</Button>
           </Badge>
+          <Button className="ml-5" color="primary" onClick={wallet}>
+            Login
+          </Button>
         </NavbarItem>
       </NavbarContent>
 

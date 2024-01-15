@@ -19,7 +19,6 @@ const AllProject = () => {
 
   const getApiProject = async () => {
     const res = await getProject();
-    console.log("🚀 ~ getApiProject ~ res:", res.data)
     if (!!res) setProjects(res.data);
   };
 
@@ -56,16 +55,22 @@ const AllProject = () => {
         </div>
       </div>
       <div className="w-full flex flex-col gap-[20px]  ">
-        <Search onSearch={handleSearch} onProject={getApiProject} />
-
+      <Search onSearch={handleSearch} onProject={getApiProject} />
         <TabAllProject />
       </div>
       <div className="flex items-center justify-center">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8">
+        <InfiniteScroll
+          dataLength={projects.length}
+          next={getApiProject}
+          hasMore={true} // Replace with a condition based on your data source
+          loader={<p>Loading...</p>}
+          endMessage={<p>No more data to load.</p>}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8"
+        >
           {projects.map((project, index) => (
             <ProjectCard key={index} onOpen={onOpen} data={project} />
           ))}
-        </div>
+        </InfiniteScroll>
       </div>
     </div>
   );

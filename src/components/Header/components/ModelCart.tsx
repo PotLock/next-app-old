@@ -5,11 +5,14 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Tooltip,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import IconNear from "../../../assets/images/IconNear.png";
 import IconLogoCart from "../../../assets/images/Logo.png";
+import { CartContext } from "@/layout/LayoutProvides";
+import { useContext } from "react";
 
 const ModelCart = ({
   isOpen,
@@ -19,6 +22,7 @@ const ModelCart = ({
   onOpenChange: () => void;
 }) => {
   const router = useRouter();
+  const { cart } = useContext(CartContext);
   const handleRouter = () => {
     router.push("/cart");
   };
@@ -33,50 +37,37 @@ const ModelCart = ({
             </ModalHeader>
             <ModalBody className="bg-white   ">
               <div className="text-[#7b7b7b] text-sm font-normal p-3  border-b">
-                2 projects
+                {cart.length} projects
               </div>
-
-              <div className="flex w-full items-center justify-center gap-3 border-b p-3 ">
-                <Image alt="" src={IconLogoCart} />
-                <div className="w-3/4 ">
-                  <div className="text-sm font-semibold">DecntralMedia</div>
-                  <div className="text-sm truncate ">
-                    Seamless infrastructure for hosting hybrid crypto events
-                    good
+              {cart.map((item: any) => (
+                <>
+                  <div className="flex w-full items-center justify-center gap-3 border-b p-3 ">
+                    <Image alt="" src={IconLogoCart} />
+                    <div className="w-3/4 ">
+                      <div className="text-sm font-semibold">{item.name}</div>
+                      <div className="text-sm truncate ">
+                        {item?.description}
+                      </div>
+                    </div>
+                    <div className="flex gap-2 items-center justify-center">
+                      <div className="font-semibold">1</div>
+                      <Image alt="" src={IconNear} />
+                    </div>
                   </div>
-                </div>
-                <div className="flex gap-2 items-center justify-center">
-                  <div className="font-semibold">100</div>
-
-                  <Image alt="" src={IconNear} />
-                </div>
-              </div>
-
-              <div className="flex w-full items-center justify-center gap-3 border-b p-3 ">
-                <Image alt="" src={IconLogoCart} />
-                <div className="w-3/4 ">
-                  <div className="text-sm font-semibold">DecntralMedia</div>
-                  <div className="text-sm truncate ">
-                    Seamless infrastructure for hosting hybrid crypto events
-                    good
-                  </div>
-                </div>
-                <div className="flex gap-2 items-center justify-center">
-                  <div className="font-semibold">100</div>
-
-                  <Image alt="" src={IconNear} />
-                </div>
-              </div>
+                </>
+              ))}
             </ModalBody>
             <ModalFooter className="bg-white rounded-b-xl ">
-              <Button
-                className="border-none bg-[#dd3344] py-3 px-4 rounded-md shadow-[0px_2px_2px]"
-                onClick={handleRouter}
-                onPress={onClose}
-                color="danger"
-              >
-                Proceed to donate
-              </Button>
+              <Tooltip content="Comming Soon">
+                <Button
+                  className="border-none bg-[#dd3344] py-3 px-4 rounded-md shadow-[0px_2px_2px]"
+                  //onClick={handleRouter}
+                  onPress={onClose}
+                  color="danger"
+                >
+                  Proceed to donate
+                </Button>
+              </Tooltip>
             </ModalFooter>
           </>
         )}

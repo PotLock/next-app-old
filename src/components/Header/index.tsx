@@ -14,17 +14,19 @@ import {
   NavbarMenuToggle,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ModelCart from "./components/ModelCart";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
+import { CartContext } from "@/layout/LayoutProvides";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const currentPath = usePathname();
   const [account, setAccount] = useState<any | null>(null);
+  const { cart } = useContext(CartContext);
 
   const handleSignIn = async () => {
     const wallet = new Wallet({
@@ -94,7 +96,7 @@ const Header = () => {
         ))}
 
         <NavbarItem>
-          <Badge content="0" color="warning" variant="solid">
+          <Badge content={cart.length} color="warning" variant="solid">
             <Button onClick={onOpen}>CART</Button>
           </Badge>
           {account ? (

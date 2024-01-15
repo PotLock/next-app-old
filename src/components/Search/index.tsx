@@ -55,6 +55,7 @@ const Search = ({ onSearch }: any) => {
 
   const handleFilter = (label: any) => {
     setFilter(label);
+    onSearch({ page: 1, limit: 9 });
     const sort = items.find((item) => item.label === label);
     router.push(pathname + `?sort=${sort?.key}&title=${search}`, {
       scroll: false,
@@ -63,6 +64,7 @@ const Search = ({ onSearch }: any) => {
 
   const handleSearch = (name: any) => {
     setSearch(name);
+    onSearch({ page: 1, limit: 9 });
     const sort = items.find((item) => item.label === filter);
     router.push(pathname + `?sort=${sort?.key}&title=${name}`, {
       scroll: false,

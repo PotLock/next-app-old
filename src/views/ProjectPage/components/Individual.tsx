@@ -1,6 +1,6 @@
 "use client";
-import { ProjectDetail } from "@/app/project/[id]/page";
 import { DATA_PROFILE } from "@/constant/project";
+import { ProjectDetail } from "@/contexts";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
 import React, { useContext } from "react";
 

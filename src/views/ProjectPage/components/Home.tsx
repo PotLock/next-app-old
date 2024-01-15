@@ -1,6 +1,6 @@
 "use client";
-import { ProjectDetail } from "@/app/project/[id]/page";
 import { DATA_ABOUT, DATA_OVERVIEW } from "@/constant/project";
+import { ProjectDetail } from "@/contexts";
 import React, { useContext } from "react";
 
 export interface IContentProps {}

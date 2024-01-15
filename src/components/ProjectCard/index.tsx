@@ -41,7 +41,10 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
         </div>
         <div className="flex gap-2">
           {data?.tags?.map((tag: any, index: any) => (
-            <div className="p-2 border rounded shadow-[0px_1px_1px]">
+            <div
+              key={index}
+              className="p-2 border rounded shadow-[0px_1px_1px]"
+            >
               {tag || "Tag"}
             </div>
           ))}

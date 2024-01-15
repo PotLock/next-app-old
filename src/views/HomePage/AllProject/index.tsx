@@ -1,11 +1,12 @@
 'use client'
 import React from "react";
 import ProjectCard from "../../../components/ProjectCard";
-import Search from "./components/Search";
+
 import TabAllProject from "./components/Tab";
 import { useDisclosure } from "@nextui-org/react";
 import { PROJECTS } from "@/constant";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
+import Search from "@/components/Search";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();

@@ -1,5 +1,5 @@
-'use client'
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
 import TabAllProject from "./components/Tab";
@@ -7,11 +7,23 @@ import { useDisclosure } from "@nextui-org/react";
 import { PROJECTS } from "@/constant";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import Search from "@/components/Search";
+import { getProject } from "@/services";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [projects, setProjects] = useState<any[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  const getApiProject = async () => {
+    const res = await getProject();
+    if (!!res) setProjects(res.data);
+  };
+
+  useEffect(() => {
+    getApiProject();
+  }, []);
   return (
-    
     <div className="flex flex-col w-full h-full mb-[120px] gap-5 ">
       <DonateProjectModel
         isOpen={isOpen}
@@ -41,13 +53,12 @@ const AllProject = () => {
         <TabAllProject />
       </div>
       <div className="flex items-center justify-center">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8">
-        {PROJECTS.map((project, index) => (
-          <ProjectCard key={index} onOpen={onOpen} />
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8">
+          {PROJECTS.map((project, index) => (
+            <ProjectCard key={index} onOpen={onOpen} data={project} />
+          ))}
+        </div>
       </div>
-      </div>
-      
     </div>
   );
 };

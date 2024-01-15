@@ -13,15 +13,14 @@ import {
 import React from "react";
 
 const ProjectCard = ({
-  title,
-  content,
+ data,
   onOpen,
 }: {
-  title?: string;
-  content?: string;
+  data: any
   onOpen?: () => void;
 }) => {
   return (
+ 
     <Card className=" w-[360px] sm:w-[408px] ">
       <div className="w-full relative">
         <Image
@@ -40,19 +39,15 @@ const ProjectCard = ({
         />
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">
-        <div className="font-semibold">{title || "RevitFi"}</div>
-        <div >
-          {content ||
+        <div className="font-semibold">{data?.name || "RevitFi"}</div>
+        <div className="line-clamp-2 overflow-ellipsis " >
+          {data?.description ||
             "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
         </div>
         <div className="flex gap-2">
-          <div className="p-2 border rounded shadow-[0px_1px_1px]">Defi</div>
-          <div className="p-2 border rounded shadow-[0px_1px_1px]">
-            Open source
-          </div>
-          <div className="p-2 border rounded shadow-[0px_1px_1px]">
-            Non profit
-          </div>
+          {
+            data?.tags?.map((tag: any, index: any) =>  <div className="p-2 border rounded shadow-[0px_1px_1px]">{tag ||'Tag'}</div>)
+          }
         </div>
       </CardBody>
       <Divider  />
@@ -63,7 +58,7 @@ const ProjectCard = ({
         </div>
 
         <Button  onPress={onOpen}>
-          Add to cart
+          Donate
         </Button>
       </CardFooter>
     </Card>

@@ -11,10 +11,6 @@ import {
 import React from "react";
 
 const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
-  const img = `https://nftstorage.link/ipfs/${data?.profileImageUrl}`;
-
-  console.log("🚀 ~ img:", data?.name, img);
-
   return (
     <Card className=" w-[360px] sm:w-[408px] ">
       <div className="w-full relative">

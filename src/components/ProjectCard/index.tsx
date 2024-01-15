@@ -15,7 +15,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
     onOpen();
   };
 
-const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
+
 
   const router = useRouter();
   return (
@@ -93,7 +93,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
     </div>
    
   );
-}
+
 }
 
 export default ProjectCard

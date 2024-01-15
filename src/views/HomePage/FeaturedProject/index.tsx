@@ -1,39 +1,56 @@
 "use client";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
-import { PROJECTS } from "@/constant";
-
-import { useDisclosure } from "@nextui-org/react";
-import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import Pagination from "@/components/Panigation";
+import { getProject } from "@/services";
+import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
+import { useDisclosure } from "@nextui-org/react";
 
 const FeaturedProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; // Adjust the number of items per page as needed
 
+  const [projects, setProjects] = useState<any[]>([]);
+
+  const getApiProject = async () => {
+    const res = await getProject();
+    let items = [];
+    for (let i = 0; i < res?.data.length; i++) {
+      if (
+        res?.data[i].project_id === "opact_near.near" ||
+        res?.data[i].project_id === "sharddog.near" ||
+        res?.data[i].project_id === "sharddog.magicbuild.near" ||
+        res?.data[i].project_id === "build.sputnik-dao.near" ||
+        res?.data[i].project_id === "evrything.near" ||
+        res?.data[i].project_id === "bos.questverse.near"
+      ) {
+        items.push(res?.data[i]);
+      }
+    }
+    setProjects(items);
+  };
+
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    const slicedData = PROJECTS.slice(startIndex, endIndex);
+    const slicedData = projects.slice(startIndex, endIndex);
 
     return slicedData.map((item, index) => (
-      
-        <ProjectCard
-        key={index}
-          onOpen={onOpen}
-          title={item.title}
-          content={item.content}
-        />
-      
+      <ProjectCard key={index} onOpen={onOpen} data={item} />
     ));
   };
   // Function to handle page change
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    getApiProject();
+  }, []);
+
   return (
     <div className="flex flex-col w-full h-full mb-[120px] gap-5">
       <DonateProjectModel
@@ -44,19 +61,17 @@ const FeaturedProject = () => {
       <div className="flex  justify-between mx-4 sm:mx-0">
         <div className="font-semibold text-[22px] ">Featured projects</div>
         <Pagination
-          data={PROJECTS}
+          data={projects}
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
         />
       </div>
 
-
       <div className="flex items-center justify-center ">
-      <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between sm:mx-0 gap-y-3 gap-x-8">
-        {getCurrentPageItems()}
+        <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between sm:mx-0 gap-y-3 gap-x-8">
+          {getCurrentPageItems()}
+        </div>
       </div>
-      </div>
-      
     </div>
   );
 };

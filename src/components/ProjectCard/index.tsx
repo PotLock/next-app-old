@@ -12,17 +12,9 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 
-const ProjectCard = ({
-  title,
-  content,
-  onOpen,
-}: {
-  title?: string;
-  content?: string;
-  onOpen?: () => void;
-}) => {
+const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
   return (
-    <Card className=" w-[360px] sm:w-[408px] ">
+    <Card className=" w-[360px] sm:w-[408px] min-h-[397px]">
       <div className="w-full relative">
         <Image
           radius="none"
@@ -40,31 +32,29 @@ const ProjectCard = ({
         />
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">
-        <div className="font-semibold">{title || "RevitFi"}</div>
-        <div >
-          {content ||
-            "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
+        <div className="font-semibold">{data?.name || "RevitFi"}</div>
+        <div className=" h-[60px] ">
+          <p className="line-clamp-2 overflow-ellipsis">
+            {data?.description ||
+              "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
+          </p>
         </div>
         <div className="flex gap-2">
-          <div className="p-2 border rounded shadow-[0px_1px_1px]">Defi</div>
-          <div className="p-2 border rounded shadow-[0px_1px_1px]">
-            Open source
-          </div>
-          <div className="p-2 border rounded shadow-[0px_1px_1px]">
-            Non profit
-          </div>
+          {data?.tags?.map((tag: any, index: any) => (
+            <div className="p-2 border rounded shadow-[0px_1px_1px]">
+              {tag || "Tag"}
+            </div>
+          ))}
         </div>
       </CardBody>
-      <Divider  />
+      <Divider />
       <CardFooter className="flex justify-between py-4 px-6 items-center">
         <div className="flex gap-2">
           <div className="font-semibold ">$24.00</div>
           <div>Raised</div>
         </div>
 
-        <Button  onPress={onOpen}>
-          Add to cart
-        </Button>
+        <Button onPress={onOpen}>Donate</Button>
       </CardFooter>
     </Card>
   );

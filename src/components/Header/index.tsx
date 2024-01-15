@@ -94,7 +94,7 @@ const Header = () => {
         ))}
 
         <NavbarItem>
-          <Badge content="5" color="warning" variant="solid">
+          <Badge content="0" color="warning" variant="solid">
             <Button onClick={onOpen}>CART</Button>
           </Badge>
           {account ? (

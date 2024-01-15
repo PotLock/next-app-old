@@ -11,6 +11,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Input,
 } from "@nextui-org/react";
 import NearIcon from "../../../assets/icons/NearIcon.svg";
 import IconNear from "../../../assets/images/IconNear.png";
@@ -38,6 +39,7 @@ const DonateProjectModel = ({
     onOpenChange: OnOpenChangeFinal,
   } = useDisclosure();
 
+  const [count, setCount] = useState("0.1");
   const [openNote, setOpenNote] = useState<boolean>(false);
   const [openBreakDown, setOpenBreakDown] = useState<boolean>(false);
 
@@ -49,21 +51,23 @@ const DonateProjectModel = ({
   };
 
   const donate = async () => {
-    const receipientId = localStorage.getItem("receipientId");
-    const wallet = new Wallet({
-      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
-    });
-    await wallet.startUp();
-    if (receipientId) {
-      await wallet.callMethod({
-        contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
-        method: "donate",
-        args: {
-          recipient_id: receipientId,
-        },
-        deposit: "9000000000000000000000",
+    if (+count > 0) {
+      const receipientId = localStorage.getItem("receipientId");
+      const wallet = new Wallet({
+        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+        network: "mainnet",
       });
+      await wallet.startUp();
+      if (receipientId) {
+        await wallet.callMethod({
+          contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
+          method: "donate",
+          args: {
+            recipient_id: receipientId,
+          },
+          deposit: utils.format.parseNearAmount(count.toString())?.toString(),
+        });
+      }
     }
   };
 
@@ -123,7 +127,13 @@ const DonateProjectModel = ({
                       <DropdownItem key="copy">USDC</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
-                  <div className="mx-4 text-[#7B7B7B]">0</div>
+                  <Input
+                    label=""
+                    onChange={(e) => setCount(e.target.value)}
+                    value={count}
+                    className="w-full text-right "
+                    type="number"
+                  />
                 </div>
 
                 <div className="text-[#7B7B7B] text-[11px] flex items-center justify-between">
@@ -206,6 +216,7 @@ const DonateProjectModel = ({
                     donate();
                   }}
                   color="danger"
+                  disabled={+count < 0}
                 >
                   Donate
                 </Button>

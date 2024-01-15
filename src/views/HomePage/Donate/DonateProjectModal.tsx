@@ -49,22 +49,22 @@ const DonateProjectModel = ({
   };
 
   const donate = async () => {
+    const receipientId = localStorage.getItem("receipientId");
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
       network: "mainnet",
     });
     await wallet.startUp();
-    await wallet.callMethod({
-      contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
-      method: "donate",
-      args: {
-        // recipient_id: localStorage.getItem("receipientId"),
-        // message: "",
-        // referrer_id: "",
-        recipient_id: "magicbuild.near",
-      },
-      deposit: "9000000000000000000000",
-    });
+    if (receipientId) {
+      await wallet.callMethod({
+        contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
+        method: "donate",
+        args: {
+          recipient_id: receipientId,
+        },
+        deposit: "9000000000000000000000",
+      });
+    }
   };
 
   return (

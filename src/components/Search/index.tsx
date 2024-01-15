@@ -9,8 +9,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 const items = [
   {
     key: "dateCreated",
@@ -43,6 +43,15 @@ const Search = ({ onSearch }: any) => {
   const [search, setSearch] = useState("");
   const router = useRouter();
   const pathname = usePathname();
+  const searchParam = useSearchParams();
+  const sort = searchParam.get("sort");
+  const title = searchParam.get("title");
+
+  useEffect(() => {
+    setSearch(title ?? "");
+    const sortFilter = items.find((item) => item.key === sort);
+    setFilter(sortFilter?.label ?? "All projects");
+  }, [sort, title]);
 
   const handleFilter = (label: any) => {
     setFilter(label);
@@ -55,7 +64,9 @@ const Search = ({ onSearch }: any) => {
   const handleSearch = (name: any) => {
     setSearch(name);
     const sort = items.find((item) => item.label === filter);
-    router.push(pathname + `?sort=${sort}&title=${name}`, { scroll: false });
+    router.push(pathname + `?sort=${sort?.key}&title=${name}`, {
+      scroll: false,
+    });
   };
 
   return (
@@ -66,6 +77,7 @@ const Search = ({ onSearch }: any) => {
       <input
         onChange={(e) => handleSearch(e.target.value)}
         type="search"
+        value={search}
         className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
         placeholder="Search (9) projects..."
       />

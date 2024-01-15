@@ -24,14 +24,14 @@ const Pagination = ({ data, itemsPerPage, onPageChange }: any) => {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="flex items-center justify-center w-[44px] h-[44px] p-[10px] rounded-full border hover:bg-slate-100"
+          className="flex items-center justify-center w-[44px] h-[44px] p-[10px] rounded-full border hover:bg-slate-100 cursor-pointer"
         >
           <IconLeft />
         </button>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="flex items-center justify-center w-[44px] h-[44px] p-[10px] rounded-full border hover:bg-slate-100"
+          className="flex items-center justify-center w-[44px] h-[44px] p-[10px] rounded-full border hover:bg-slate-100 cursor-pointer"
         >
           <IconRight />
         </button>

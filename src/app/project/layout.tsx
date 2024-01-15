@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import LayoutProvides from "@/layout/LayoutProvides";
-import "@near-wallet-selector/modal-ui/styles.css";
+import ".././globals.css";
+import ProjectPage from "@/views/ProjectPage/Project";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,13 +13,13 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactElement;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="max-w-[1440px] m-auto">
-          <LayoutProvides>{children}</LayoutProvides>
+        <div className="flex flex-col-reverse">
+          <ProjectPage>{children}</ProjectPage>
         </div>
       </body>
     </html>

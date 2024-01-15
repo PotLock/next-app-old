@@ -1,6 +1,4 @@
-// import Image from 'next/image'
-import ProjectImg from "../../assets/images/ProjectImage.png";
-import ProjectLogo from "../../assets/images/ProjectLogo.png";
+
 import {
   Card,
   CardHeader,
@@ -26,6 +24,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
             alt="Card background"
             className="object-fill h-[150px] w-[360px] sm:w-[408px] "
             src={`https://nftstorage.link/ipfs/${data?.bannerImageUrl}`}
+            
           />
         ) : (
           <Image
@@ -40,16 +39,17 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
           <Image
             alt="Card icon"
             className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
-            src={
-              `https://nftstorage.link/ipfs/${data?.profileImageUrl}` ||
-              "/ProjectLogo.png"
-            }
+            src={`https://nftstorage.link/ipfs/${data?.profileImageUrl}`}
+           width={60}
+           height={60}
           />
         ) : (
           <Image
             alt="Card icon"
             className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
             src="/ProjectLogo.png"
+            width={60}
+           height={60}
           />
         )}
       </div>

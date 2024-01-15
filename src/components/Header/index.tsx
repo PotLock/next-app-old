@@ -1,19 +1,19 @@
 "use client";
-
 import IconLogo from "@/assets/icons/IconLogo";
 import IconMenu from "@/assets/icons/IconMenu";
+import wallet from "@/configs/near.config";
 import { MENUITEMS } from "@/constant";
 import {
+  Badge,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   Button,
-  NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
+  NavbarMenuToggle,
   useDisclosure,
-  Badge,
 } from "@nextui-org/react";
 import React from "react";
 import ModelCart from "./components/ModelCart";
@@ -24,7 +24,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const currenPath = usePathname();
- 
+
   return (
     <Navbar
       maxWidth="full"
@@ -60,6 +60,9 @@ const Header = () => {
           <Badge content="5" color="warning" variant="solid">
             <Button onClick={onOpen}>CART</Button>
           </Badge>
+          <Button className="ml-5" color="primary" onClick={wallet}>
+            Login
+          </Button>
         </NavbarItem>
       </NavbarContent>
 
@@ -71,7 +74,12 @@ const Header = () => {
       <NavbarMenu className="w-full h-full bg-[white] flex items-center justify-center gap-10">
         {MENUITEMS.map((item, index) => (
           <NavbarMenuItem key={index}>
-            <Link className={`${currenPath === item.href && "font-semibold"} w-full  text-4xl`} href={item.href}>
+            <Link
+              className={`${
+                currenPath === item.href && "font-semibold"
+              } w-full  text-4xl`}
+              href={item.href}
+            >
               {item.title}
             </Link>
           </NavbarMenuItem>

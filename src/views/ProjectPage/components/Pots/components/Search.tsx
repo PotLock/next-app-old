@@ -1,61 +1,20 @@
 "use client";
-import IconCheck from "@/assets/icons/IconCheck";
-import IconFilter from "@/assets/icons/IconFilter";
-import IconSearch from "@/assets/icons/IconSearch";
+import { IconSearch, IconFilter, IconCheck } from "@/assets/icons";
+import { DATA_ITEMS_SEARCH } from "@/constant/project";
 import {
-  Button,
   Dropdown,
-  DropdownItem,
-  DropdownMenu,
   DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
 } from "@nextui-org/react";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-const items = [
-  {
-    key: "dateCreated",
-    label: "All projects",
-    subLabel: "",
-  },
-  {
-    key: "dateCreated",
-    label: "New to Old",
-    subLabel: "Time",
-  },
-  {
-    key: "-dateCreated",
-    label: "Old to New",
-    subLabel: "Time",
-  },
-  {
-    key: "dateCreated",
-    label: "Most to Least",
-    subLabel: "Donations ",
-  },
-  {
-    key: "dateCreated",
-    label: "Least to Most",
-    subLabel: "Donations ",
-  },
-];
-const Search = ({ onSearch }: any) => {
-  const [filter, setFilter] = useState("All projects");
-  const [search, setSearch] = useState("");
-  const router = useRouter();
-  const pathname = usePathname();
+import React, { useState } from "react";
+
+const Search = () => {
+  const [filter, setFilter] = useState("All posts");
 
   const handleFilter = (label: any) => {
     setFilter(label);
-    const sort = items.find((item) => item.label === label);
-    router.push(pathname + `?sort=${sort?.key}&title=${search}`, {
-      scroll: false,
-    });
-  };
-
-  const handleSearch = (name: any) => {
-    setSearch(name);
-    const sort = items.find((item) => item.label === filter);
-    router.push(pathname + `?sort=${sort}&title=${name}`, { scroll: false });
   };
 
   return (
@@ -64,10 +23,9 @@ const Search = ({ onSearch }: any) => {
         <IconSearch />
       </div>
       <input
-        onChange={(e) => handleSearch(e.target.value)}
         type="search"
         className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
-        placeholder="Search (9) projects..."
+        placeholder="Search (3) posts"
       />
       <Dropdown>
         <DropdownTrigger>
@@ -79,7 +37,11 @@ const Search = ({ onSearch }: any) => {
             <IconFilter />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu className="" aria-label="Dynamic Actions" items={items}>
+        <DropdownMenu
+          className=""
+          aria-label="Dynamic Actions"
+          items={DATA_ITEMS_SEARCH}
+        >
           {(item) => (
             <DropdownItem
               key={item.key}

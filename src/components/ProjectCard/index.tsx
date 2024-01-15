@@ -33,9 +33,11 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen?: () => void }) => {
       </div>
       <CardBody className="p-6 flex gap-[6px] flex-col">
         <div className="font-semibold">{data?.name || "RevitFi"}</div>
-        <div className="line-clamp-2 overflow-ellipsis ">
-          {data?.description ||
-            "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
+        <div className=" h-[60px] ">
+          <p className="line-clamp-2 overflow-ellipsis">
+            {data?.description ||
+              "Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure."}
+          </p>
         </div>
         <div className="flex gap-2">
           {data?.tags?.map((tag: any, index: any) => (

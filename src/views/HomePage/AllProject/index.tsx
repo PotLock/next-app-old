@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
 import TabAllProject from "./components/Tab";
-import { useDisclosure } from "@nextui-org/react";
+import { Divider, useDisclosure } from "@nextui-org/react";
 import { PROJECTS } from "@/constant";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import Search from "@/components/Search";
@@ -23,7 +23,12 @@ const AllProject = () => {
   const getApiProject = async () => {
     try {
       const res = await searchProjectName({ ...searchFilter, sort, title });
-      if (!!res) setProjects(res.data);
+      if (!!res)
+        if (sort || title) {
+          setProjects(res.data);
+        } else {
+          setProjects([...projects, ...res.data]);
+        }
     } catch (error) {}
   };
 
@@ -58,38 +63,42 @@ const AllProject = () => {
       />
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="font-semibold text-sm sm:text-[22px]">ALL PROJECTS</div>
-        <div className="flex ">
-          <div className="flex gap-2  py-1 px-4 border border-[#F4B37D] bg-[#FEF6EE] text-[11px] sm:text-sm">
-            <div>{data?.totalContributed ?? "$0"}</div>
+        <div className="flex h-5 items-center space-x-4 text-small">
+          <div className="flex gap-2">
+            <div className="font-bold	">{data?.totalContributed ?? "$0"}</div>
             <div>Donated</div>
           </div>
-          <div className="flex gap-2 px-4 border border-[#F4B37D] bg-[#FEF6EE] py-1 text-[11px] sm:text-sm">
-            <div>{data?.uniqueDonors ?? "0"}</div>
+          <Divider orientation="vertical" />
+          <div className="flex gap-2">
+            <div className="font-bold	">{data?.uniqueDonors ?? "0"}</div>
             <div>Unique Donors</div>
           </div>
-          <div className="flex gap-2 px-4 border border-[#F4B37D]  bg-[#FEF6EE] py-1 text-[11px] sm:text-sm">
-            <div>{data?.donationQuantity ?? "0"}</div>
+          <Divider orientation="vertical" />
+          <div className="flex gap-2">
+            <div className="font-bold	">{data?.donationQuantity ?? "0"}</div>
             <div>Donations</div>
           </div>
         </div>
       </div>
       <div className="w-full flex flex-col gap-[20px]  ">
-        <Search onSearch={handleSearch} />
+        <Search onSearch={setSearchFilter} />
         <TabAllProject />
       </div>
       <div className="flex items-center justify-center">
         <InfiniteScroll
           dataLength={projects.length}
-          next={() =>
-            setSearchFilter({
-              ...searchFilter,
-              page: searchFilter.page + 1,
-            })
-          }
+          next={() => {
+            if (projects.length) {
+              setSearchFilter({
+                ...searchFilter,
+                page: searchFilter.page + 1,
+              });
+            }
+          }}
           hasMore={true} // Replace with a condition based on your data source
           loader={<p>No more data to load.</p>}
           endMessage={<p>No more data to load.</p>}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8 min-h-[400px]"
           // inverse={true}
         >
           {projects.map((project, index) => (

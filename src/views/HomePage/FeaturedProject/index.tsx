@@ -21,7 +21,7 @@ const FeaturedProject = () => {
       if (
         res?.data[i].project_id === "opact_near.near" ||
         res?.data[i].project_id === "sharddog.near" ||
-        res?.data[i].project_id === "sharddog.magicbuild.near" ||
+        res?.data[i].project_id === "magicbuild.near" ||
         res?.data[i].project_id === "build.sputnik-dao.near" ||
         res?.data[i].project_id === "evrything.near" ||
         res?.data[i].project_id === "bos.questverse.near"

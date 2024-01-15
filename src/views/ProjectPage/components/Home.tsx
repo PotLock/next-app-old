@@ -47,7 +47,7 @@ export default function HomePage(props: IContentProps) {
                     key={item?.id}
                     className="w-[33%] flex items-end gap-2 p-[12px] rounded-md bg-[#FEF6EE]"
                   >
-                    <div>{item?.icons}</div>
+                    {/* <div>{item?.icons}</div>  */}
                     <div className="text-[14px] font-normal">{item.name}</div>
                   </div>
                 ))}

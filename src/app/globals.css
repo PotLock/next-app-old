@@ -25,3 +25,11 @@
     )
     rgb(var(--background-start-rgb));
 } */
+
+.slick-slider {
+  width: 100%;
+}
+
+.slick-arrow {
+  display: none !important;
+}

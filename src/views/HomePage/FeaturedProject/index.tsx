@@ -1,16 +1,26 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
 import Pagination from "@/components/Panigation";
 import { getProject } from "@/services";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import { useDisclosure } from "@nextui-org/react";
+import Slider from "react-slick";
 
 const FeaturedProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [currentPage, setCurrentPage] = useState(1);
+  const slickRef = useRef<any>(null);
   const itemsPerPage = 3; // Adjust the number of items per page as needed
+
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+  };
 
   const [projects, setProjects] = useState<any[]>([]);
 
@@ -33,18 +43,17 @@ const FeaturedProject = () => {
   };
 
   const getCurrentPageItems = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    const slicedData = projects.slice(startIndex, endIndex);
-
-    return slicedData.map((item, index) => (
+    return projects.map((item, index) => (
       <ProjectCard key={index} onOpen={onOpen} data={item} />
     ));
   };
   // Function to handle page change
   const handlePageChange = (page: any) => {
-    setCurrentPage(page);
+    if (page == "next") {
+      slickRef.current.slickNext();
+    } else {
+      slickRef.current.slickPrev();
+    }
   };
 
   useEffect(() => {
@@ -68,9 +77,12 @@ const FeaturedProject = () => {
       </div>
 
       <div className="flex items-center justify-center ">
-        <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between sm:mx-0 gap-y-3 gap-x-8">
+        {/* <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between sm:mx-0 gap-y-3 gap-x-8">
+          <Slider {...settings}>{getCurrentPageItems()}</Slider>
+        </div> */}
+        <Slider ref={slickRef} {...settings}>
           {getCurrentPageItems()}
-        </div>
+        </Slider>
       </div>
     </div>
   );

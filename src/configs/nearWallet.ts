@@ -5,9 +5,7 @@ import { providers } from "near-api-js";
 
 // wallet selector UI
 import "@near-wallet-selector/modal-ui/styles.css";
-import { setupModal } from "@near-wallet-selector/modal-ui";
-
-// wallet selector options
+import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
 import type {
   Network,
   NetworkId,
@@ -15,12 +13,25 @@ import type {
   Wallet as WalletSelectorWallet,
 } from "@near-wallet-selector/core";
 import { setupWalletSelector } from "@near-wallet-selector/core";
-import { setupNearWallet } from "@near-wallet-selector/near-wallet";
-import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
-import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
-import { setupSender } from "@near-wallet-selector/sender";
-import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
 import { setupHereWallet } from "@near-wallet-selector/here-wallet";
+import { setupMathWallet } from "@near-wallet-selector/math-wallet";
+import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
+import { setupNarwallets } from "@near-wallet-selector/narwallets";
+import { setupModal } from "@near-wallet-selector/modal-ui";
+import { setupNearWallet } from "@near-wallet-selector/near-wallet";
+import { setupNearFi } from "@near-wallet-selector/nearfi";
+import { setupNightly } from "@near-wallet-selector/nightly";
+import { setupSender } from "@near-wallet-selector/sender";
+import { setupBitgetWallet } from "@near-wallet-selector/bitget-wallet";
+import { setupWalletConnect } from "@near-wallet-selector/wallet-connect";
+import { setupWelldoneWallet } from "@near-wallet-selector/welldone-wallet";
+import { setupNeth } from "@near-wallet-selector/neth";
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
+import { setupLedger } from "@near-wallet-selector/ledger";
+import { setupXDEFI } from "@near-wallet-selector/xdefi";
+import { setupRamperWallet } from "@near-wallet-selector/ramper-wallet";
+import { setupNearMobileWallet } from "@near-wallet-selector/near-mobile-wallet";
+import { setupMintbaseWallet } from "@near-wallet-selector/mintbase-wallet";
 
 const THIRTY_TGAS = "30000000000000";
 export const NO_DEPOSIT = "0";
@@ -58,12 +69,36 @@ export class Wallet {
     this.walletSelector = await setupWalletSelector({
       network: this.network,
       modules: [
-        setupMyNearWallet({}),
-        setupHereWallet({}),
-        setupCoin98Wallet({}),
-        setupNearWallet({}),
-        setupMeteorWallet({}),
-        setupSender({}),
+        setupMyNearWallet(),
+        setupLedger(),
+        setupNearWallet(),
+        setupSender(),
+        setupBitgetWallet(),
+        setupMathWallet(),
+        setupNightly(),
+        setupMeteorWallet(),
+        setupNarwallets(),
+        setupWelldoneWallet(),
+        setupHereWallet(),
+        setupCoin98Wallet(),
+        setupNearFi(),
+        setupRamperWallet(),
+        setupNeth({
+          gas: "300000000000000",
+          bundle: false,
+        }),
+        setupXDEFI(),
+        setupWalletConnect({
+          projectId: "c4f79cc...",
+          metadata: {
+            name: "NEAR Wallet Selector",
+            description: "Example dApp used by NEAR Wallet Selector",
+            url: "https://github.com/near/wallet-selector",
+            icons: ["https://avatars.githubusercontent.com/u/37784886"],
+          },
+        }),
+        setupNearMobileWallet(),
+        setupMintbaseWallet(),
       ],
     });
 

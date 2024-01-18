@@ -36,7 +36,9 @@
     "@near-wallet-selector/xdefi": "^8.9.2",
     "@nextui-org/react": "^2.2.9",
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/react-slick": "^0.23.13",
     "@types/redux-logger": "^3.0.12",
+    "add": "^2.0.6",
     "axios": "^1.6.5",
     "framer-motion": "^10.17.9",
     "fs": "0.0.1-security",
@@ -49,7 +51,12 @@
     "react-dom": "^18",
     "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^9.1.0",
-    "redux-logger": "^3.0.6"
+    "react-slick": "^0.29.0",
+    "redux-logger": "^3.0.6",
+    "slick-carousel": "^1.8.1",
+    "react-markdown": "^9.0.0",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -78,16 +78,33 @@ export const PROJECTS = [
 
 export const TABS = [
   {
-    id: "defi",
-    label: "DeFi",
+    id: "desci",
+    label: "DeSci",
   },
   {
     id: "open",
-    label: "Open source",
+    label: "Open Source",
   },
   {
     id: "non",
-    label: "Non profit",
+    label: "NonProfit",
+  },
+  {
+    id: "social",
+    label: "Social Impact",
+  },
+  { id: "climate", label: "Climate" },
+  {
+    id: "public",
+    label: "Public Good",
+  },
+  {
+    id: "community",
+    label: "Community",
+  },
+  {
+    id: "education",
+    label: "Education",
   },
 ];
 

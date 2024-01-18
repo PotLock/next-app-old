@@ -86,7 +86,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
       <Divider />
       <CardFooter className="flex justify-between py-4 px-6 items-center">
         <div className="flex gap-2">
-          <div className="font-semibold ">$24.00</div>
+          <div className="font-semibold ">{data?.totalContributed}</div>
           <div>Raised</div>
         </div>
         <Button

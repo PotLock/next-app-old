@@ -2,6 +2,7 @@
 import { DATA_PROFILE } from "@/constant/project";
 import { ProjectDetail } from "@/contexts";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
+import Link from "next/link";
 import React, { useContext } from "react";
 
 export interface IProfilePageProps {}
@@ -12,36 +13,39 @@ export default function IndividualPage(props: IProfilePageProps) {
     <div>
       <div>
         <div className="my-2 text-[44px] font-normal text-[#292929]">
-          {data?.name}
+          {data?.name || "User Name"}
         </div>
         <div className="my-2 text-[17px] font-normal text-[#7B7B7B]">
           @{data?.project_id}
         </div>
-        {/* <div className="flex gap-[12px] my-4">
-            {item.status?.map((item) => (
-              <div key={item.id}>
-                <Chip radius="sm" size="lg">
-                  {item?.title}
-                </Chip>
-              </div>
-            ))}
-          </div> */}
+        <div className="flex gap-[12px] my-4">
+          <Chip radius="sm" size="lg">
+            {data?.status || "normal"}
+          </Chip>
+        </div>
         <div className="flex items-center justify-between my-4">
           <div>
             <div className="flex gap-[24px]">
-              {/* <div className="flex">
+              <div className="flex">
                 <div className="text-[14px] text-[#292929] font-medium mr-[24px]">
                   Followers
-                  <span className="text-[#7B7B7B] pl-2">{item.followers}</span>
+                  <span className="text-[#7B7B7B] pl-2">
+                    {data?.followers || "0"}
+                  </span>
                 </div>
                 <div className="text-[14px] text-[#292929] font-medium">
                   Following
-                  <span className="text-[#7B7B7B] pl-2">{item.following}</span>
+                  <span className="text-[#7B7B7B] pl-2">
+                    {data?.Totalfollowing || "0"}
+                  </span>
                 </div>
               </div>
-              <div className="text-[14px] font-medium text-[#DD3345]">
+              <Link
+                href={`${data?.following}`}
+                className="text-[14px] font-medium text-[#DD3345]"
+              >
                 Follow
-              </div> */}
+              </Link>
             </div>
           </div>
           <div>

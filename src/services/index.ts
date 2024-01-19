@@ -19,3 +19,7 @@ export const searchProjectName = ({ page, limit, sort, title }: any) => {
     }&limit=${limit}&${sort ? "sort=" + sort : ""}`,
   );
 };
+
+export const getProjectFeatured = () => {
+  return axiosInstance.get("/project/featured");
+};

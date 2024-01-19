@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
 import Pagination from "@/components/Panigation";
-import { getProject } from "@/services";
+import { getProjectFeatured } from "@/services";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import { useDisclosure } from "@nextui-org/react";
-import Slider from "react-slick";
 import { useMediaQuery } from "react-responsive";
+import Slider from "react-slick";
 
 const FeaturedProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -26,21 +26,12 @@ const FeaturedProject = () => {
   const [projects, setProjects] = useState<any[]>([]);
 
   const getApiProject = async () => {
-    const res = await getProject();
-    let items = [];
-    for (let i = 0; i < res?.data.length; i++) {
-      if (
-        res?.data[i].project_id === "opact_near.near" ||
-        res?.data[i].project_id === "sharddog.near" ||
-        res?.data[i].project_id === "magicbuild.near" ||
-        res?.data[i].project_id === "build.sputnik-dao.near" ||
-        res?.data[i].project_id === "evrything.near" ||
-        res?.data[i].project_id === "bos.questverse.near"
-      ) {
-        items.push(res?.data[i]);
-      }
+    try {
+      const res = await getProjectFeatured();
+      setProjects(res?.data);
+    } catch (error) {
+      console.error(error);
     }
-    setProjects(items);
   };
 
   const getCurrentPageItems = () => {

@@ -11,9 +11,9 @@ const TagAllProject = ({
   handleTag: (label: string) => void;
 }) => {
   return (
-    <div className="flex w-full flex-row gap-3 items-center justify-start mx-4 sm:mx-0">
+    <div className="flex w-full flex-col gap-3 items-start justify-start pl-[15px] pr-[15px] mx-0 sm:flex-row sm:p-0 sm:items-center">
       <div>Tags:</div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap ">
         {TABS.map((t) => (
           <div
             key={t.id}

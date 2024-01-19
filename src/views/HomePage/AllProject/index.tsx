@@ -84,17 +84,17 @@ const AllProject = () => {
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="font-semibold text-sm sm:text-[22px]">ALL PROJECTS</div>
         <div className="flex h-5 items-center space-x-4 text-small">
-          <div className="flex gap-2">
+          <div className="flex gap-2 text-[11px]">
             <div className="font-bold	">{data?.totalContributed ?? "$0"}</div>
             <div>Donated</div>
           </div>
           <Divider orientation="vertical" />
-          <div className="flex gap-2">
+          <div className="flex gap-2 text-[11px]">
             <div className="font-bold	">{data?.uniqueDonors ?? "0"}</div>
             <div>Unique Donors</div>
           </div>
           <Divider orientation="vertical" />
-          <div className="flex gap-2">
+          <div className="flex gap-2 text-[11px]">
             <div className="font-bold	">{data?.donationQuantity ?? "0"}</div>
             <div>Donations</div>
           </div>

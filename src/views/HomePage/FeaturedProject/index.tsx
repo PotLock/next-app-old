@@ -7,19 +7,20 @@ import { getProject } from "@/services";
 import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import { useDisclosure } from "@nextui-org/react";
 import Slider from "react-slick";
+import { useMediaQuery } from "react-responsive";
 
 const FeaturedProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [currentPage, setCurrentPage] = useState(1);
   const slickRef = useRef<any>(null);
+  const mobileWiew = useMediaQuery({ query: "(max-width: 500px)" });
   const itemsPerPage = 3; // Adjust the number of items per page as needed
 
   const settings = {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: mobileWiew ? 1 : 3,
+    slidesToScroll: mobileWiew ? 1 : 3,
   };
 
   const [projects, setProjects] = useState<any[]>([]);
@@ -76,7 +77,7 @@ const FeaturedProject = () => {
         />
       </div>
 
-      <div className="flex items-center justify-center ">
+      <div className="flex items-center justify-center pl-[15px] pr-[15px]">
         {/* <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between sm:mx-0 gap-y-3 gap-x-8">
           <Slider {...settings}>{getCurrentPageItems()}</Slider>
         </div> */}

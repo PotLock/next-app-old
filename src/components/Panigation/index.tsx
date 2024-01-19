@@ -7,13 +7,13 @@ const Pagination = ({ onPageChange }: any) => {
     <div>
       <div className="flex gap-2">
         <button
-          onClick={() => onPageChange("next")}
+          onClick={() => onPageChange("prev")}
           className="flex items-center justify-center w-[44px] h-[44px] p-[10px] rounded-full border hover:bg-slate-100 cursor-pointer"
         >
           <IconLeft />
         </button>
         <button
-          onClick={() => onPageChange("prev")}
+          onClick={() => onPageChange("next")}
           className="flex items-center justify-center w-[44px] h-[44px] p-[10px] rounded-full border hover:bg-slate-100 cursor-pointer"
         >
           <IconRight />

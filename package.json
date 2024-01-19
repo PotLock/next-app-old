@@ -50,13 +50,14 @@
     "react": "^18",
     "react-dom": "^18",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-markdown": "^9.0.0",
     "react-redux": "^9.1.0",
+    "react-responsive": "^9.0.2",
     "react-slick": "^0.29.0",
     "redux-logger": "^3.0.6",
-    "slick-carousel": "^1.8.1",
-    "react-markdown": "^9.0.0",
     "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@types/node": "^20",

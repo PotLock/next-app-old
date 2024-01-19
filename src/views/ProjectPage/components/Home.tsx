@@ -1,10 +1,9 @@
 "use client";
-import { DATA_ABOUT, DATA_OVERVIEW } from "@/constant/project";
 import { ProjectDetail } from "@/contexts";
 import React, { useContext } from "react";
 import Markdown from "react-markdown";
 import gfm from "remark-gfm";
-import rehypeRaw from 'rehype-raw'
+import rehypeRaw from "rehype-raw";
 
 export interface IContentProps {}
 
@@ -45,9 +44,8 @@ export default function HomePage() {
             Overview
           </div>
           <div className="w-[65%] text-[#7B7B7B] text-[17px] font-normal">
-           
             <Markdown remarkPlugins={[gfm]} rehypePlugins={[rehypeRaw]}>
-               {data?.description}
+              {data?.description}
             </Markdown>
           </div>
         </div>

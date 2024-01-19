@@ -8,12 +8,21 @@ import {
   Divider,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
+  const [imageUrl, setImageUrl] = useState("");
+  const [logo, setLogo] = useState("");
   const router = useRouter();
-
   const { updateCart } = useContext(CartContext);
+  useEffect(() => {
+    if (data.bannerImageUrl) {
+      setImageUrl(`https://nftstorage.link/ipfs/${data?.bannerImageUrl}`);
+    }
+    if (data.profileImageUrl) {
+      setLogo(`https://nftstorage.link/ipfs/${data?.profileImageUrl}`);
+    }
+  }, [data]);
 
   const openModal = () => {
     localStorage.setItem("receipientId", data?.project_id);
@@ -24,12 +33,13 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
     <div onClick={() => router.push(`/project/${data?.id}`)}>
       <Card className=" w-[360px] sm:w-[408px] cursor-pointer ">
         <div className="w-full relative">
-          {data?.bannerImageUrl !== "" ? (
+          {!!data?.bannerImageUrl ? (
             <Image
               radius="none"
               alt="Card background"
               className="object-fill h-[150px] w-[360px] sm:w-[408px] "
-              src={`https://nftstorage.link/ipfs/${data?.bannerImageUrl}`}
+              src={imageUrl}
+              onError={() => setImageUrl("/ProjectImage.png")}
             />
           ) : (
             <Image
@@ -44,9 +54,10 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
             <Image
               alt="Card icon"
               className="ml-6 absolute -bottom-5 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
-              src={`https://nftstorage.link/ipfs/${data?.profileImageUrl}`}
+              src={logo}
               width={60}
               height={60}
+              onError={() => setLogo("/ProjectLogo.png")}
             />
           ) : (
             <Image
@@ -78,9 +89,9 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
           </div>
         </CardBody>
         <Divider />
-        <CardFooter className="flex justify-between py-4 px-6 items-center">
+        <CardFooter className="flex justify-between p-4 items-center">
           <div className="flex gap-2">
-            <div className="font-semibold ">${data?.totalContributed}</div>
+            <div className="font-semibold ">{data?.totalContributed}</div>
             <div>Raised</div>
           </div>
           <Button

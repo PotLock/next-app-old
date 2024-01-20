@@ -43,6 +43,7 @@ export default function IndividualPage(props: IProfilePageProps) {
               <Link
                 href={`${data?.following}`}
                 className="text-[14px] font-medium text-[#DD3345]"
+                passHref
               >
                 Follow
               </Link>

@@ -6,6 +6,7 @@ import { DATA_SOCIALS } from "@/constant/socials";
 import NavbarPage from "./components/Navbar";
 import { ProjectDetail } from "@/contexts";
 import Link from "next/link";
+
 export interface IProjectPageProps {
   children?: ReactNode;
 }
@@ -44,7 +45,7 @@ link: data?.linktree[item.url]
             <Image
               radius="none"
               alt="Card background"
-              className="object-fill h-[150px] w-[1400px]"
+              className="object-fill h-[280px] w-[1440px]"
               src={imageUrl}
               onError={() => setImageUrl("/ProjectImage.png")}
             />
@@ -52,22 +53,22 @@ link: data?.linktree[item.url]
             <Image
               radius="none"
               alt="Card background"
-              className="object-fill h-[150px] w-[1400px]"
+              className="object-fill h-[280px] w-[1440px]"
               src="/ProjectImage.png"
             />
           )}
-          <div className="absolute top-[120px]">
+          <div className="absolute top-[240px]">
           {!!data?.profileImageUrl ? (
             <Image
               alt="Card icon"
-              className="ml-6  rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
+              className="ml-6 rounded-full border-2 border-white object-cover w-[80px] h-[80px]"
               src={logo}
               onError={() => setLogo("/ProjectLogo.png")}
             />
           ) : (
             <Image
               alt="Card icon"
-              className="ml-6 rounded-full border-2 border-white object-cover w-[60px] h-[60px]"
+              className="ml-6 rounded-full border-2 border-white object-cover w-[80px] h-[80px]"
               src="/ProjectLogo.png"
             />
           )} 

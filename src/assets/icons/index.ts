@@ -26,3 +26,5 @@ export { default as IconDots } from "./IconDots";
 export { default as IconLike } from "./IconLike";
 export { default as IconComment } from "./IconComment";
 export { default as IconRepost } from "./IconRepost";
+export { default as IconAction } from "./IconAction";
+

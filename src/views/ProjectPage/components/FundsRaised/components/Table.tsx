@@ -42,7 +42,7 @@ export default function TableRaised() {
       />
     </div>
     <Table removeWrapper aria-label="Example static collection table">
-      <TableHeader radius="none" className="text-[#000]">
+      <TableHeader className="text-[#000]">
         <TableColumn>Donor</TableColumn>
         <TableColumn>Type</TableColumn>
         <TableColumn>Amount</TableColumn>

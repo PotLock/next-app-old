@@ -1,29 +1,29 @@
 
-export const DATA_NAVBAR = [
+export const DATA_NAVBAR = (id: any) => [
   {
     id: 1,
     name: "Home",
-    url: "/project/home",
+    url: `/project/${id}`,
   },
   {
     id: 2,
     name: "Social feed",
-    url: "/project/social-feed",
+    url: `/project/${id}/social-feed`,
   },
   {
     id: 3,
     name: "Pots",
-    url: "/project/pots",
+    url:  `/project/${id}/pots`,
   },
   {
     id: 4,
     name: "Attestations",
-    url: "/project/attestations",
+    url: `/project/${id}/attestations`,
   },
   {
     id: 5,
     name: "Funding raised",
-    url: "/project/raised",
+    url: `/project/${id}/raised`,
   },
 ];
 

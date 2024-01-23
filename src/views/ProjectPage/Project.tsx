@@ -13,7 +13,6 @@ export interface IProjectPageProps {
 export default function ProjectPage(props: IProjectPageProps) {
   const { children } = props;
   const { data } = useContext(ProjectDetail);
-  console.log("👋  data-project", data)
 
   const [imageUrl, setImageUrl] = useState("");
   const [logo, setLogo] = useState("");

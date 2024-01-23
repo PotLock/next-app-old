@@ -1,29 +1,45 @@
 "use client";
-import React, { useState } from "react";
 import IconCheckYellow from "@/assets/icons/IconCheckYellow";
-import { TABS } from "@/constant";
+import { getListTagRequest } from "@/services";
+import { TTag } from "@/types";
+import { useEffect, useState } from "react";
 
 const TagAllProject = ({
-  tab,
+  tags,
   handleTag,
 }: {
-  tab: string;
+  tags: string[];
   handleTag: (label: string) => void;
 }) => {
+  const [listTags, setListTags] = useState<TTag[]>([]);
+
+  const getListTag = async () => {
+    try {
+      const res = await getListTagRequest();
+      setListTags(res?.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getListTag();
+  }, []);
+
   return (
     <div className="flex w-full flex-col gap-3 items-start justify-start pl-[15px] pr-[15px] mx-0 sm:flex-row sm:p-0 sm:items-center">
       <div>Tags:</div>
       <div className="flex gap-3 flex-wrap ">
-        {TABS.map((t) => (
+        {listTags.map((t) => (
           <div
-            key={t.id}
-            onClick={() => handleTag(t.label)}
+            key={t.value}
+            onClick={() => handleTag(t.value)}
             className={`${
-              tab === t.label && "gap-2 bg-[#FEF6EE]"
+              tags.some((item) => item === t.value) && "gap-2 bg-[#FEF6EE]"
             } p-2 rounded border text-sm flex items-center  cursor-pointer`}
           >
-            {tab === t.label && <IconCheckYellow />}
-            {t.label}
+            {tags.some((item) => item === t.value) && <IconCheckYellow />}
+            {t.text}
           </div>
         ))}
       </div>

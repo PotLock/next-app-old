@@ -28,12 +28,12 @@ const items = [
     subLabel: "Time",
   },
   {
-    key: "dateCreated",
+    key: "-totalContributed",
     label: "Most to Least",
     subLabel: "Donations ",
   },
   {
-    key: "dateCreated",
+    key: "totalContributed",
     label: "Least to Most",
     subLabel: "Donations ",
   },

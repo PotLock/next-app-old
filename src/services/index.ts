@@ -9,7 +9,7 @@ export const getProject = () => {
 };
 
 export const getProjectDetail = (id: any) => {
-  return axiosInstance.get(`/project/${id}`);
+  return axiosInstance.get(`/project/detail/${id}`);
 };
 
 export const searchProjectName = ({ page, limit, sort, title }: any) => {

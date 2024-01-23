@@ -59,20 +59,20 @@ export default function HomePage() {
           <div className="w-[35%] pr-[40px] text-[#292929] text-[17px] font-semibold">
             Team members
           </div>
-          <div className="flex w-[65%] text-[#7B7B7B] text-[17px] font-normal">
+          <div className="flex flex-wrap w-[65%] text-[#7B7B7B] text-[17px] font-normal">
               <div className="flex gap-[40px]">
               {data?.team?.map((item: ITeam, index: number) => (
                 <div className="flex flex-col items-center" key={index}>
                   {data?.team && item?.imageUrl !== "" ? (
                   <Image
                     alt="avatar"
-                    src="/ProjectImage.png"
+                    src={item?.imageUrl}
                     onError={() => "/Avatar.png"}
                     className="w-[80px] h-[80px] rounded-[50%]"
                   />
                 ) : (
                   <Image
-                      className="w-[80px] h-[80px] rounded-[50%]"
+                    className="w-[80px] h-[80px] rounded-[50%]"
                     alt="avatar"
                     src="/Banner.png"
                   />

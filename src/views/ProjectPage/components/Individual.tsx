@@ -20,7 +20,7 @@ export default function IndividualPage(props: IProfilePageProps) {
         </div>
         <div className="flex gap-[12px] my-4">
           <Chip radius="sm" size="lg">
-            {data?.status || "normal"}
+            {data?.tags?.map((item : string) => item)}
           </Chip>
         </div>
         <div className="flex items-center justify-between my-4">
@@ -29,24 +29,24 @@ export default function IndividualPage(props: IProfilePageProps) {
               <div className="flex">
                 <div className="text-[14px] text-[#292929] font-medium mr-[24px]">
                   Followers
-                  <span className="text-[#7B7B7B] pl-2">
-                    {data?.followers || "0"}
-                  </span>
+                  <a href={data?.follower} target="_blank" className="text-[#7B7B7B] pl-2">
+                    {data?.numFollowers || "0"}
+                  </a>
                 </div>
                 <div className="text-[14px] text-[#292929] font-medium">
                   Following
-                  <span className="text-[#7B7B7B] pl-2">
-                    {data?.Totalfollowing || "0"}
-                  </span>
+                  <a href={data?.following} target="_blank" className="text-[#7B7B7B] pl-2">
+                    {data?.numFollowing || "0"}
+                  </a>
                 </div>
               </div>
-              <Link
-                href={`${data?.following}`}
+              <a
+                href={data?.following}
+                target="_blank"
                 className="text-[14px] font-medium text-[#DD3345]"
-                passHref
               >
                 Follow
-              </Link>
+              </a>
             </div>
           </div>
           <div>

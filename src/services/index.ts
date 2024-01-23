@@ -12,14 +12,18 @@ export const getProjectDetail = (id: any) => {
   return axiosInstance.get(`/project/detail/${id}`);
 };
 
-export const searchProjectName = ({ page, limit, sort, title }: any) => {
+export const searchProjectName = ({ page, limit, sort, title, tags }: any) => {
   return axiosInstance.get(
     `/project?${title ? "title=" + title : ""}&page=${
       page ?? 1
-    }&limit=${limit}&${sort ? "sort=" + sort : ""}`,
+    }&limit=${limit}${sort ? "&sort=" + sort : ""}${tags.length ? "&tags=" + tags?.toString() : ""}`,
   );
 };
 
 export const getProjectFeatured = () => {
   return axiosInstance.get("/project/featured");
+};
+
+export const getListTagRequest = () => {
+  return axiosInstance.get("/project/tags");
 };

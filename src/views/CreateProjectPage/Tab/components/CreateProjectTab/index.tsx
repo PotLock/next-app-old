@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Card,
@@ -19,6 +19,7 @@ import { SELECTiTEMS, URLINFOR } from "@/constant";
 import IconAdd from "@/assets/icons/IconAdd";
 import AddFundingModal from "../Modal/AddFundingModal";
 import { useForm, SubmitHandler } from "react-hook-form"
+import { BannerCreateContext } from "@/contexts";
 
 type Inputs = {
   projectName: string
@@ -29,6 +30,8 @@ type Inputs = {
   linkGithub: string
   linkWebsite: string
   DAOAddress: string
+  fileBanner: File
+  fileAvatar: File
 }
 
 const CreateProjectTab = () => {
@@ -36,10 +39,10 @@ const CreateProjectTab = () => {
   const [onSmartContract, setOnSmartContract] = useState(false);
   const [onFundingSources, setOnFundingSources] = useState(false);
   const [onDao, setOnDao] = useState(false);
-  const [selectCategory, setSelecteCategory] = useState("");
-  const [selectChain, setSelecteChain] = useState("");
-  const [selectSmartContract, setSelecteSmartContract] = useState("");
-
+  const [selectCategory, setSelecteCategory] = useState(new Set());
+  const [selectChain, setSelecteChain] = useState(new Set([SELECTiTEMS[0]['value']]));
+  const [selectSmartContract, setSelecteSmartContract] = useState(new Set([SELECTiTEMS[0]['value']]));
+  const { bannerImage, avatarImage} = useContext(BannerCreateContext);
 
   const {
     register,
@@ -54,14 +57,16 @@ const CreateProjectTab = () => {
     data.Github = `github.com/${data.Github}`
     data.Website = `https://${data.Website}`
     data.category = [...selectCategory]
+    data.fileBanner = bannerImage
+    data.fileAvatar = avatarImage
     const listData = { ...data }
     console.log("👋  listData:", listData)
   }
 
   const handleSelectCategory = (e: any) => {
-    setSelecteCategory(e.target.value);
-    setSelecteChain(e.target.value);
-    setSelecteSmartContract(e.target.value);
+    setSelecteCategory(new Set([e.target.value]));
+    setSelecteChain(new Set([e.target.value]));
+    setSelecteSmartContract(new Set([e.target.value]));
   }
 
   return (
@@ -94,7 +99,7 @@ const CreateProjectTab = () => {
 
             <div className="flex flex-col gap-2">
               <div className="font-medium">Select category</div>
-              <Select size="sm" selectionMode="multiple" items={SELECTiTEMS} selectedKeys={selectCategory} onChange={handleSelectCategory}>
+              <Select size="sm" selectionMode="multiple" items={SELECTiTEMS} onChange={handleSelectCategory}>
                 {(options) => <SelectItem key={options.value} value={options.value}>
                   {options.label}
                 </SelectItem>
@@ -137,7 +142,7 @@ const CreateProjectTab = () => {
                     <div className="text-[#7B7B7B]">(optional)</div>
                   </div>
                   <Select size="sm" placeholder="Yes, my project is a dapp and has smart contracts"
-                    selectionMode="multiple" items={SELECTiTEMS} selectedKeys={selectSmartContract} onChange={handleSelectCategory}>
+                    selectionMode="multiple" items={SELECTiTEMS} onChange={handleSelectCategory}>
                     {(options) => <SelectItem key={options.value} value={options.value}>
                       {options.label}
                     </SelectItem>
@@ -147,7 +152,7 @@ const CreateProjectTab = () => {
                 <div className="flex flex-col gap-2">
                   <div className="font-medium">Add chain</div>
 
-                  <Select size="sm" placeholder="Select chain" selectionMode="multiple" items={SELECTiTEMS} selectedKeys={selectChain} onChange={handleSelectCategory}>
+                  <Select size="sm" placeholder="Select chain" selectionMode="multiple" items={SELECTiTEMS}  onChange={handleSelectCategory}>
                     {(options) => <SelectItem key={options.value} value={options.value}>
                       {options.label}
                     </SelectItem>

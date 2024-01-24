@@ -38,7 +38,7 @@ const items = [
     subLabel: "Donations ",
   },
 ];
-const Search = ({ onSearch }: any) => {
+const Search = ({ onSearch, totalProject }: any) => {
   const [filter, setFilter] = useState("All projects");
   const [search, setSearch] = useState("");
   const router = useRouter();
@@ -81,7 +81,7 @@ const Search = ({ onSearch }: any) => {
         type="search"
         value={search}
         className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
-        placeholder="Search (9) projects..."
+        placeholder={`Search (${totalProject || '0'}) projects...`}
       />
       <Dropdown>
         <DropdownTrigger>

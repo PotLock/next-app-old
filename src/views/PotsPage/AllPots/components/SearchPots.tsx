@@ -13,33 +13,38 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 const items = [
   {
-    key: "dateCreated",
-    label: "All projects",
-    subLabel: "",
+    key: "most-to-least-donations",
+    label: "Most to Least Donations",
+
   },
   {
-    key: "dateCreated",
-    label: "New to Old",
-    subLabel: "Time",
+    key: "least-to-most-donations",
+    label: "Least to Most Donations",
+
   },
   {
-    key: "-dateCreated",
-    label: "Old to New",
-    subLabel: "Time",
+    key: "least-to-least-matching-pool",
+    label: "Least to Least Matching Pool",
+
   },
   {
-    key: "-totalContributed",
-    label: "Most to Least",
-    subLabel: "Donations ",
+    key: "most-to-least-matching-pool",
+    label: "Most to Least Matching Pool",
+
   },
   {
-    key: "totalContributed",
-    label: "Least to Most",
-    subLabel: "Donations ",
+    key: "least-to-most-donors",
+    label: "Least to Most # Donors",
+    
+  },
+  {
+    key: "most-to-least-donors",
+    label: "Most to Least # Donors",
+   
   },
 ];
-const Search = ({ onSearch, totalProject }: any) => {
-  const [filter, setFilter] = useState("All projects");
+const SearchPots = ({ onSearch, totalPots }: any) => {
+  const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const router = useRouter();
   const pathname = usePathname();
@@ -50,7 +55,7 @@ const Search = ({ onSearch, totalProject }: any) => {
   useEffect(() => {
     setSearch(title ?? "");
     const sortFilter = items.find((item) => item.key === sort);
-    setFilter(sortFilter?.label ?? "All projects");
+    setFilter(sortFilter?.label ?? "Sort");
   }, [sort, title]);
 
   const handleFilter = (label: any) => {
@@ -81,7 +86,7 @@ const Search = ({ onSearch, totalProject }: any) => {
         type="search"
         value={search}
         className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
-        placeholder={`Search (${totalProject || '0'}) projects...`}
+        placeholder={`Search (${totalPots || '0'}) pots...`}
       />
       <Dropdown>
         <DropdownTrigger>
@@ -110,7 +115,7 @@ const Search = ({ onSearch, totalProject }: any) => {
                   )}
                   {item.label}
                 </div>
-                <div className="text-[#7B7B7B]">{item.subLabel}</div>
+                
               </div>
             </DropdownItem>
           )}
@@ -120,4 +125,4 @@ const Search = ({ onSearch, totalProject }: any) => {
   );
 };
 
-export default Search;
+export default SearchPots;

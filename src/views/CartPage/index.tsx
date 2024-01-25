@@ -1,18 +1,4 @@
 "use client";
-import React, { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Select,
-  SelectItem,
-  Checkbox,
-  Chip,
-  Input,
-  Button,
-  Image,
-} from "@nextui-org/react";
 import {
   IconArrowDown,
   IconArrowUp,
@@ -20,13 +6,31 @@ import {
   IconCoinX,
   IconDelete,
 } from "@/assets/icons";
-import { DATA_CART, OPTIONS } from "@/constant/cart";
+import { OPTIONS } from "@/constant/cart";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Checkbox,
+  Chip,
+  Image,
+  Input,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
+import { useState } from "react";
 
 export interface ICartPageProps {}
 
 export default function CartPage(props: ICartPageProps) {
-  const [itemCart, setItemsCart] = useState(DATA_CART);
+  const projectsCart: any =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("projects_in_cart") ?? "")
+      : [];
 
+  const [itemCart, setItemsCart] = useState<any[]>(projectsCart);
   const [selectedCity, setSelectedCity] = useState(
     new Set([OPTIONS[0]["value"]]),
   );
@@ -37,7 +41,7 @@ export default function CartPage(props: ICartPageProps) {
   };
 
   const handleHideShowBreakdown = (id: number, index: number) => {
-    const newItems = [...itemCart];
+    const newItems: any = [...itemCart];
     newItems[index] = {
       ...newItems[index],
       showBreakDown: !newItems[index].showBreakDown,
@@ -130,8 +134,8 @@ export default function CartPage(props: ICartPageProps) {
                 <Checkbox
                   onChange={(e) => {
                     const newItems = [
-                      ...itemCart.map((item) => ({
-                        ...item,
+                      ...itemCart.map((cartItem: any) => ({
+                        ...cartItem,
                         checked: e.target.checked,
                       })),
                     ];
@@ -187,7 +191,7 @@ export default function CartPage(props: ICartPageProps) {
                     alt="nextui logo"
                     height={24}
                     radius="sm"
-                    src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                    src={`https://nftstorage.link/ipfs/${item.profileImageUrl}`}
                     width={24}
                   />
                   <Chip color="secondary" radius="sm" className="mr-4">
@@ -198,7 +202,7 @@ export default function CartPage(props: ICartPageProps) {
                   <div className="pl-2">
                     <h1 className="text-md font-semibold">{item.title}</h1>
                     <div className="text-[#7B7B7B] font-normal text-[14px] overflow-ellipsis line-clamp-2">
-                      {item.des}
+                      {item.description}
                     </div>
                   </div>
                 </CardHeader>
@@ -267,7 +271,7 @@ export default function CartPage(props: ICartPageProps) {
                       </button>
 
                       <div className="w-[100%] p-[16px] bg-[#F0F0F0] rounded-lg mt-1">
-                        {item.breakdown?.map((list) => (
+                        {item.breakdown?.map((list: any) => (
                           <div
                             className="flex justify-between py-1"
                             key={list.id}

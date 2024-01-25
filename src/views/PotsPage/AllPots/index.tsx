@@ -1,16 +1,15 @@
 "use client";
 import Search from "@/components/Search";
-import { Card, CardBody, Divider, Tab, Tabs } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import { Divider } from "@nextui-org/react";
 import FillterPots from "./components/FillterPots";
-import {  getPotsGeneral, searchPotsName } from "@/services";
+import { getPotsGeneral, searchPotsName } from "@/services";
 import PotCard from "@/components/PotCard";
 import TagAllPots from "./components/TabAllPots";
 import { useSearchParams } from "next/navigation";
 import SearchPots from "./components/SearchPots";
+import { useEffect, useState } from "react";
 
 const AllPots = () => {
-
   const [tags, setTags] = useState<string[]>([]);
   const [pots, setPots] = useState<any[]>([]);
   const [data, setData] = useState<any>();
@@ -36,14 +35,12 @@ const AllPots = () => {
         tags,
       });
       if (!!res) setPots(res.data);
-      console.log("🚀 ~ getApiAllPots ~ res:", res)
-
     } catch (error) {}
   };
 
   const getApiPotsGeneral = async () => {
     try {
-      const res  = await getPotsGeneral();
+      const res = await getPotsGeneral();
       setData(res?.data);
     } catch (error) {
       console.error(error);
@@ -52,7 +49,7 @@ const AllPots = () => {
   useEffect(() => {
     getApiPotsGeneral();
   }, []);
-  
+
   useEffect(() => {
     getApiAllPots();
   }, [sort, title, searchFilter, tags]);
@@ -61,7 +58,7 @@ const AllPots = () => {
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="flex gap-2 text-sm sm:text-[22px]">
           <div className="font-semibold ">ALL pots </div>
-          <div className="text-[#DD3345]">{pots.length || '0'}</div>
+          <div className="text-[#DD3345]">{pots.length || "0"}</div>
         </div>
 
         <div className="flex h-5 items-center text-small">
@@ -81,19 +78,18 @@ const AllPots = () => {
           </div>
         </div>
       </div>
-    
+
       <div className="w-full flex flex-col gap-[20px]  ">
-      <SearchPots onSearch={setSearchFilter} totalPots={pots.length}/>
+        <SearchPots onSearch={setSearchFilter} totalPots={pots.length} />
 
         <TagAllPots tags={tags} handleTag={handleTag} />
       </div>
-      
-        <div className="sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8 pl-[15px] pr-[15px] sm:p-0 mb-20 ">
-          {pots.map((pot, index) => (
-            <PotCard key={index}  data={pot} />
-          ))}
-        </div>
-      
+
+      <div className="sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8 pl-[15px] pr-[15px] sm:p-0 mb-20 ">
+        {pots.map((pot, index) => (
+          <PotCard key={index} data={pot} />
+        ))}
+      </div>
     </div>
   );
 };

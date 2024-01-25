@@ -14,8 +14,22 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   const updateCart = (data: any) => {
     if (!cart.length) {
       setCart([...cart, data]);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(
+          "projects_in_cart",
+          JSON.stringify([...cart, data]),
+        );
+      }
     } else {
-      if (!cart.find((item) => item.id === data.id)) setCart([...cart, data]);
+      if (!cart.find((item) => item.id === data.id)) {
+        setCart([...cart, data]);
+        if (typeof window !== "undefined") {
+          localStorage.setItem(
+            "projects_in_cart",
+            JSON.stringify([...cart, data]),
+          );
+        }
+      }
     }
   };
   return (

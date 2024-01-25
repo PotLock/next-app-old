@@ -30,7 +30,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
   };
 
   return (
-    <div onClick={() => router.push(`/project/${data?.id}`)}>
+    <div onClick={() => router.push(`/project/${data?.project_id}`)}>
       <Card className=" w-[360px] sm:w-[408px] cursor-pointer ">
         <div className="w-full relative">
           {!!data?.bannerImageUrl ? (

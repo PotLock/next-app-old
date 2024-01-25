@@ -1,9 +1,7 @@
 "use client";
 import Search from "@/components/Search";
-import { Card, CardBody, Divider, Tab, Tabs } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import { Divider } from "@nextui-org/react";
 import FillterPots from "./components/FillterPots";
-import { getProjectGeneral } from "@/services";
 
 const AllPots = () => {
   return (

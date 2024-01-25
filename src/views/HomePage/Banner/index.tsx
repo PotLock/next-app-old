@@ -1,11 +1,9 @@
 "use client";
-import { ITEMSBANNER } from "@/constant";
 import { getProjectGeneral } from "@/services";
 import DonationRandomlyModel from "@/views/HomePage/DonationRandomly/DonationRandomlyModal";
-import DonationRandomlyModelFinal from "@/views/HomePage/DonationRandomly/DonationRandomlyModalFinal";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Banner = () => {
   const route = useRouter();

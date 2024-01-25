@@ -187,7 +187,7 @@ const CreateProjectTab = () => {
               </div>
               <div className="w-full sm:w-1/2 gap-6 flex flex-col">
                 {smartcontracts.map((item, index) => (
-                  <div className="w-full gap-6 flex flex-row">
+                  <div className="w-full gap-6 flex flex-row" key={index}>
                     <div className="flex flex-col gap-2 w-[25%]">
                       <div className="font-medium">Add chain</div>
                       <Select

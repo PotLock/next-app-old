@@ -13,6 +13,9 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@nextui-org/react";
 import React, { useContext, useEffect, useState } from "react";
 import ModelCart from "./components/ModelCart";
@@ -20,13 +23,32 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
 import { CartContext } from "@/layout/LayoutProvides";
+import IconProfile from "@/assets/icons/IconProfile";
+import { IconArrowDown } from "@/assets/icons";
+import axios from "axios";
+import Image from "next/image";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const currentPath = usePathname();
-  const [account, setAccount] = useState<any | null>(null);
+  const [account, setAccount] = useState<any>(null);
   const { cart } = useContext(CartContext);
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      await axios
+        .get(
+          `${process.env.NEXT_PUBLIC_API_URL}/project/social-profile/${account}`,
+        )
+        .then((res) => setProfile(res.data));
+    };
+
+    if (account) {
+      fetchProfile();
+    }
+  }, [account]);
 
   const handleSignIn = async () => {
     const wallet = new Wallet({
@@ -54,14 +76,14 @@ const Header = () => {
       network: "mainnet",
     });
 
-    const startUpWallet = async () => {
+    const getAccount = async () => {
       await wallet.startUp();
       const accountId = wallet.accountId;
       if (accountId) {
         setAccount(wallet.accountId);
       }
     };
-    startUpWallet();
+    getAccount();
   }, []);
 
   return (
@@ -95,14 +117,44 @@ const Header = () => {
           </NavbarItem>
         ))}
 
-        <NavbarItem>
+        <NavbarItem className="flex gap-8">
           <Badge content={cart.length} color="warning" variant="solid">
             <Button onClick={onOpen}>CART</Button>
           </Badge>
           {account ? (
-            <Button className="ml-5" color="primary" onClick={handleSignOut}>
-              {account}
-            </Button>
+            <Popover placement="bottom-end">
+              <PopoverTrigger>
+                <Button className="bg-transparent flex items-center justify-center w-max p-[10px]">
+                  <IconProfile />
+                  <IconArrowDown />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="p-2 flex flex-col items-start gap-2 w-[230px] rounded-md border border-[#292929] shadow-lg">
+                <div className="flex gap-3 items-center justify-center cursor-pointer">
+                  <div className="bg-[#F0F0F0] p-[10px] rounded-full">
+                    {profile && profile?.image && profile?.image?.ipfs_cid ? (
+                      <Image
+                        src={profile.image.ipfs_cid}
+                        alt="avatar"
+                        width={24}
+                        height={24}
+                      />
+                    ) : (
+                      <IconProfile />
+                    )}
+                  </div>
+                  <div className="text-sm font-medium">{account}</div>
+                </div>
+                <div className="text-sm p-2 cursor-pointer">My Profile</div>
+                <div className="text-sm p-2 cursor-pointer">Add Money</div>
+                <div
+                  className="text-sm text-[#DD3345] p-2 cursor-pointer"
+                  onClick={handleSignOut}
+                >
+                  Logout
+                </div>
+              </PopoverContent>
+            </Popover>
           ) : (
             <Button className="ml-5" color="primary" onClick={handleSignIn}>
               Log in

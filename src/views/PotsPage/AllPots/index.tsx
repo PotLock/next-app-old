@@ -3,7 +3,7 @@ import Search from "@/components/Search";
 import { Card, CardBody, Divider, Tab, Tabs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import FillterPots from "./components/FillterPots";
-import { getAllPots, getProjectGeneral, searchPotsName } from "@/services";
+import {  getPotsGeneral, searchPotsName } from "@/services";
 import PotCard from "@/components/PotCard";
 import TagAllPots from "./components/TabAllPots";
 import { useSearchParams } from "next/navigation";
@@ -41,6 +41,17 @@ const AllPots = () => {
     } catch (error) {}
   };
 
+  const getApiPotsGeneral = async () => {
+    try {
+      const res  = await getPotsGeneral();
+      setData(res?.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getApiPotsGeneral();
+  }, []);
   
   useEffect(() => {
     getApiAllPots();
@@ -55,17 +66,17 @@ const AllPots = () => {
 
         <div className="flex h-5 items-center text-small">
           <div className="flex gap-2  py-1 pr-4 text-[11px] sm:text-sm">
-            <div className="font-semibold">$2027.23</div>
+            <div className="font-semibold">{data?.totalAmountMatched}</div>
             <div>Donated</div>
           </div>
           <Divider orientation="vertical" />
           <div className="flex gap-2  py-1 px-4 text-[11px] sm:text-sm">
-            <div className="font-semibold">$2027.23</div>
+            <div className="font-semibold">{data?.totalDonor}</div>
             <div>Unique Donors</div>
           </div>
           <Divider orientation="vertical" />
           <div className="flex gap-2  py-1 pl-4 text-[11px] sm:text-sm">
-            <div className="font-semibold">$2027.23</div>
+            <div className="font-semibold">{data?.totalDonation}</div>
             <div>Donations</div>
           </div>
         </div>

@@ -49,3 +49,7 @@ export const getListTagPots = () => {
 export const getPotsFeatured = () => {
   return axiosInstance.get("/pots/featured");
 };
+
+export const getPotsGeneral = () => {
+  return axiosInstance.get(`/pots/general`);
+};

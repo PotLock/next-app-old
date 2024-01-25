@@ -5,7 +5,7 @@ export const MENUITEMS = [
   },
   {
     title: "PROJECTS",
-    href: "#",
+    href: "/",
   },
   {
     title: "FEED",

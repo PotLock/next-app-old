@@ -6,23 +6,18 @@ import AddPhoto from "../../../assets/images/AddPhoto.png";
 import AddPhotoBanner from "../../../assets/images/Scrim.png";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Avatar, AvatarGroup, Button, useDisclosure } from "@nextui-org/react";
 import AddTeamMemberModal from "../Tab/components/Modal/AddTeamMemberModal";
+import { BannerCreateContext } from "@/contexts";
 
 const BannerMember = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isHoveredBanner, setIsHoveredBanner] = useState(false);
   const [isHoveredAvatar, setIsHoveredAvatar] = useState(false);
-  const [selectedFile, setSelectedFile] = useState("");
-  const [bannerImage, setBannerImage] = useState<File>();
-  const [avatarImage, setAvatarImage] = useState<File>();
-
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
-  };
-
+  // const [bannerImage, setBannerImage] = useState<File>();
+  // const [avatarImage, setAvatarImage] = useState<File>();
+  const {setBannerImage, bannerImage, setAvatarImage, avatarImage} = useContext(BannerCreateContext);
   const handleChangeBanner = async (e: any) => {
     let file = e.target.files[0];
     setBannerImage(file);

@@ -20,6 +20,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
 import { CartContext } from "@/layout/LayoutProvides";
+import { WalletContext } from "@/contexts/WalletContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -27,6 +28,7 @@ const Header = () => {
   const currentPath = usePathname();
   const [account, setAccount] = useState<any | null>(null);
   const { cart } = useContext(CartContext);
+  const { setWalletId } = useContext(WalletContext);
 
   const handleSignIn = async () => {
     const wallet = new Wallet({
@@ -46,6 +48,7 @@ const Header = () => {
     await wallet.startUp().then(() => {
       wallet.signOut();
     });
+    setWalletId(undefined);
   };
 
   useEffect(() => {
@@ -59,6 +62,7 @@ const Header = () => {
       const accountId = wallet.accountId;
       if (accountId) {
         setAccount(wallet.accountId);
+        setWalletId(accountId);
       }
     };
     startUpWallet();

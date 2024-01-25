@@ -27,4 +27,4 @@ export { default as IconLike } from "./IconLike";
 export { default as IconComment } from "./IconComment";
 export { default as IconRepost } from "./IconRepost";
 export { default as IconAction } from "./IconAction";
-
+export { default as IconPlus } from "./IconPlus";

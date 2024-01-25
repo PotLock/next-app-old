@@ -8,21 +8,7 @@ import CreateProjectTab from "./components/CreateProjectTab";
 const TabsCreateProject = () => {
   return (
     <div className="px-4 sm:px-[186px] w-full text-sm mb-14">
-      <Tabs aria-label="Options">
-        <Tab key="create-project" title="Create Project">
-          <CreateProjectTab />
-        </Tab>
-        <Tab key="create-proposal" title="Create Proposal">
-          <Card>
-            <CardBody>
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur.
-            </CardBody>
-          </Card>
-        </Tab>
-      </Tabs>
+      <CreateProjectTab />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 import Header from "@/components/Header";
+import WalletProvider from "@/contexts/WalletContext";
 import { NextUIProvider } from "@nextui-org/react";
 import * as React from "react";
 
@@ -20,10 +21,12 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   };
   return (
     <NextUIProvider>
-      <CartContext.Provider value={{ cart, updateCart }}>
-        <Header />
-        {children}
-      </CartContext.Provider>
+      <WalletProvider>
+        <CartContext.Provider value={{ cart, updateCart }}>
+          <Header />
+          {children}
+        </CartContext.Provider>
+      </WalletProvider>
     </NextUIProvider>
   );
 }

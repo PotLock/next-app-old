@@ -27,3 +27,25 @@ export const getProjectFeatured = () => {
 export const getListTagRequest = () => {
   return axiosInstance.get("/project/tags");
 };
+
+
+export const getAllPots = () => {
+  return axiosInstance.get("/pots");
+}
+
+export const searchPotsName = ({ page, limit, sort, title, tags }: any) => {
+  return axiosInstance.get(
+    `/pots?${title ? "title=" + title : ""}&page=${
+      page ?? 1
+    }&limit=${limit}${sort ? "&sort=" + sort : ""}${tags.length ? "&tags=" + tags?.toString() : ""}`,
+  );
+};
+
+
+export const getListTagPots = () => {
+  return axiosInstance.get("/pots/tags");
+};
+
+export const getPotsFeatured = () => {
+  return axiosInstance.get("/pots/featured");
+};

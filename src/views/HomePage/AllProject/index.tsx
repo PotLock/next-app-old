@@ -85,7 +85,7 @@ const AllProject = () => {
         </div>
       </div>
       <div className="w-full flex flex-col gap-[20px]  ">
-        <Search onSearch={setSearchFilter} />
+        <Search onSearch={setSearchFilter} totalProject={projects.length} />
         <TabAllProject tags={tags} handleTag={handleTag} />
       </div>
       <div className="flex items-center justify-center">

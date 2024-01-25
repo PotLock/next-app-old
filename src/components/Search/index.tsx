@@ -72,7 +72,7 @@ const Search = ({ onSearch, totalProject }: any) => {
   };
 
   return (
-    <div className="relative mx-4 sm:mx-0">
+    <div className="relative mx-4 sm:mx-0 bg-[#F0F0F0] ">
       <div className="absolute inset-y-0 start-0 flex items-center px-6 pointer-events-none">
         <IconSearch />
       </div>
@@ -80,7 +80,7 @@ const Search = ({ onSearch, totalProject }: any) => {
         onChange={(e) => handleSearch(e.target.value)}
         type="search"
         value={search}
-        className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
+        className="block w-[90%] p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
         placeholder={`Search (${totalProject || '0'}) projects...`}
       />
       <Dropdown>

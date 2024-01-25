@@ -13,32 +13,32 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 const items = [
   {
-    key: "most-to-least-donations",
+    key: "-totalDonation",
     label: "Most to Least Donations",
 
   },
   {
-    key: "least-to-most-donations",
+    key: "totalDonation",
     label: "Least to Most Donations",
 
   },
   {
-    key: "least-to-least-matching-pool",
+    key: "totalMatchingPool",
     label: "Least to Least Matching Pool",
 
   },
   {
-    key: "most-to-least-matching-pool",
+    key: "-totalMatchingPool",
     label: "Most to Least Matching Pool",
 
   },
   {
-    key: "least-to-most-donors",
+    key: "public_donations_count",
     label: "Least to Most # Donors",
     
   },
   {
-    key: "most-to-least-donors",
+    key: "-public_donations_count",
     label: "Most to Least # Donors",
    
   },
@@ -77,7 +77,7 @@ const SearchPots = ({ onSearch, totalPots }: any) => {
   };
 
   return (
-    <div className="relative mx-4 sm:mx-0">
+    <div className="relative mx-4 sm:mx-0 bg-[#F0F0F0]">
       <div className="absolute inset-y-0 start-0 flex items-center px-6 pointer-events-none">
         <IconSearch />
       </div>
@@ -85,7 +85,7 @@ const SearchPots = ({ onSearch, totalPots }: any) => {
         onChange={(e) => handleSearch(e.target.value)}
         type="search"
         value={search}
-        className="block w-full p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
+        className="block w-[90%] p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
         placeholder={`Search (${totalPots || '0'}) pots...`}
       />
       <Dropdown>

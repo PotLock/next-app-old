@@ -28,7 +28,7 @@ const PotCard = ({data}: any) => {
       <CardFooter className="flex flex-col items-start gap-4">
         <div className="flex flex-row gap-2 justify-between w-full items-center">
           <p className="font-semibold">{data?.totalAmount || '1,369.69 NEAR'} </p>
-          <p className="text-[#7B7B7B]">{data?.totalAmountNeartoUsd }</p>
+          <p className="text-[#7B7B7B]">{data?.totalMatchingPool } Matched</p>
         </div>
         <div className="border bg-[#9ADD33] py-[6px] px-2 rounded">
           1 day left for Matching

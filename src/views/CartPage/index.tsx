@@ -25,12 +25,23 @@ import { useState } from "react";
 export interface ICartPageProps {}
 
 export default function CartPage(props: ICartPageProps) {
-  const projectsCart: any =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("projects_in_cart") ?? "")
-      : [];
+  const projectsCart : any = typeof window !== "undefined" ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "") : [];
+  // const projectsCart = typeof window !== "undefined"
+  // ? (() => {
+  //     const storedData = localStorage?.getItem("projects_in_cart") || "";
+      
+  //     try {
+  //       // Attempt to parse the JSON data
+  //       return JSON.parse(storedData) || [];
+  //     } catch (error) {
+  //       // Handle JSON parsing error
+  //       console.error("Error parsing JSON:", error);
+  //       return [];
+  //     }
+  //   })()
+  // : [];
 
-  const [itemCart, setItemsCart] = useState<any[]>(projectsCart);
+  const [itemCart, setItemsCart] = useState<any[]>( );
   const [selectedCity, setSelectedCity] = useState(
     new Set([OPTIONS[0]["value"]]),
   );
@@ -49,6 +60,18 @@ export default function CartPage(props: ICartPageProps) {
     setItemsCart(newItems);
   };
 
+  const COIN = [
+    183,
+    138,
+  ]
+
+  const sum = COIN?.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+
+  const calculatePercentage = (number: number, percentage: number) => {
+    const total = ( number * percentage) / 100
+    return Math.round(total);
+  }
+  
   return (
     <div className="flex w-full max-lg:flex-wrap-reverse p-[42px] max-lg:p-[24px]">
       <div className="w-[45%] mr-[140px] max-lg:mr-0 max-lg:w-full max-lg:mt-[24px]">
@@ -68,14 +91,14 @@ export default function CartPage(props: ICartPageProps) {
                   <IconCoinT />
                   46.25
                 </div>
-                <div>$55.26</div>
+                <div>${COIN[0]}</div>
               </div>
               <div className="flex justify-between text-sm p-2 mb-2">
                 <div className="flex items-center gap-2">
                   <IconCoinX />
                   1.25
                 </div>
-                <div>$55.26</div>
+                <div>${COIN[1]}</div>
               </div>
             </div>
             <div>
@@ -94,11 +117,11 @@ export default function CartPage(props: ICartPageProps) {
                     Pot
                   </Chip>
                 </div>
-                <div>60% ($66)</div>
+                <div>60% (${calculatePercentage(sum, 60)})</div>
               </div>
               <div className="flex justify-between text-sm p-2">
                 <div className="flex items-center gap-2">Direct Donations</div>
-                <div>20% ($22)</div>
+                <div>20% (${calculatePercentage(sum, 20)})</div>
               </div>
               <div className="flex justify-between text-sm p-2">
                 <div className="flex items-center gap-2">
@@ -111,13 +134,13 @@ export default function CartPage(props: ICartPageProps) {
                     Pot
                   </Chip>
                 </div>
-                <div>20% ($22)</div>
+                <div>20% (${calculatePercentage(sum, 20)})</div>
               </div>
               <div className="flex justify-between text-sm p-2 border-t-2 mt-6">
                 <div className="flex items-center gap-2 font-semibold">
                   Total
                 </div>
-                <div className="font-medium text-black ">$110.52</div>
+                <div className="font-medium text-black ">${sum}</div>
               </div>
             </div>
           </div>

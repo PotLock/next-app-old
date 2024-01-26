@@ -1,3 +1,5 @@
+export const IPFS_BASE_URL = "https://nftstorage.link/ipfs/";
+
 export const MENUITEMS = [
   {
     title: "POTS",
@@ -10,101 +12,6 @@ export const MENUITEMS = [
   {
     title: "FEED",
     href: "#",
-  },
-];
-
-export const PROJECTS = [
-  {
-    title: "RevitFi 1",
-    content:
-      "1 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 2",
-    content:
-      "2 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 3",
-    content:
-      "3 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 4",
-    content:
-      "4 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 5",
-    content:
-      "5 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 6",
-    content:
-      "6 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 7",
-    content:
-      "7 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 8",
-    content:
-      "8 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 9",
-    content:
-      "9 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 10",
-    content:
-      "10 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 11",
-    content:
-      "11 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-  {
-    title: "RevitFi 12",
-    content:
-      "12 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-];
-
-export const TABS = [
-  {
-    id: "desci",
-    label: "DeSci",
-  },
-  {
-    id: "open",
-    label: "Open Source",
-  },
-  {
-    id: "non",
-    label: "NonProfit",
-  },
-  {
-    id: "social",
-    label: "Social Impact",
-  },
-  { id: "climate", label: "Climate" },
-  {
-    id: "public",
-    label: "Public Good",
-  },
-  {
-    id: "community",
-    label: "Community",
-  },
-  {
-    id: "education",
-    label: "Education",
   },
 ];
 

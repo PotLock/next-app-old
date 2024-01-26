@@ -1,3 +1,5 @@
+export const IPFS_BASE_URL = "https://nftstorage.link/ipfs/";
+
 export const MENUITEMS = [
   {
     title: "POTS",
@@ -73,38 +75,6 @@ export const PROJECTS = [
     title: "RevitFi 12",
     content:
       "12 Redefining DeFi on NEAR with a cross-chain interoperable layer1 infrastructure",
-  },
-];
-
-export const TABS = [
-  {
-    id: "desci",
-    label: "DeSci",
-  },
-  {
-    id: "open",
-    label: "Open Source",
-  },
-  {
-    id: "non",
-    label: "NonProfit",
-  },
-  {
-    id: "social",
-    label: "Social Impact",
-  },
-  { id: "climate", label: "Climate" },
-  {
-    id: "public",
-    label: "Public Good",
-  },
-  {
-    id: "community",
-    label: "Community",
-  },
-  {
-    id: "education",
-    label: "Education",
   },
 ];
 

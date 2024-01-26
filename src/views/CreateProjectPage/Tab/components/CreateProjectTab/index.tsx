@@ -1,28 +1,24 @@
 "use client";
-import React, { useContext, useState } from "react";
+import { IconDelete, IconPlus } from "@/assets/icons";
+import IconAdd from "@/assets/icons/IconAdd";
+import { SELECTiTEMS, URLINFOR } from "@/constant";
+import { CreateProjectContext } from "@/contexts/CreateProjectContext";
+import { WalletContext } from "@/contexts/WalletContext";
+import useTags from "@/hooks/useTags";
 import {
   Button,
-  Card,
-  CardBody,
   Checkbox,
   CheckboxGroup,
   Divider,
   Input,
   Select,
   SelectItem,
-  Tab,
-  Tabs,
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { SELECTiTEMS, URLINFOR } from "@/constant";
-import IconAdd from "@/assets/icons/IconAdd";
+import { useContext, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import AddFundingModal from "../Modal/AddFundingModal";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { BannerCreateContext } from "@/contexts";
-import { IconDelete, IconPlus } from "@/assets/icons";
-import { WalletContext } from "@/contexts/WalletContext";
-import useTags from "@/hooks/useTags";
 
 type Inputs = {
   projectName: string;
@@ -48,7 +44,8 @@ const CreateProjectTab = () => {
     { chain: undefined, contactAddress: undefined },
   ]);
 
-  const { bannerImage, avatarImage } = useContext(BannerCreateContext);
+  const { bannerImage, avatarImage, members } =
+    useContext(CreateProjectContext);
   const { walletId } = useContext(WalletContext);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const listTags = useTags();
@@ -68,6 +65,7 @@ const CreateProjectTab = () => {
     data.category = [...selectCategory];
     data.fileBanner = bannerImage;
     data.fileAvatar = avatarImage;
+    data.members = members;
     if (smartcontracts.some((item) => item.chain && item.contactAddress)) {
       data.smartcontract = smartcontracts.filter((item) => item.chain);
     }

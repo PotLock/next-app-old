@@ -5,11 +5,11 @@ import ProjectCard from "../../../components/ProjectCard";
 import TabAllProject from "./components/Tab";
 import { Divider, useDisclosure } from "@nextui-org/react";
 import { PROJECTS } from "@/constant";
-import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import Search from "@/components/Search";
 import { getProject, getProjectGeneral, searchProjectName } from "@/services";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSearchParams } from "next/navigation";
+import DonateProjectModal from "../Donate/DonateProjectModal";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -22,61 +22,61 @@ const AllProject = () => {
   const title = search.get("title");
   const [tab, setTab] = useState("");
 
-  const getApiProject = async () => {
-    try {
-      const res = await searchProjectName({ ...searchFilter, sort, title });
-      if (!!res)
-        if (sort || title) {
-          setTempProjects(res.data);
-          setProjects(res.data);
-        } else {
-          setTempProjects([...projects, ...res.data]);
-          setProjects([...projects, ...res.data]);
-        }
-    } catch (error) {}
-  };
+  // const handleSearch = async (name: any) => {
+  //   const res = await searchProjectName(name.length ? name : undefined);
+  //   setProjects(res.data);
+  // };
 
-  const handleSearch = async (name: any) => {
-    const res = await searchProjectName(name.length ? name : undefined);
-    setProjects(res.data);
-  };
+  // const handleTag = (label: string) => {
+  //   const filterProjectsByTag = (label: string) => {
+  //     return tempProjects.filter((project) => project.tags.includes(label));
+  //   };
 
-  const handleTag = (label: string) => {
-    const filterProjectsByTag = (label: string) => {
-      return tempProjects.filter((project) => project.tags.includes(label));
-    };
+  //   const filteredProjects = filterProjectsByTag(label);
 
-    const filteredProjects = filterProjectsByTag(label);
-
-    if (tab === label) {
-      setProjects(tempProjects);
-      setTab("");
-    } else {
-      setProjects(filteredProjects);
-      setTab(label);
-    }
-  };
-
-  const getDataDetail = async () => {
-    try {
-      const { data } = await getProjectGeneral();
-      setData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //   if (tab === label) {
+  //     setProjects(tempProjects);
+  //     setTab("");
+  //   } else {
+  //     setProjects(filteredProjects);
+  //     setTab(label);
+  //   }
+  // };
 
   useEffect(() => {
+    const getDataDetail = async () => {
+      try {
+        const { data } = await getProjectGeneral();
+        setData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     getDataDetail();
   }, []);
 
-  useEffect(() => {
-    getApiProject();
-  }, [sort, title, searchFilter]);
+  // useEffect(() => {
+  //   const getApiProject = async () => {
+  //     try {
+  //       const res = await searchProjectName({ ...searchFilter, sort, title });
+  //       if (!!res)
+  //         if (sort || title) {
+  //           setTempProjects(res.data);
+  //           setProjects(res.data);
+  //         } else {
+  //           setTempProjects([...projects, ...res.data]);
+  //           setProjects([...projects, ...res.data]);
+  //         }
+  //     } catch (error) {}
+  //   };
+
+  //   getApiProject();
+  // }, [sort, title, searchFilter, projects]);
 
   return (
     <div className="flex flex-col w-full h-full mb-[120px] gap-5 ">
-      <DonateProjectModel
+      <DonateProjectModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
@@ -102,7 +102,7 @@ const AllProject = () => {
       </div>
       <div className="w-full flex flex-col gap-[20px]  ">
         <Search onSearch={setSearchFilter} />
-        <TabAllProject tab={tab} handleTag={handleTag} />
+        {/* <TabAllProject tab={tab} handleTag={handleTag} /> */}
       </div>
       <div className="flex items-center justify-center">
         <InfiniteScroll

@@ -4,7 +4,7 @@ import { getProjectDetail } from "@/services";
 import ProjectPage from "@/views/ProjectPage/Project";
 import HomePage from "@/views/ProjectPage/components/Home";
 import { useParams } from "next/navigation";
-import React, { ReactElement, createContext } from "react";
+import React, { useEffect } from "react";
 
 export interface IHomeProps {}
 
@@ -12,14 +12,14 @@ export default function Home(props: IHomeProps) {
   const { id } = useParams();
   const [projectDetail, setProjectDetail] = React.useState<any>();
 
-  const getProjectDetailApi = async () => {
-    const res = await getProjectDetail(id);
-    if (!!res) setProjectDetail(res?.data);
-  };
+  useEffect(() => {
+    const getProjectDetailApi = async () => {
+      const res = await getProjectDetail(id);
+      if (!!res) setProjectDetail(res?.data);
+    };
 
-  React.useEffect(() => {
     getProjectDetailApi();
-  }, []);
+  }, [id]);
 
   return (
     <div>

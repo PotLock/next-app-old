@@ -5,7 +5,9 @@ import { Button, Chip, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useContext } from "react";
 
-export interface IProfilePageProps {}
+export interface IProfilePageProps {
+  openModal: () => void;
+}
 
 export default function IndividualPage(props: IProfilePageProps) {
   const { data } = useContext(ProjectDetail);
@@ -50,14 +52,15 @@ export default function IndividualPage(props: IProfilePageProps) {
             </div>
           </div>
           <div>
-            <Tooltip content="Comming Soon">
-              <Button color="danger" radius="sm" className="mr-[24px]">
-                Donate
-              </Button>
-            </Tooltip>
-            <Tooltip content="Comming Soon">
-              <Button radius="sm">Add to cart</Button>
-            </Tooltip>
+            <Button
+              color="danger"
+              radius="sm"
+              className="mr-[24px]"
+              onClick={props.openModal}
+            >
+              Donate
+            </Button>
+            <Button radius="sm">Add to cart</Button>
           </div>
         </div>
       </div>

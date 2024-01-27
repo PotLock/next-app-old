@@ -35,7 +35,7 @@ export const getAllPots = () => {
 
 export const searchPotsName = ({ page, limit, sort, title, tags }: any) => {
   return axiosInstance.get(
-    `/pots?${title ? "title=" + title : ""}&page=${
+    `/pots?${title ? "search=" + title : ""}&page=${
       page ?? 1
     }&limit=${limit}${sort ? "&sort=" + sort : ""}${tags.length ? "&tags=" + tags?.toString() : ""}`,
   );
@@ -53,3 +53,8 @@ export const getPotsFeatured = () => {
 export const getPotsGeneral = () => {
   return axiosInstance.get(`/pots/general`);
 };
+
+
+export const getWhiteListAccountWallet = () => {
+  return axiosInstance.get('/pots/white-listed-accounts')
+}

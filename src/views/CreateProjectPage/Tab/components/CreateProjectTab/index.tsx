@@ -1,5 +1,5 @@
 "use client";
-import { IconDelete, IconPlus } from "@/assets/icons";
+import { IconDelete, IconPlus, IconEdit } from "@/assets/icons";
 import IconAdd from "@/assets/icons/IconAdd";
 import { SELECTiTEMS, URLINFOR } from "@/constant";
 import { CreateProjectContext } from "@/contexts/CreateProjectContext";
@@ -15,6 +15,13 @@ import {
   SelectItem,
   Textarea,
   useDisclosure,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableCell,
+  TableRow,
+  getKeyValue
 } from "@nextui-org/react";
 import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -35,10 +42,23 @@ type Inputs = {
 };
 type TSmartContract = { chain?: string; contactAddress?: string };
 
+const rows = [
+  {
+    key: "1",
+    fundingSource: "Web3 Open Source Software",
+    description: <div className="overflow-ellipsis line-clamp-1">
+      Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc. Viverra arcu eu sed consequat.
+    </div>,
+    amount: "$ 30",
+    action: <div className="flex gap-[20px]"><IconEdit /> <IconDelete /></div>
+  },
+];
+
 const CreateProjectTab = () => {
   const [onSmartContract, setOnSmartContract] = useState(false);
   const [onFundingSources, setOnFundingSources] = useState(false);
   const [onDao, setOnDao] = useState(false);
+  const [data, setData] = useState(rows)
   const [selectCategory, setSelecteCategory] = useState(new Set());
   const [smartcontracts, setSmartContracts] = useState<TSmartContract[]>([
     { chain: undefined, contactAddress: undefined },
@@ -86,7 +106,7 @@ const CreateProjectTab = () => {
   return (
     <form>
       <div className="flex flex-col w-full h-full">
-        <AddFundingModal isOpen={isOpen} onOpenChange={onOpenChange} />
+        <AddFundingModal isOpen={isOpen} onOpenChange={onOpenChange} setData={setData} data={data} />
         <div className="w-full h-full flex flex-col sm:flex-row gap-4">
           <div className="w-full sm:w-1/2 gap-4 flex flex-col">
             <div className="font-semibold">Project details</div>
@@ -263,6 +283,23 @@ const CreateProjectTab = () => {
                 Add the funding sources that you currently have before
                 registering to Potlock (You checked it on the product details)
               </div>
+            </div>
+            <div className="my-[12px]">
+              <Table>
+                <TableHeader>
+                  <TableColumn key="fundingSource">Funding Source</TableColumn>
+                  <TableColumn key="description" width={350}>Description</TableColumn>
+                  <TableColumn key="amount" allowsSorting={true} >Amount</TableColumn>
+                  <TableColumn key="action"><div></div></TableColumn>
+                </TableHeader>
+                <TableBody items={data}>
+                  {(item) => (
+                    <TableRow key={item.key}>
+                      {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </div>
             <div>
               <Button onPress={onOpen} color="danger" variant="light">

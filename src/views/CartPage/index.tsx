@@ -25,11 +25,14 @@ import { useState } from "react";
 export interface ICartPageProps {}
 
 export default function CartPage(props: ICartPageProps) {
-  const projectsCart : any = typeof window !== "undefined" ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "") : [];
+  const projectsCart: any =
+    typeof window !== "undefined"
+      ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
+      : [];
   // const projectsCart = typeof window !== "undefined"
   // ? (() => {
   //     const storedData = localStorage?.getItem("projects_in_cart") || "";
-      
+
   //     try {
   //       // Attempt to parse the JSON data
   //       return JSON.parse(storedData) || [];
@@ -41,7 +44,7 @@ export default function CartPage(props: ICartPageProps) {
   //   })()
   // : [];
 
-  const [itemCart, setItemsCart] = useState<any[]>( );
+  const [itemCart, setItemsCart] = useState<any[]>();
   const [selectedCity, setSelectedCity] = useState(
     new Set([OPTIONS[0]["value"]]),
   );
@@ -52,7 +55,7 @@ export default function CartPage(props: ICartPageProps) {
   };
 
   const handleHideShowBreakdown = (id: number, index: number) => {
-    const newItems: any = [...itemCart];
+    const newItems: an[[]] = [...itemCart];
     newItems[index] = {
       ...newItems[index],
       showBreakDown: !newItems[index].showBreakDown,
@@ -60,18 +63,18 @@ export default function CartPage(props: ICartPageProps) {
     setItemsCart(newItems);
   };
 
-  const COIN = [
-    183,
-    138,
-  ]
+  const COIN = [183, 138];
 
-  const sum = COIN?.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+  const sum = COIN?.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0,
+  );
 
   const calculatePercentage = (number: number, percentage: number) => {
-    const total = ( number * percentage) / 100
+    const total = (number * percentage) / 100;
     return Math.round(total);
-  }
-  
+  };
+
   return (
     <div className="flex w-full max-lg:flex-wrap-reverse p-[42px] max-lg:p-[24px]">
       <div className="w-[45%] mr-[140px] max-lg:mr-0 max-lg:w-full max-lg:mt-[24px]">

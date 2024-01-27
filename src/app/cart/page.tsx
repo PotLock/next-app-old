@@ -1,12 +1,11 @@
-import Cart from '@/views/CartPage';
-import * as React from 'react';
+import Cart from "@/views/CartPage";
 
 export interface ICartPageProps {}
 
-export default function CartPage (props: ICartPageProps) {
+export default function CartPage(props: ICartPageProps) {
   return (
     <div>
-      <Cart/>
+      <Cart />
     </div>
   );
 }

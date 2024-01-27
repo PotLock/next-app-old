@@ -1,18 +1,30 @@
 "use client";
 import IconCheckYellow from "@/assets/icons/IconCheckYellow";
-import useTags from "@/hooks/useTags";
-import { getListTagRequest } from "@/services";
+import { getListTagPots, getListTagRequest } from "@/services";
 import { TTag } from "@/types";
 import { useEffect, useState } from "react";
 
-const TagAllProject = ({
+const TagAllPots = ({
   tags,
   handleTag,
 }: {
   tags: string[];
   handleTag: (label: string) => void;
 }) => {
-  const listTags = useTags();
+  const [listTags, setListTags] = useState<TTag[]>([]);
+
+  const getListTag = async () => {
+    try {
+      const res = await getListTagPots();
+      setListTags(res?.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getListTag();
+  }, []);
 
   return (
     <div className="flex w-full flex-col gap-3 items-start justify-start pl-[15px] pr-[15px] mx-0 sm:flex-row sm:p-0 sm:items-center">
@@ -35,4 +47,4 @@ const TagAllProject = ({
   );
 };
 
-export default TagAllProject;
+export default TagAllPots;

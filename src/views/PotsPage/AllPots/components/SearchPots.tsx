@@ -13,33 +13,38 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 const items = [
   {
-    key: "dateCreated",
-    label: "All projects",
-    subLabel: "",
+    key: "-totalDonation",
+    label: "Most to Least Donations",
+
   },
   {
-    key: "dateCreated",
-    label: "New to Old",
-    subLabel: "Time",
+    key: "totalDonation",
+    label: "Least to Most Donations",
+
   },
   {
-    key: "-dateCreated",
-    label: "Old to New",
-    subLabel: "Time",
+    key: "totalMatchingPool",
+    label: "Least to Least Matching Pool",
+
   },
   {
-    key: "-totalContributed",
-    label: "Most to Least",
-    subLabel: "Donations ",
+    key: "-totalMatchingPool",
+    label: "Most to Least Matching Pool",
+
   },
   {
-    key: "totalContributed",
-    label: "Least to Most",
-    subLabel: "Donations ",
+    key: "public_donations_count",
+    label: "Least to Most # Donors",
+    
+  },
+  {
+    key: "-public_donations_count",
+    label: "Most to Least # Donors",
+   
   },
 ];
-const Search = ({ onSearch, totalProject }: any) => {
-  const [filter, setFilter] = useState("All projects");
+const SearchPots = ({ onSearch, totalPots }: any) => {
+  const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const router = useRouter();
   const pathname = usePathname();
@@ -50,7 +55,7 @@ const Search = ({ onSearch, totalProject }: any) => {
   useEffect(() => {
     setSearch(title ?? "");
     const sortFilter = items.find((item) => item.key === sort);
-    setFilter(sortFilter?.label ?? "All projects");
+    setFilter(sortFilter?.label ?? "Sort");
   }, [sort, title]);
 
   const handleFilter = (label: any) => {
@@ -72,7 +77,7 @@ const Search = ({ onSearch, totalProject }: any) => {
   };
 
   return (
-    <div className="relative mx-4 sm:mx-0 bg-[#F0F0F0] ">
+    <div className="relative mx-4 sm:mx-0 bg-[#F0F0F0]">
       <div className="absolute inset-y-0 start-0 flex items-center px-6 pointer-events-none">
         <IconSearch />
       </div>
@@ -81,7 +86,7 @@ const Search = ({ onSearch, totalProject }: any) => {
         type="search"
         value={search}
         className="block w-[90%] p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
-        placeholder={`Search (${totalProject || '0'}) projects...`}
+        placeholder={`Search (${totalPots || '0'}) pots...`}
       />
       <Dropdown>
         <DropdownTrigger>
@@ -110,7 +115,7 @@ const Search = ({ onSearch, totalProject }: any) => {
                   )}
                   {item.label}
                 </div>
-                <div className="text-[#7B7B7B]">{item.subLabel}</div>
+                
               </div>
             </DropdownItem>
           )}
@@ -120,4 +125,4 @@ const Search = ({ onSearch, totalProject }: any) => {
   );
 };
 
-export default Search;
+export default SearchPots;

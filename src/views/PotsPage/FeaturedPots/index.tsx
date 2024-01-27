@@ -1,46 +1,71 @@
-'use client'
-import Pagination from '@/components/Panigation'
-import PotCard from '@/components/PotCard'
-import { PROJECTS } from '@/constant'
-import React, { useState } from 'react'
+"use client";
+import Pagination from "@/components/Panigation";
+import PotCard from "@/components/PotCard";
+import { PROJECTS } from "@/constant";
+import { getPotsFeatured } from "@/services";
+import React, { useEffect, useRef, useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import Slider from "react-slick";
 
 const FeaturedPots = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const slickRef = useRef<any>(null);
+  const mobileWiew = useMediaQuery({ query: "(max-width: 500px)" });
   const itemsPerPage = 3; // Adjust the number of items per page as needed
+  const [pots, setPots] = useState<any[]>([]);
+
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: mobileWiew ? 1 : 3,
+    slidesToScroll: mobileWiew ? 1 : 3,
+  };
+
+
+  const getApiPots = async () => {
+    try {
+      const res = await getPotsFeatured();
+      setPots(res?.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getCurrentPageItems = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    const slicedData = PROJECTS.slice(startIndex, endIndex);
-
-    return slicedData.map((item, index) => (
-      
-        <PotCard key={index}/>
-      
-    ));
+    return pots.map((item, index) => <PotCard key={index} data={item} />);
   };
+
+  // };
   // Function to handle page change
   const handlePageChange = (page: any) => {
-    setCurrentPage(page);
+    if (page == "next") {
+      slickRef.current.slickNext();
+    } else {
+      slickRef.current.slickPrev();
+    }
   };
+
+  useEffect(() => {
+    getApiPots();
+  }, []);
   return (
-    <div className='w-full h-full flex flex-col gap-6'>
-  <div className="flex  justify-between mx-4 sm:mx-0">
+    <div className="flex flex-col w-full h-full  gap-5 ">
+      <div className="flex  justify-between mx-4 sm:mx-0">
         <div className="font-semibold text-[22px] ">Featured Pots</div>
         <Pagination
-          data={PROJECTS}
+          data={pots}
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
         />
       </div>
-      <div className="flex items-center justify-center ">
-      <div className="grid grid-cols-1 sm:flex sm:items-center sm:justify-between sm:mx-0 gap-y-3 gap-x-8">
-        {getCurrentPageItems()}
-      </div>
+
+      <div className="flex items-center justify-center pl-[15px] pr-[15px] sm:p-0">
+        <Slider ref={slickRef} {...settings}>
+          {getCurrentPageItems()}
+        </Slider>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FeaturedPots
+export default FeaturedPots;

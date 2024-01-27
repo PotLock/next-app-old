@@ -6,22 +6,19 @@ import AddPhoto from "../../../assets/images/AddPhoto.png";
 import AddPhotoBanner from "../../../assets/images/Scrim.png";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Avatar, AvatarGroup, Button, useDisclosure } from "@nextui-org/react";
 import AddTeamMemberModal from "../Tab/components/Modal/AddTeamMemberModal";
+import { CreateProjectContext } from "@/contexts/CreateProjectContext";
+import { TMember } from "@/types";
 
 const BannerMember = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isHoveredBanner, setIsHoveredBanner] = useState(false);
   const [isHoveredAvatar, setIsHoveredAvatar] = useState(false);
-  const [selectedFile, setSelectedFile] = useState("");
-  const [bannerImage, setBannerImage] = useState<File>();
-  const [avatarImage, setAvatarImage] = useState<File>();
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
-  };
+  const { setBannerImage, bannerImage, setAvatarImage, avatarImage, members } =
+    useContext(CreateProjectContext);
 
   const handleChangeBanner = async (e: any) => {
     let file = e.target.files[0];
@@ -36,7 +33,6 @@ const BannerMember = () => {
     <div className="px-4 sm:px-[76px] py-12 w-full gap-10 sm:gap-2 flex flex-col">
       <AddTeamMemberModal isOpen={isOpen} onOpenChange={onOpenChange} />
       <div className="relative w-full  sm:h-[280px] h-[200px]">
-
         {/* change banner */}
         {!!bannerImage ? (
           <img
@@ -78,7 +74,6 @@ const BannerMember = () => {
         {!!avatarImage ? (
           <img
             src={URL.createObjectURL(avatarImage)}
-           
             alt=""
             className="absolute -bottom-10 left-3 sm:left-24  rounded-full cursor-pointer w-16 h-16 sm:w-[88px] sm:h-[88px]"
             onMouseEnter={() => setIsHoveredAvatar(true)}
@@ -87,7 +82,6 @@ const BannerMember = () => {
         ) : (
           <Image
             src={Profile}
-            
             alt=""
             className="absolute -bottom-10 left-3 sm:left-24 rounded-full cursor-pointer w-16 h-16 sm:w-[88px] sm:h-[88px]"
             onMouseEnter={() => setIsHoveredAvatar(true)}
@@ -122,12 +116,9 @@ const BannerMember = () => {
           <div className="text-[#DD3345] font-medium"> Add team members</div>
         </Button>
         <AvatarGroup className="cursor-pointer">
-          <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-          <Avatar src="https://i.pravatar.cc/150?u=a04258a2462d826712d" />
-          <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-          <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" />
-          <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-          <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026708c" />
+          {members.map((m: TMember, index: number) => (
+            <Avatar key={index} src={m.imageUrl} />
+          ))}
         </AvatarGroup>
       </div>
     </div>

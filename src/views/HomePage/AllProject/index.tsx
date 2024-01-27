@@ -1,47 +1,32 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
-import TabAllProject from "./components/Tab";
-import { Button, Divider, useDisclosure } from "@nextui-org/react";
-import { PROJECTS } from "@/constant";
 import Search from "@/components/Search";
-import { getProject, getProjectGeneral, searchProjectName } from "@/services";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { getProjectGeneral, searchProjectName } from "@/services";
+import { Divider, useDisclosure } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
+import TabAllProject from "./components/Tab";
 import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [projects, setProjects] = useState<any[]>([]);
-  const [tempProjects, setTempProjects] = useState<any[]>([]);
   const [data, setData] = useState<any>();
   const [searchFilter, setSearchFilter] = useState({ page: 1, limit: 1000 });
   const search = useSearchParams();
   const sort = search.get("sort");
   const title = search.get("title");
-  const [tab, setTab] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
 
-  // const handleSearch = async (name: any) => {
-  //   const res = await searchProjectName(name.length ? name : undefined);
-  //   setProjects(res.data);
-  // };
-
-  // const handleTag = (label: string) => {
-  //   const filterProjectsByTag = (label: string) => {
-  //     return tempProjects.filter((project) => project.tags.includes(label));
-  //   };
-
-  //   const filteredProjects = filterProjectsByTag(label);
-
-  //   if (tab === label) {
-  //     setProjects(tempProjects);
-  //     setTab("");
-  //   } else {
-  //     setProjects(filteredProjects);
-  //     setTab(label);
-  //   }
-  // };
+  const getDataDetail = async () => {
+    try {
+      const { data } = await getProjectGeneral();
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const getDataDetail = async () => {
@@ -56,30 +41,35 @@ const AllProject = () => {
     getDataDetail();
   }, []);
 
-  // useEffect(() => {
-  //   const getApiProject = async () => {
-  //     try {
-  //       const res = await searchProjectName({ ...searchFilter, sort, title });
-  //       if (!!res)
-  //         if (sort || title) {
-  //           setTempProjects(res.data);
-  //           setProjects(res.data);
-  //         } else {
-  //           setTempProjects([...projects, ...res.data]);
-  //           setProjects([...projects, ...res.data]);
-  //         }
-  //     } catch (error) {}
-  //   };
+  useEffect(() => {
+    const getApiProject = async () => {
+      try {
+        const res = await searchProjectName({
+          ...searchFilter,
+          sort,
+          title,
+          tags,
+        });
+        if (!!res) setProjects(res.data);
+      } catch (error) {}
+    };
 
-  //   getApiProject();
-  // }, [sort, title, searchFilter, projects]);
+    getApiProject();
+  }, [sort, title, searchFilter, tags]);
+
+  const handleTag = (label: string) => {
+    const isChecked = tags.some((item) => item === label);
+    if (isChecked) {
+      const tagFilted = tags.filter((item) => item !== label);
+      setTags(tagFilted);
+    } else {
+      setTags([...tags, label]);
+    }
+  };
 
   return (
     <div className="flex flex-col w-full h-full mb-[120px] gap-5 ">
-      <DonateProjectModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      />
+      <DonateProjectModal isOpen={isOpen} onOpenChange={onOpenChange} />
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="font-semibold text-sm sm:text-[22px]">ALL PROJECTS</div>
         <div className="flex h-5 items-center space-x-4 text-small">
@@ -100,30 +90,15 @@ const AllProject = () => {
         </div>
       </div>
       <div className="w-full flex flex-col gap-[20px]  ">
-        <Search onSearch={setSearchFilter} />
-        {/* <TabAllProject tab={tab} handleTag={handleTag} /> */}
+        <Search onSearch={setSearchFilter} totalProject={projects.length} />
+        <TabAllProject tags={tags} handleTag={handleTag} />
       </div>
       <div className="flex items-center justify-center">
-        <InfiniteScroll
-          dataLength={projects.length}
-          next={() => {
-            if (projects.length) {
-              setSearchFilter({
-                ...searchFilter,
-                page: searchFilter.page + 1,
-              });
-            }
-          }}
-          hasMore={true} // Replace with a condition based on your data source
-          loader={<p>No more data to load.</p>}
-          endMessage={<p>No more data to load.</p>}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8 min-h-[400px]"
-          // inverse={true}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8 min-h-[400px]">
           {projects.map((project, index) => (
             <ProjectCard key={index} onOpen={onOpen} data={project} />
           ))}
-        </InfiniteScroll>
+        </div>
       </div>
     </div>
   );

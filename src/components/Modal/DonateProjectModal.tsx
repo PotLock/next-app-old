@@ -154,8 +154,9 @@ export default function DonateProjectModal({
 
   return (
     <Modal
-      backdrop="opaque"
+      backdrop="blur"
       isOpen={isOpen}
+      onClose={onClose}
       onOpenChange={onOpenChange}
       className="bg-white rounded-md border border-[#FAFAFA] text-sm"
       size="2xl"
@@ -164,18 +165,27 @@ export default function DonateProjectModal({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1 text-center text-[17px]">
-              Donate to project
+              {isRandom ? "Donate Randomly" : "Donate to project"}
             </ModalHeader>
             <ModalBody>
               <div className="flex w-full items-center  gap-3 border-b py-3 ">
-                <Image alt="" src={IconLogoCart} />
-                <div className="">
-                  <div className="text-sm font-semibold">DecntralMedia</div>
+                {isRandom ? (
                   <div className="text-sm">
-                    Seamless infrastructure for hosting hybrid crypto events
-                    good registry and figure out who you supported after
+                    Randomly donate to an approved project on our public good
+                    registry and figure out who you supported after
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <Image alt="cart logo" src={IconLogoCart} />
+                    <div>
+                      <div className="text-sm font-semibold">DecntralMedia</div>
+                      <div className="text-sm">
+                        Seamless infrastructure for hosting hybrid crypto events
+                        good registry and figure out who you supported after
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <p className="font-medium">Amount</p>

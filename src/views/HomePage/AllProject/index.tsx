@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
 import TabAllProject from "./components/Tab";
-import { Divider, useDisclosure } from "@nextui-org/react";
+import { Button, Divider, useDisclosure } from "@nextui-org/react";
 import { PROJECTS } from "@/constant";
 import Search from "@/components/Search";
 import { getProject, getProjectGeneral, searchProjectName } from "@/services";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSearchParams } from "next/navigation";
-import DonateProjectModal from "../Donate/DonateProjectModal";
+import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -79,7 +79,6 @@ const AllProject = () => {
       <DonateProjectModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        onClose={onClose}
       />
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="font-semibold text-sm sm:text-[22px]">ALL PROJECTS</div>

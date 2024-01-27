@@ -9,8 +9,8 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import IconNear from "../../../assets/images/IconNear.png";
-import IconLogoCart from "../../../assets/images/Logo.png";
+import IconNear from "@/assets/images/IconNear.png";
+import IconLogoCart from "@/assets/images/Logo.png";
 import { CartContext } from "@/layout/LayoutProvides";
 import { useContext } from "react";
 

@@ -11,17 +11,17 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import IconNear from "../../../assets/images/IconNear.png";
-import IconUSDC from "../../../assets/images/IconUSDC.png";
+import IconNear from "@/assets/images/IconNear.png";
+import IconUSDC from "@/assets/images/IconUSDC.png";
 import IconArrowDown from "@/assets/icons/IconArrowDown";
 import IconEdit from "@/assets/icons/IconEdit";
 import Image from "next/image";
-import IconLogoCart from "../../../assets/images/Logo.png";
+import IconLogoCart from "@/assets/images/Logo.png";
 import IconArrowDownFull from "@/assets/icons/IconArrowDownFull";
 import { Wallet } from "@/configs/nearWallet";
-import { Contract, connect, keyStores, utils } from "near-api-js";
+import { utils } from "near-api-js";
 import axios from "axios";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 
 type TCurrency = "near" | "usdc";
 
@@ -33,11 +33,12 @@ export default function DonateProjectModal({
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
-  onClose: () => void;
+  onClose?: () => void;
   isRandom?: true;
 }) {
   const { id } = useParams();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const [donateAmount, setDonateAmount] = useState<number>(0);
   const [openNote, setOpenNote] = useState<boolean>(false);
@@ -49,7 +50,6 @@ export default function DonateProjectModal({
   const [projectAllocation, setProjectAllocation] = useState<number>(0);
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referralFee, setReferralFee] = useState<number>(0);
-  const [chefFee, setChefFee] = useState<number>(0);
 
   const selectCurrency = (currency: TCurrency) => {
     setSelectedCurrency(currency);
@@ -74,16 +74,11 @@ export default function DonateProjectModal({
     if (searchParams && searchParams?.get("referralId")) {
       referralFeeAmount = (Number(event.target.value) / 200) * 5;
     }
-    const chefFeeAmount = (Number(event.target.value) / 100) * 5;
     setDonateAmount(Number(event.target.value));
     setProtocolFee(protocolFeeAmount);
     setReferralFee(referralFeeAmount);
-    setChefFee(chefFeeAmount);
     setProjectAllocation(
-      Number(event.target.value) -
-        protocolFeeAmount -
-        referralFeeAmount -
-        chefFeeAmount,
+      Number(event.target.value) - protocolFeeAmount - referralFeeAmount,
     );
   };
 
@@ -98,67 +93,39 @@ export default function DonateProjectModal({
     };
 
     if (donateAmount > 0) {
-      const connectionConfig = {
-        networkId: "mainnet",
-        // keyStore: new keyStores.BrowserLocalStorageKeyStore(),
-        keyStores:
-          "ed25519:2ui2tp9ZrRjuffwBGSh7VogUUUF288vax7V9GCADa9HnLevqC7QGWF1Vefg97cT8AhZAVnvi3Pj8LY1xsMEhWGVn",
-        nodeUrl: "https://rpc.mainnet.near.org",
-        walletUrl: "https://wallet.mainnet.near.org",
-        helperUrl: "https://helper.mainnet.near.org",
-        explorerUrl: "https://nearblocks.io",
-        headers: {},
-      };
-
-      const nearConnection = await connect(connectionConfig);
-
-      const account = await nearConnection.account("orasci-contributor.near");
-
+      const wallet = new Wallet({
+        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+        network: "mainnet",
+      });
       const recipientId = id ?? localStorage.getItem("recipientId");
-      // const wallet = new Wallet({
-      //   createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      //   network: "mainnet",
-      // });
-      // await wallet.startUp();
-      // if (recipientId) {
-      //   await wallet.callMethod({
-      //     contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
-      //     method: "donate",
-      //     args: {
-      //       recipient_id: recipientId,
-      //       message: note,
-      //       referrer_id: searchParams?.get("referralId") ?? null,
-      //     },
-      //     deposit: utils.format
-      //       .parseNearAmount(
-      //         setDepositOnCurrency(selectedCurrency, donateAmount).toString(),
-      //       )
-      //       ?.toString(),
-      //   });
-      // }
-      const contract = new Contract(account, "donate.potlock.near", {
-        changeMethods: ["donate"],
-        viewMethods: ["get_donation_by_id"],
-      });
-      // @ts-ignore: Unreachable code error
-      await contract.donate({
-        callbackUrl: "http://localhost:3000/",
-        meta: "referralId=dfasf",
-        args: {
-          recipient_id: recipientId,
-          message: note,
-          referrer_id: searchParams?.get("referralId") ?? null,
-        },
-        gas: 300000000000000,
-        amount: 1000000000000000000000000,
-        // amount: utils.format
-        //   .parseNearAmount(
-        //     setDepositOnCurrency(selectedCurrency, donateAmount).toString(),
-        //   )
-        //   ?.toString(),
-      });
+      await wallet.startUp();
+      if (recipientId) {
+        await wallet.callMethod({
+          contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
+          method: "donate",
+          callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}${pathname}?donate-success`,
+          args: {
+            recipient_id: recipientId,
+            message: note,
+            referrer_id: searchParams?.get("referralId") ?? null,
+          },
+          deposit: utils.format
+            .parseNearAmount(
+              setDepositOnCurrency(selectedCurrency, donateAmount).toString(),
+            )
+            ?.toString(),
+        });
+      }
     }
-  }, [donateAmount, currencyPrice, note, id, searchParams]);
+  }, [
+    donateAmount,
+    currencyPrice,
+    note,
+    id,
+    searchParams,
+    selectedCurrency,
+    pathname,
+  ]);
 
   const renderCurrency = (currency: TCurrency) => {
     switch (currency) {
@@ -302,13 +269,6 @@ export default function DonateProjectModal({
                     </p>
                     <div className="flex items-center gap-2">
                       <p>{referralFee}</p>
-                      <Image width={20} height={20} src={IconNear} alt="" />
-                    </div>
-                  </div>
-                  <div className="flex w-full items-center justify-between">
-                    <p>Chef fees (5%) </p>
-                    <div className="flex items-center gap-2">
-                      <p>{chefFee}</p>
                       <Image width={20} height={20} src={IconNear} alt="" />
                     </div>
                   </div>

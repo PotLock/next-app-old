@@ -5,7 +5,7 @@ import { Image, useDisclosure } from "@nextui-org/react";
 import { DATA_SOCIALS } from "@/constant/socials";
 import NavbarPage from "./components/Navbar";
 import { ProjectDetail } from "@/contexts";
-import DonateProjectModal from "../HomePage/Donate/DonateProjectModal";
+import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 export interface IProjectPageProps {
   children?: ReactNode;
 }

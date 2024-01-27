@@ -57,7 +57,7 @@ const AllPots = () => {
     <div className="flex flex-col w-ful h-full gap-6">
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="flex gap-2 text-sm sm:text-[22px]">
-          <div className="font-semibold ">ALL pots </div>
+          <div className="font-semibold ">ALL POTS </div>
           <div className="text-[#DD3345]">{pots.length || "0"}</div>
         </div>
 

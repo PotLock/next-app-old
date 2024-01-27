@@ -63,6 +63,7 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
     return new Date(localDateTime).getTime();
   };
   const onSubmit: SubmitHandler<any> = async (data: any) => {
+  
    
   const deployArgs = {
     owner: account,
@@ -77,18 +78,19 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
     public_round_end_ms: convertToUTCTimestamp(data?.matchingRoundEndDate),
     registry_provider: data?.registry,
     sybil_wrapper_provider: DEFAULT_SYBIL_WRAPPER_PROVIDER,
-    custom_sybil_checks: null, // not necessary to include null values but doing so for clarity
+    custom_sybil_checks: null,
     custom_min_threshold_score: null,
     referral_fee: data?.referrerFee,
     protocol_fee: '2',
     chef_fee_basis_points: data?.chefFeeBasisPoints,
-    protocol_config_provider: DEFAULT_PROTOCOL_CONFIG_PROVIDER, // TODO: this should not be passed in here, as it's too easy to override. Should be set by factory contract when deploying.
+    protocol_config_provider: DEFAULT_PROTOCOL_CONFIG_PROVIDER, 
     source_metadata: {
       version: CURRENT_SOURCE_CODE_VERSION,
       commit_hash: data?.latestSourceCodeCommitHash,
       link: SOURCE_CODE_LINK,
     },
   };
+
   
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
@@ -100,7 +102,7 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
         contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
         method: "deploy_pot",
         args: {
-          pot_args: data,
+          pot_args: deployArgs,
         },
         deposit: utils.format.parseNearAmount(count.toString())?.toString(),
       });
@@ -159,7 +161,7 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
               </div>
               <Input
                 size="sm"
-                type="text"
+                type="number"
                 placeholder="% 0"
                 {...register("referrerFee")}
               />
@@ -235,7 +237,7 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
               </div>
               <Input
                 size="sm"
-                type="text"
+                type="number"
                 placeholder="% 0"
                 {...register("chefFeeBasisPoints")}
               />
@@ -255,8 +257,8 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
               <div className="font-medium ">Max. approved applicants</div>
               <Input
                 size="sm"
-                type="text"
-                placeholder="4"
+                type="number"
+                placeholder="0"
                 {...register("maxProjects")}
               />
             </div>

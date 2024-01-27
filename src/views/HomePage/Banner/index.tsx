@@ -1,6 +1,6 @@
 "use client";
+import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 import { getProjectGeneral } from "@/services";
-import DonationRandomlyModel from "@/views/HomePage/DonationRandomly/DonationRandomlyModal";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -40,10 +40,11 @@ const Banner = () => {
 
   return (
     <div className="w-full  flex items-center justify-center my-[160px] ">
-      <DonationRandomlyModel
+      <DonateProjectModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
+        isRandom
       />
       <div className="flex gap-6 items-center justify-center  flex-col text-center">
         <div className="text-sm font-medium text-[#292929]">

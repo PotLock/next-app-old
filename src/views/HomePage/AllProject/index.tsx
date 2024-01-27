@@ -4,10 +4,10 @@ import ProjectCard from "../../../components/ProjectCard";
 
 import Search from "@/components/Search";
 import { getProjectGeneral, searchProjectName } from "@/services";
-import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
 import { Divider, useDisclosure } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
 import TabAllProject from "./components/Tab";
+import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -19,18 +19,6 @@ const AllProject = () => {
   const title = search.get("title");
   const [tags, setTags] = useState<string[]>([]);
 
-  const getApiProject = async () => {
-    try {
-      const res = await searchProjectName({
-        ...searchFilter,
-        sort,
-        title,
-        tags,
-      });
-      if (!!res) setProjects(res.data);
-    } catch (error) {}
-  };
-
   const getDataDetail = async () => {
     try {
       const { data } = await getProjectGeneral();
@@ -41,10 +29,31 @@ const AllProject = () => {
   };
 
   useEffect(() => {
+    const getDataDetail = async () => {
+      try {
+        const { data } = await getProjectGeneral();
+        setData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     getDataDetail();
   }, []);
 
   useEffect(() => {
+    const getApiProject = async () => {
+      try {
+        const res = await searchProjectName({
+          ...searchFilter,
+          sort,
+          title,
+          tags,
+        });
+        if (!!res) setProjects(res.data);
+      } catch (error) {}
+    };
+
     getApiProject();
   }, [sort, title, searchFilter, tags]);
 
@@ -60,11 +69,7 @@ const AllProject = () => {
 
   return (
     <div className="flex flex-col w-full h-full mb-[120px] gap-5 ">
-      <DonateProjectModel
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        onClose={onClose}
-      />
+      <DonateProjectModal isOpen={isOpen} onOpenChange={onOpenChange} />
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="font-semibold text-sm sm:text-[22px]">ALL PROJECTS</div>
         <div className="flex h-5 items-center space-x-4 text-small">

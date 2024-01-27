@@ -192,12 +192,14 @@ export class Wallet {
     args = {},
     gas = THIRTY_TGAS,
     deposit = NO_DEPOSIT,
+    callbackURL,
   }: {
     contractId: string;
     method: string;
     args?: Record<string, unknown>;
     gas?: string;
     deposit?: string;
+    callbackURL?: string;
   }) {
     if (!this.wallet) {
       this.signIn();
@@ -207,6 +209,7 @@ export class Wallet {
       return await this.wallet.signAndSendTransaction({
         signerId: this.accountId,
         receiverId: contractId,
+        callbackUrl: callbackURL,
         actions: [
           {
             type: "FunctionCall",

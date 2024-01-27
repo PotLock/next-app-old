@@ -42,6 +42,7 @@ type Inputs = {
 };
 type TSmartContract = { chain?: string; contactAddress?: string };
 
+
 const rows = [
   {
     key: "1",
@@ -49,8 +50,7 @@ const rows = [
     description: <div className="overflow-ellipsis line-clamp-1">
       Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc. Viverra arcu eu sed consequat.
     </div>,
-    amount: "$ 30",
-    action: <div className="flex gap-[20px]"><IconEdit /> <IconDelete /></div>
+    amount: "$ 30"
   },
 ];
 
@@ -59,6 +59,7 @@ const CreateProjectTab = () => {
   const [onFundingSources, setOnFundingSources] = useState(false);
   const [onDao, setOnDao] = useState(false);
   const [data, setData] = useState(rows)
+  console.log("👋  data:", data)
   const [selectCategory, setSelecteCategory] = useState(new Set());
   const [smartcontracts, setSmartContracts] = useState<TSmartContract[]>([
     { chain: undefined, contactAddress: undefined },
@@ -102,6 +103,14 @@ const CreateProjectTab = () => {
     data[index][event.target.name as keyof TSmartContract] = event.target.value;
     setSmartContracts(data);
   };
+
+  const handleDelete = (key: string) => {
+    setData((prevData) => prevData?.filter((item) => item.key !==key))
+  }
+
+  const handleEdit = () => {
+    console.log('asaa')
+  }
 
   return (
     <form>
@@ -293,12 +302,25 @@ const CreateProjectTab = () => {
                   <TableColumn key="action"><div></div></TableColumn>
                 </TableHeader>
                 <TableBody items={data}>
-                  {(item) => (
-                    <TableRow key={item.key}>
-                      {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-                    </TableRow>
-                  )}
-                </TableBody>
+                {(item) => (
+                  <TableRow key={item.key}>
+                    {(columnKey) => (
+                      <TableCell>
+                        {columnKey === "action" ? (
+                          <div className="flex gap-[20px] cursor-pointer">
+                            <div onClick={onOpen}><IconEdit /></div>
+                            <div onClick={() => handleDelete(item.key)}>
+                            <IconDelete />
+                            </div>
+                          </div>
+                        ) : (
+                          getKeyValue(item, columnKey)
+                        )}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
               </Table>
             </div>
             <div>

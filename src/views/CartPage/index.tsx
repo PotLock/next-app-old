@@ -44,7 +44,7 @@ export default function CartPage(props: ICartPageProps) {
   //   })()
   // : [];
 
-  const [itemCart, setItemsCart] = useState<any[]>();
+  const [itemCart, setItemsCart] = useState<any[]>([]);
   const [selectedCity, setSelectedCity] = useState(
     new Set([OPTIONS[0]["value"]]),
   );
@@ -55,7 +55,7 @@ export default function CartPage(props: ICartPageProps) {
   };
 
   const handleHideShowBreakdown = (id: number, index: number) => {
-    const newItems: an[[]] = [...itemCart];
+    const newItems: any[] = [...itemCart];
     newItems[index] = {
       ...newItems[index],
       showBreakDown: !newItems[index].showBreakDown,

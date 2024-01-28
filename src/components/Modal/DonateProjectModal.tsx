@@ -22,6 +22,7 @@ import { Wallet } from "@/configs/nearWallet";
 import { utils } from "near-api-js";
 import axios from "axios";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { getApiProjectRandom } from "@/services";
 
 type TCurrency = "near" | "usdc";
 
@@ -36,6 +37,7 @@ export default function DonateProjectModal({
   onClose?: () => void;
   isRandom?: true;
 }) {
+ 
   const { id } = useParams();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -50,6 +52,7 @@ export default function DonateProjectModal({
   const [projectAllocation, setProjectAllocation] = useState<number>(0);
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referralFee, setReferralFee] = useState<number>(0);
+
 
   const selectCurrency = (currency: TCurrency) => {
     setSelectedCurrency(currency);
@@ -82,7 +85,15 @@ export default function DonateProjectModal({
     );
   };
 
+const getProjectRandom = async () => {
+  if(!!isRandom) {
+    const res = await getApiProjectRandom();
+    return res?.data?._id
+  }
+}
+
   const donate = useCallback(async () => {
+    const projectIdRandom = await getProjectRandom();
     const setDepositOnCurrency = (currency: TCurrency, amount: number) => {
       switch (currency) {
         case "near":
@@ -97,7 +108,7 @@ export default function DonateProjectModal({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
         network: "mainnet",
       });
-      const recipientId = id ?? localStorage.getItem("recipientId");
+      const recipientId = !!isRandom ? projectIdRandom : id ?? localStorage.getItem("recipientId");
       await wallet.startUp();
       if (recipientId) {
         await wallet.callMethod({

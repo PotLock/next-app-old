@@ -13,18 +13,18 @@ export default function ProjectLayout({
   const { id } = useParams();
   const [projectDetail, setProjectDetail] = React.useState<any>();
 
-  const getProjectDetailApi = async () => {
-    const res = await getProjectDetail(id);
-    if (!!res) setProjectDetail(res?.data);
-  };
+  useEffect(() => {
+    const getProjectDetailApi = async () => {
+      const res = await getProjectDetail(id);
+      if (!!res) setProjectDetail(res?.data);
+    };
 
- useEffect(() => {
     getProjectDetailApi();
-  }, []);
+  }, [id]);
 
   return (
     <ProjectDetail.Provider value={{ data: projectDetail }}>
-          <ProjectPage>{children}</ProjectPage>
-      </ProjectDetail.Provider>
+      <ProjectPage>{children}</ProjectPage>
+    </ProjectDetail.Provider>
   );
 }

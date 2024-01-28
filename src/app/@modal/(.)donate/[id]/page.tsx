@@ -27,17 +27,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 
 type TCurrency = "near" | "usdc";
 
-export default function DonateProjectModal({
-  isOpen,
-  onOpenChange,
-  onClose,
-  isRandom,
-}: {
-  isOpen: boolean;
-  onOpenChange?: () => void;
-  onClose?: () => void;
-  isRandom?: true;
-}) {
+export default function DonateProjectModal() {
   const { id } = useParams();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -48,6 +38,7 @@ export default function DonateProjectModal({
   const [selectedCurrency, setSelectedCurrency] = useState<TCurrency>("near");
   const [currencyPrice, setCurrencyPrice] = useState<number>(0);
   const [note, setNote] = useState<string>("");
+  const [isRandom, setIsRandom] = useState<boolean>(false);
 
   const [projectAllocation, setProjectAllocation] = useState<number>(0);
   const [protocolFee, setProtocolFee] = useState<number>(0);
@@ -157,9 +148,8 @@ export default function DonateProjectModal({
   return (
     <Modal
       backdrop="blur"
-      isOpen={isOpen}
-      onClose={onClose}
-      onOpenChange={onOpenChange}
+      isOpen={true}
+      //   onClose={onClose}
       className="bg-white rounded-md border border-[#FAFAFA] text-sm"
       size="2xl"
     >

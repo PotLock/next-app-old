@@ -22,15 +22,6 @@ const DeployPotForm = () => {
   const [listAccount, setListAccount] = useState<any | null>(null);
   const [count, setCount] = useState("0.02");
 
-const potFactoryContractId = "potfactory1.tests.potlock.near"; // TODO: update to production address when contract is deployed to prod
-const DEFAULT_REGISTRY_PROVIDER = "registry.potlock.near";
-const DEFAULT_SYBIL_WRAPPER_PROVIDER = "sybil.potlock.near";
-const DEFAULT_PROTOCOL_CONFIG_PROVIDER = potFactoryContractId;
-const CURRENT_SOURCE_CODE_VERSION = "0.1.0";
-const SOURCE_CODE_LINK = "https://github.com/PotLock/core"; // for use in contract source metadata
-const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot"; // for directing user to view source code for Pot
-
-
   const {
     register,
     control,
@@ -40,7 +31,6 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
   const getApiWhiteListAccountWallet = async () => {
     try {
       const res = await getWhiteListAccountWallet();
-      console.log("🚀 ~ getApiWhiteListAccountWal ~ res:", res?.data);
       if (!!res) setListAccount(res?.data);
     } catch (error) {}
   };
@@ -67,7 +57,7 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
    
   const deployArgs = {
     owner: account,
-    admins: [], // TODO: CHANGE TO TAKE FROM STATE
+    admins: [], 
     chef: data?.chef,
     pot_name: data?.name,
     pot_description: data?.description,
@@ -77,17 +67,17 @@ const POT_CODE_LINK = "https://github.com/PotLock/core/tree/main/contracts/pot";
     public_round_start_ms: convertToUTCTimestamp(data?.matchingRoundStartDate),
     public_round_end_ms: convertToUTCTimestamp(data?.matchingRoundEndDate),
     registry_provider: data?.registry,
-    sybil_wrapper_provider: DEFAULT_SYBIL_WRAPPER_PROVIDER,
+    sybil_wrapper_provider: process.env.DEFAULT_SYBIL_WRAPPER_PROVIDER,
     custom_sybil_checks: null,
     custom_min_threshold_score: null,
     referral_fee: data?.referrerFee,
     protocol_fee: '2',
     chef_fee_basis_points: data?.chefFeeBasisPoints,
-    protocol_config_provider: DEFAULT_PROTOCOL_CONFIG_PROVIDER, 
+    protocol_config_provider: process.env.DEFAULT_PROTOCOL_CONFIG_PROVIDER, 
     source_metadata: {
-      version: CURRENT_SOURCE_CODE_VERSION,
+      version: process.env.CURRENT_SOURCE_CODE_VERSION,
       commit_hash: data?.latestSourceCodeCommitHash,
-      link: SOURCE_CODE_LINK,
+      link: process.env.SOURCE_CODE_LINK,
     },
   };
 

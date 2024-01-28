@@ -22,9 +22,9 @@ import { Wallet } from "@/configs/nearWallet";
 import { utils } from "near-api-js";
 import axios from "axios";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { TCurrency } from "@/types";
+import useNearToUsdt from "@/hooks/useNearToUsdt";
 import { getApiProjectRandom } from "@/services";
-
-type TCurrency = "near" | "usdc";
 
 export default function DonateProjectModal({
   isOpen,
@@ -37,7 +37,6 @@ export default function DonateProjectModal({
   onClose?: () => void;
   isRandom?: true;
 }) {
- 
   const { id } = useParams();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -46,13 +45,12 @@ export default function DonateProjectModal({
   const [openNote, setOpenNote] = useState<boolean>(false);
   const [openBreakDown, setOpenBreakDown] = useState<boolean>(false);
   const [selectedCurrency, setSelectedCurrency] = useState<TCurrency>("near");
-  const [currencyPrice, setCurrencyPrice] = useState<number>(0);
   const [note, setNote] = useState<string>("");
 
   const [projectAllocation, setProjectAllocation] = useState<number>(0);
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referralFee, setReferralFee] = useState<number>(0);
-
+  const { priceUsdt } = useNearToUsdt();
 
   const selectCurrency = (currency: TCurrency) => {
     setSelectedCurrency(currency);
@@ -85,12 +83,12 @@ export default function DonateProjectModal({
     );
   };
 
-const getProjectRandom = async () => {
-  if(!!isRandom) {
-    const res = await getApiProjectRandom();
-    return res?.data?._id
-  }
-}
+  const getProjectRandom = async () => {
+    if (!!isRandom) {
+      const res = await getApiProjectRandom();
+      return res?.data?._id;
+    }
+  };
 
   const donate = useCallback(async () => {
     const projectIdRandom = await getProjectRandom();
@@ -99,7 +97,7 @@ const getProjectRandom = async () => {
         case "near":
           return amount;
         case "usdc":
-          return amount / currencyPrice;
+          return amount / priceUsdt;
       }
     };
 
@@ -108,7 +106,9 @@ const getProjectRandom = async () => {
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
         network: "mainnet",
       });
-      const recipientId = !!isRandom ? projectIdRandom : id ?? localStorage.getItem("recipientId");
+      const recipientId = !!isRandom
+        ? projectIdRandom
+        : id ?? localStorage.getItem("recipientId");
       await wallet.startUp();
       if (recipientId) {
         await wallet.callMethod({
@@ -130,7 +130,7 @@ const getProjectRandom = async () => {
     }
   }, [
     donateAmount,
-    currencyPrice,
+    priceUsdt,
     note,
     id,
     searchParams,
@@ -148,20 +148,6 @@ const getProjectRandom = async () => {
         break;
     }
   };
-
-  useEffect(() => {
-    const fetchCurrencyPrice = async () => {
-      await axios
-        .get(
-          "https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd",
-        )
-        .then((res) => {
-          setCurrencyPrice(res.data.near.usd);
-        });
-    };
-
-    fetchCurrencyPrice();
-  }, []);
 
   return (
     <Modal
@@ -241,7 +227,7 @@ const getProjectRandom = async () => {
               </div>
 
               <div className="text-[#7B7B7B] text-[11px] flex items-center justify-between">
-                <p>1 NEAR = ${currencyPrice} USD</p>
+                <p>1 NEAR = ${priceUsdt} USD</p>
                 <div className="flex gap-2">
                   <p>Account balance:</p>
                   <div className="flex  items-center">

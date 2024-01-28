@@ -58,9 +58,13 @@ export const getWhiteListAccountWallet = () => {
 };
 
 export const getApiCommitHash = () => {
-  return axiosGithub.get('/repos/PotLock/core/commits')
-}
+  return axiosGithub.get("/repos/PotLock/core/commits");
+};
+
+export const getConfigCart = () => {
+  return axiosInstance.get("/donation/donation-config");
+};
 
 export const getApiProjectRandom = () => {
-  return axiosInstance.get('/project/random')
-}
+  return axiosInstance.get("/project/random");
+};

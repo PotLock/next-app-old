@@ -23,6 +23,7 @@ import { utils } from "near-api-js";
 import axios from "axios";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { TCurrency } from "@/types";
+import useNearToUsdt from "@/hooks/useNearToUsdt";
 
 export default function DonateProjectModal({
   isOpen,
@@ -43,12 +44,12 @@ export default function DonateProjectModal({
   const [openNote, setOpenNote] = useState<boolean>(false);
   const [openBreakDown, setOpenBreakDown] = useState<boolean>(false);
   const [selectedCurrency, setSelectedCurrency] = useState<TCurrency>("near");
-  const [currencyPrice, setCurrencyPrice] = useState<number>(0);
   const [note, setNote] = useState<string>("");
 
   const [projectAllocation, setProjectAllocation] = useState<number>(0);
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referralFee, setReferralFee] = useState<number>(0);
+  const { priceUsdt } = useNearToUsdt();
 
   const selectCurrency = (currency: TCurrency) => {
     setSelectedCurrency(currency);
@@ -87,7 +88,7 @@ export default function DonateProjectModal({
         case "near":
           return amount;
         case "usdc":
-          return amount / currencyPrice;
+          return amount / priceUsdt;
       }
     };
 
@@ -118,7 +119,7 @@ export default function DonateProjectModal({
     }
   }, [
     donateAmount,
-    currencyPrice,
+    priceUsdt,
     note,
     id,
     searchParams,
@@ -136,20 +137,6 @@ export default function DonateProjectModal({
         break;
     }
   };
-
-  useEffect(() => {
-    const fetchCurrencyPrice = async () => {
-      await axios
-        .get(
-          "https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd",
-        )
-        .then((res) => {
-          setCurrencyPrice(res.data.near.usd);
-        });
-    };
-
-    fetchCurrencyPrice();
-  }, []);
 
   return (
     <Modal
@@ -229,7 +216,7 @@ export default function DonateProjectModal({
               </div>
 
               <div className="text-[#7B7B7B] text-[11px] flex items-center justify-between">
-                <p>1 NEAR = ${currencyPrice} USD</p>
+                <p>1 NEAR = ${priceUsdt} USD</p>
                 <div className="flex gap-2">
                   <p>Account balance:</p>
                   <div className="flex  items-center">

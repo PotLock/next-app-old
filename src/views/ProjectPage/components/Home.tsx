@@ -28,9 +28,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="w-[33%] flex items-end gap-2 px-[24px] py-[16px] rounded-md bg-[#FEF6EE]">
-          <div className="text-[32px] font-normal">
-            {data?.donors}
-          </div>
+          <div className="text-[32px] font-normal">{data?.donors}</div>
           <div className="pb-[6px] font-normal text-[17px] text-[#EA6A25]">
             Donors
           </div>
@@ -60,26 +58,29 @@ export default function HomePage() {
             Team members
           </div>
           <div className="flex flex-wrap w-[65%] text-[#7B7B7B] text-[17px] font-normal">
-              <div className="flex gap-[40px]">
-              {data?.team?.map((item: ITeam, index: number) => (
-                <div className="flex flex-col items-center" key={index}>
-                  {data?.team && item?.imageUrl !== "" ? (
-                  <Image
-                    alt="avatar"
-                    src={item?.imageUrl}
-                    onError={() => "/Avatar.png"}
-                    className="w-[80px] h-[80px] rounded-[50%]"
-                  />
-                ) : (
-                  <Image
-                    className="w-[80px] h-[80px] rounded-[50%]"
-                    alt="avatar"
-                    src="/Banner.png"
-                  />
-                )}
-                  <div className="mt-[16px]">{item.address}</div>
-                </div>
-              ))}
+            <div className="flex gap-[40px] flex-wrap">
+              {data?.team?.map(
+                (item: ITeam, index: number) =>
+                  !!item.address && (
+                    <div className="flex flex-col items-center" key={index}>
+                      {data?.team && item?.imageUrl !== "" ? (
+                        <Image
+                          alt="avatar"
+                          src={item?.imageUrl}
+                          onError={() => "/Avatar.png"}
+                          className="w-[80px] h-[80px] rounded-[50%]"
+                        />
+                      ) : (
+                        <Image
+                          className="w-[80px] h-[80px] rounded-[50%]"
+                          alt="avatar"
+                          src="/Banner.png"
+                        />
+                      )}
+                      <div className="mt-[16px]">{item.address}</div>
+                    </div>
+                  ),
+              )}
             </div>
           </div>
         </div>

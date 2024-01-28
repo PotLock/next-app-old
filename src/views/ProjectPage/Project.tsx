@@ -46,7 +46,7 @@ export default function ProjectPage(props: IProjectPageProps) {
             <Image
               radius="none"
               alt="Card background"
-              className="object-fill h-[280px] w-[1440px]"
+              className="object-cover	 h-[280px] w-[1440px]"
               src={imageUrl}
               onError={() => setImageUrl("/ProjectImage.png")}
             />
@@ -54,7 +54,7 @@ export default function ProjectPage(props: IProjectPageProps) {
             <Image
               radius="none"
               alt="Card background"
-              className="object-fill h-[280px] w-[1440px]"
+              className="object-cover	 h-[280px] w-[1440px]"
               src="/ProjectImage.png"
             />
           )}

@@ -10,6 +10,8 @@ import {
 } from "@/assets/icons";
 import IconNear from "@/assets/images/IconNear.png";
 import IconUSDC from "@/assets/images/IconUSDC.png";
+import { Wallet } from "@/configs/nearWallet";
+import useNearToUsdt from "@/hooks/useNearToUsdt";
 import { getConfigCart } from "@/services";
 import { TCurrency } from "@/types";
 import {
@@ -46,6 +48,7 @@ export default function CartPage(props: ICartPageProps) {
     typeof window !== "undefined"
       ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
       : [];
+
   const [itemCart, setItemsCart] = useState<any[]>(projectsCart);
   const [config, setConfig] = useState<TConfigCart>({
     owner: "",
@@ -53,6 +56,8 @@ export default function CartPage(props: ICartPageProps) {
     referral_fee_basis_points: 0,
     protocol_fee_recipient_account: "",
   });
+
+  const { priceUsdt } = useNearToUsdt();
 
   const getConfig = async () => {
     try {
@@ -81,16 +86,9 @@ export default function CartPage(props: ICartPageProps) {
     getConfig();
   }, []);
 
-  const COIN = [183, 138];
-
-  const sum = COIN?.reduce(
-    (accumulator, currentValue) => accumulator + currentValue,
-    0,
-  );
-
   const calculatePercentage = (number: number, percentage: number) => {
     const total = (number * percentage) / 100;
-    return Math.round(total);
+    return total.toFixed(3);
   };
 
   const renderCurrency = (currency: TCurrency) => {
@@ -137,7 +135,28 @@ export default function CartPage(props: ICartPageProps) {
   };
 
   const onDonate = async () => {
-    console.log("cart", itemCart);
+    const data = itemCart.map((item) => ({
+      receiverId: process.env.NEXT_PUBLIC_DONATION_ID as string,
+      functionCalls: [
+        {
+          methodName: "donate",
+          args: {
+            recipient_id: item.id,
+            referrer_id: null,
+            message: item.note,
+          },
+          amount: item.amount.toString(),
+        },
+      ],
+    }));
+    try {
+      const wallet = new Wallet({
+        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+        network: "mainnet",
+      });
+      await wallet.startUp();
+      await wallet.callMultiMethod([...data]);
+    } catch (error) {}
   };
 
   return (
@@ -154,20 +173,20 @@ export default function CartPage(props: ICartPageProps) {
                 <div>Currency</div>
                 <div>USD</div>
               </div>
-              <div className="flex justify-between text-sm p-2">
-                <div className="flex items-center gap-2">
-                  <IconCoinT />
-                  46.25
+              {itemCart.map((item) => (
+                <div key={item.id} className="flex justify-between text-sm p-2">
+                  <div className="flex items-center gap-2">
+                    {renderCurrency(item.currency)}
+                    {item.amount}
+                  </div>
+                  <div>
+                    $
+                    {item.currency === "near"
+                      ? item.amount * priceUsdt
+                      : item.amount}
+                  </div>
                 </div>
-                <div>${COIN[0]}</div>
-              </div>
-              <div className="flex justify-between text-sm p-2 mb-2">
-                <div className="flex items-center gap-2">
-                  <IconCoinX />
-                  1.25
-                </div>
-                <div>${COIN[1]}</div>
-              </div>
+              ))}
             </div>
             <div>
               <div className="flex justify-between bg-[#F0F0F0] p-2 rounded-md text-xs text-gray-500 mt-6">
@@ -185,11 +204,11 @@ export default function CartPage(props: ICartPageProps) {
                     Pot
                   </Chip>
                 </div>
-                <div>60% (${calculatePercentage(sum, 60)})</div>
+                <div>10% (${calculatePercentage(total * priceUsdt, 10)})</div>
               </div>
               <div className="flex justify-between text-sm p-2">
                 <div className="flex items-center gap-2">Direct Donations</div>
-                <div>20% (${calculatePercentage(sum, 20)})</div>
+                <div>80% (${calculatePercentage(total * priceUsdt, 80)})</div>
               </div>
               <div className="flex justify-between text-sm p-2">
                 <div className="flex items-center gap-2">
@@ -202,21 +221,23 @@ export default function CartPage(props: ICartPageProps) {
                     Pot
                   </Chip>
                 </div>
-                <div>20% (${calculatePercentage(sum, 20)})</div>
+                <div>10% (${calculatePercentage(total * priceUsdt, 10)})</div>
               </div>
               <div className="flex justify-between text-sm p-2 border-t-2 mt-6">
                 <div className="flex items-center gap-2 font-semibold">
                   Total
                 </div>
-                <div className="font-medium text-black ">${sum}</div>
+                <div className="font-medium text-black ">
+                  ${total * priceUsdt}
+                </div>
               </div>
             </div>
           </div>
           <Button
-            className="mt-6 px-[16px] py-[12px] font-medium text-sm bg-[#DD3345]  border border-black rounded-md shadow-[0px_2px_2px]"
+            className="mt-6 px-[16px] py-[12px] font-medium text-sm bg-[#DD3345]  border rounded-md "
             onClick={onDonate}
           >
-            <p className="text-white">Donate</p>
+            <p className="text-white">Donate ${total * priceUsdt}</p>
           </Button>
         </div>
       </div>
@@ -297,7 +318,6 @@ export default function CartPage(props: ICartPageProps) {
                       >
                         {item?.description}
                       </Markdown>
-                      {item.description}
                     </div>
                   </div>
                 </CardHeader>
@@ -346,8 +366,9 @@ export default function CartPage(props: ICartPageProps) {
                         onChangeProjectCart(index, "amount", e.target.value)
                       }
                       value={item.amount ?? 1}
-                      className="w-full h-full p-2 focus:border-none focus:outline-none rounded-none"
+                      className="w-full h-full p-2 focus:border-none focus:outline-none rounded-none text-right"
                       type="number"
+                      min={1}
                     />
                   </div>
                   <div className="border-t py-4 ">
@@ -390,10 +411,7 @@ export default function CartPage(props: ICartPageProps) {
                     )}
                   </div>
                 </CardBody>
-                <CardFooter
-                  className="flex w-[100%] pb-6 justify-end"
-                  // onClick={() => setShowBreakdown(!showBreakdown)}
-                >
+                <CardFooter className="flex w-[100%] pb-6 justify-end">
                   {!item.showBreakDown ? (
                     <button
                       className="flex gap-2 justify-end"

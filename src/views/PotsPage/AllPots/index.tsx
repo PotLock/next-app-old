@@ -16,7 +16,7 @@ const AllPots = () => {
   const [searchFilter, setSearchFilter] = useState({ page: 1, limit: 1000 });
   const search = useSearchParams();
   const sort = search.get("sort");
-  const title = search.get("title");
+  const title = search.get("search");
   const handleTag = (label: string) => {
     const isChecked = tags.some((item) => item === label);
     if (isChecked) {
@@ -34,6 +34,7 @@ const AllPots = () => {
         title,
         tags,
       });
+     
       if (!!res) setPots(res.data);
     } catch (error) {}
   };

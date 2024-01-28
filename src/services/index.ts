@@ -63,3 +63,7 @@ export const getWhiteListAccountWallet = () => {
 export const getApiCommitHash = () => {
   return axiosGithub.get('/repos/PotLock/core/commits')
 }
+
+export const getApiProjectRandom = () => {
+  return axiosInstance.get('/project/random')
+}

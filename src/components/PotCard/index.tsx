@@ -8,6 +8,16 @@ import {
 import React from "react";
 
 const PotCard = ({data}: any) => {
+  const convertToPositive = (inputNumber: any) => {
+    const parsedNumber = parseFloat(inputNumber);
+
+    if (!isNaN(parsedNumber)) {
+      const positiveNumber = Math.abs(parsedNumber);
+      return positiveNumber
+    } else {
+      return null
+    }
+  };
   return (
     <Card className="max-w-[400px] m-1 " 
     
@@ -30,8 +40,8 @@ const PotCard = ({data}: any) => {
           <p className="font-semibold">{data?.totalAmount || '1,369.69 NEAR'} </p>
           <p className="text-[#7B7B7B]">{data?.totalMatchingPool } Matched</p>
         </div>
-        <div className="border bg-[#9ADD33] py-[6px] px-2 rounded">
-          1 day left for Matching
+        <div className={`${data?.timeTags?.matchingRoundDayEnd  > data?.timeTags?.applicationDayEnd ? 'bg-[#9ADD33] ' : 'bg-[#33DDCB]'} border py-[6px] px-2 rounded`}>
+          {data?.timeTags?.matchingRoundDayEnd  > data?.timeTags?.applicationDayEnd ? convertToPositive(data?.timeTags?.matchingRoundDayEnd) + ' day left for Matching'   : convertToPositive(data?.timeTags?.applicationDayEnd) + ' day left to Apply' } 
         </div>
       </CardFooter>
     </Card>

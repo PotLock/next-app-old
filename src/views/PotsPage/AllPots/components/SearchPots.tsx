@@ -50,7 +50,7 @@ const SearchPots = ({ onSearch, totalPots }: any) => {
   const pathname = usePathname();
   const searchParam = useSearchParams();
   const sort = searchParam.get("sort");
-  const title = searchParam.get("title");
+  const title = searchParam.get("search");
 
   useEffect(() => {
     setSearch(title ?? "");
@@ -62,7 +62,7 @@ const SearchPots = ({ onSearch, totalPots }: any) => {
     setFilter(label);
     onSearch({ page: 1, limit: 9 });
     const sort = items.find((item) => item.label === label);
-    router.push(pathname + `?sort=${sort?.key}&title=${search}`, {
+    router.push(pathname + `?sort=${sort?.key}&search=${search}`, {
       scroll: false,
     });
   };
@@ -71,7 +71,7 @@ const SearchPots = ({ onSearch, totalPots }: any) => {
     setSearch(name);
     onSearch({ page: 1, limit: 9 });
     const sort = items.find((item) => item.label === filter);
-    router.push(pathname + `?sort=${sort?.key}&title=${name}`, {
+    router.push(pathname + `?sort=${sort?.key}&search=${name}`, {
       scroll: false,
     });
   };

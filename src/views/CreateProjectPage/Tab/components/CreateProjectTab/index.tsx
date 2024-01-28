@@ -62,7 +62,6 @@ const rows = [
   },
 ];
 
-
 // TODO: Need handle that project should create or update
 const CreateProjectTab = () => {
   const [onSmartContract, setOnSmartContract] = useState(false);
@@ -102,7 +101,6 @@ const CreateProjectTab = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data: any) => {
-    console.log(data);
     data.twitter = data.twitter ? `twitter.com/${data.twitter}` : "";
     data.telegram = data.telegram ? `t.me/${data.telegram}` : "";
     data.github = data.github ? `github.com/${data.github}` : "";
@@ -264,6 +262,14 @@ const CreateProjectTab = () => {
     setSmartContracts(data);
   };
 
+  const handleDelete = (key: string) => {
+    setData((prevData) => prevData?.filter((item) => item.key !== key));
+  };
+
+  const handleEdit = () => {
+    console.log("asaa");
+  };
+
   return (
     <form>
       <div className="flex flex-col w-full h-full">
@@ -393,7 +399,20 @@ const CreateProjectTab = () => {
                   {(item) => (
                     <TableRow key={item.key}>
                       {(columnKey) => (
-                        <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                        <TableCell>
+                          {columnKey === "action" ? (
+                            <div className="flex gap-[20px] cursor-pointer">
+                              <div onClick={onOpen}>
+                                <IconEdit />
+                              </div>
+                              <div onClick={() => handleDelete(item.key)}>
+                                <IconDelete />
+                              </div>
+                            </div>
+                          ) : (
+                            getKeyValue(item, columnKey)
+                          )}
+                        </TableCell>
                       )}
                     </TableRow>
                   )}

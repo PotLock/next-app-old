@@ -15,7 +15,7 @@ export const getProjectDetail = (id: any) => {
 
 export const searchProjectName = ({ page, limit, sort, title, tags }: any) => {
   return axiosInstance.get(
-    `/project?${title ? "title=" + title : ""}&page=${
+    `/project?status=Approved&${title ? "title=" + title : ""}&page=${
       page ?? 1
     }&limit=${limit}${sort ? "&sort=" + sort : ""}${tags.length ? "&tags=" + tags?.toString() : ""}`,
   );
@@ -29,10 +29,9 @@ export const getListTagRequest = () => {
   return axiosInstance.get("/project/tags");
 };
 
-
 export const getAllPots = () => {
   return axiosInstance.get("/pots");
-}
+};
 
 export const searchPotsName = ({ page, limit, sort, title, tags }: any) => {
   return axiosInstance.get(
@@ -41,7 +40,6 @@ export const searchPotsName = ({ page, limit, sort, title, tags }: any) => {
     }&limit=${limit}${sort ? "&sort=" + sort : ""}${tags.length ? "&tags=" + tags?.toString() : ""}`,
   );
 };
-
 
 export const getListTagPots = () => {
   return axiosInstance.get("/pots/tags");
@@ -55,11 +53,10 @@ export const getPotsGeneral = () => {
   return axiosInstance.get(`/pots/general`);
 };
 
-
 export const getWhiteListAccountWallet = () => {
-  return axiosInstance.get('/pots/white-listed-accounts')
-}
+  return axiosInstance.get("/pots/white-listed-accounts");
+};
 
 export const getApiCommitHash = () => {
-  return axiosGithub.get('/repos/PotLock/core/commits')
-}
+  return axiosGithub.get("/repos/PotLock/core/commits");
+};

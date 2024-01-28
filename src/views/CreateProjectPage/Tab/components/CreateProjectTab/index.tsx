@@ -1,9 +1,8 @@
 "use client";
 import { IconDelete, IconPlus, IconEdit } from "@/assets/icons";
 import IconAdd from "@/assets/icons/IconAdd";
-import { SELECTiTEMS, URLINFOR } from "@/constant";
+import { URLINFOR } from "@/constant";
 import { CreateProjectContext } from "@/contexts/CreateProjectContext";
-import { WalletContext } from "@/contexts/WalletContext";
 import useTags from "@/hooks/useTags";
 import {
   Button,
@@ -21,45 +20,54 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  getKeyValue
+  getKeyValue,
 } from "@nextui-org/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import AddFundingModal from "../Modal/AddFundingModal";
+import { Transaction, Wallet } from "@/configs/nearWallet";
+import SmartContractForm from "./SmartContractForm";
 
 type Inputs = {
   projectName: string;
   projectId?: string;
   overview: string;
   contractAddress: string;
-  Twitter: string;
-  linkTelegram: string;
-  linkGithub: string;
-  linkWebsite: string;
+  twitter: string;
+  telegram: string;
+  github: string;
+  website: string;
   DAOAddress: string;
   fileBanner: File;
   fileAvatar: File;
 };
 type TSmartContract = { chain?: string; contactAddress?: string };
 
-
 const rows = [
   {
     key: "1",
     fundingSource: "Web3 Open Source Software",
-    description: <div className="overflow-ellipsis line-clamp-1">
-      Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc. Viverra arcu eu sed consequat.
-    </div>,
-    amount: "$ 30"
+    description: (
+      <div className="overflow-ellipsis line-clamp-1">
+        Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc. Viverra
+        arcu eu sed consequat.
+      </div>
+    ),
+    amount: "$ 30",
+    action: (
+      <div className="flex gap-[20px]">
+        <IconEdit /> <IconDelete />
+      </div>
+    ),
   },
 ];
 
+// TODO: Need handle that project should create or update
 const CreateProjectTab = () => {
   const [onSmartContract, setOnSmartContract] = useState(false);
   const [onFundingSources, setOnFundingSources] = useState(false);
   const [onDao, setOnDao] = useState(false);
-  const [data, setData] = useState(rows)
-  console.log("👋  data:", data)
+  const [data, setData] = useState(rows);
   const [selectCategory, setSelecteCategory] = useState(new Set());
   const [smartcontracts, setSmartContracts] = useState<TSmartContract[]>([
     { chain: undefined, contactAddress: undefined },
@@ -67,9 +75,23 @@ const CreateProjectTab = () => {
 
   const { bannerImage, avatarImage, members } =
     useContext(CreateProjectContext);
-  const { walletId } = useContext(WalletContext);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const listTags = useTags();
+  const [accountId, setAccountId] = useState<string>("");
+
+  useEffect(() => {
+    const getAccountId = async () => {
+      const wallet = new Wallet({
+        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+        network: "mainnet",
+      });
+      await wallet.startUp();
+      const accountId = wallet.accountId;
+      if (accountId) setAccountId(accountId);
+    };
+
+    getAccountId();
+  }, []);
 
   const {
     register,
@@ -78,44 +100,185 @@ const CreateProjectTab = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data: any) => {
-    data.Twitter = data.Twitter ? `twitter.com/${data.Twitter}` : "";
-    data.Telegram = data.Telegram ? `t.me/${data.Telegram}` : "";
-    data.Github = data.Github ? `github.com/${data.Github}` : "";
-    data.Website = data.Website ? `https://${data.Website}` : "";
+  const onSubmit: SubmitHandler<Inputs> = async (data: any) => {
+    data.twitter = data.twitter ? `twitter.com/${data.twitter}` : "";
+    data.telegram = data.telegram ? `t.me/${data.telegram}` : "";
+    data.github = data.github ? `github.com/${data.github}` : "";
+    data.website = data.website ? `https://${data.website}` : "";
     data.category = [...selectCategory];
-    data.fileBanner = bannerImage;
-    data.fileAvatar = avatarImage;
+    data.backgroundImage = bannerImage;
+    data.profileImage = avatarImage;
     data.members = members;
     if (smartcontracts.some((item) => item.chain && item.contactAddress)) {
       data.smartcontract = smartcontracts.filter((item) => item.chain);
     }
 
-    const listData = { ...data };
+    const socialArgs = {
+      data: {
+        [accountId]: {
+          profile: {
+            name: data.projectName,
+            category: data.category,
+            description: data.overview,
+            linktree: {
+              website: data.website,
+              twitter: data.twitter,
+              telegram: data.telegram,
+              github: data.github,
+            },
+            team: data.members.reduce(
+              (acc: any, tm: any) => ({
+                ...acc,
+                [tm.accountId]: tm.remove ? null : "",
+              }),
+              {},
+            ),
+            backgroundImage: {
+              ipfs_cid: "cid from ipfs",
+            },
+            image: {
+              ipfs_cid: "cid from ipfs",
+            },
+          },
+          index: {
+            star: {
+              key: {
+                type: "social",
+                path: "potlock.near/widget/Index",
+              },
+              value: {
+                type: "star",
+              },
+            },
+            notify: {
+              key: "potlock.near",
+              value: {
+                type: "star",
+                item: {
+                  type: "social",
+                  path: "potlock.near/widget/Index",
+                },
+              },
+            },
+          },
+          graph: {
+            star: {
+              "potlock.near": {
+                widget: {
+                  Index: "",
+                },
+              },
+            },
+            follow: {
+              "potlock.near": "",
+            },
+          },
+        },
+      },
+    };
+
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+
+    await wallet.startUp();
+    const socialTransaction: Transaction = {
+      receiverId: "social.near",
+      functionCalls: [
+        {
+          methodName: "set",
+          args: socialArgs,
+          // amount: utils.format
+          //   .parseNearAmount(
+          //     (JSON.stringify(socialArgs).length * 0.00003).toString(),
+          //   )
+          //   ?.toString(),
+          amount: (JSON.stringify(socialArgs).length * 0.00003).toString(),
+        },
+      ],
+    };
+
+    const registerTransaction: Transaction = {
+      receiverId: process.env.NEXT_PUBLIC_REGISTRY_ID as string,
+      functionCalls: [
+        {
+          methodName: "register",
+          args: {},
+        },
+      ],
+    };
+
+    const addProjectTransaction: Transaction = {
+      receiverId: "nearhorizon.near",
+      functionCalls: [
+        {
+          methodName: "add_project",
+          args: { account_id: wallet.accountId },
+        },
+      ],
+    };
+
+    await wallet.callMultiMethod([
+      socialTransaction,
+      registerTransaction,
+      addProjectTransaction,
+    ]);
+    // await wallet.callMethod({
+    //   contractId: "social.near",
+    //   method: "set",
+    //   args: socialArgs,
+    //   deposit: utils.format
+    //     .parseNearAmount(
+    //       (JSON.stringify(socialArgs).length * 0.00003).toString(),
+    //     )
+    //     ?.toString(),
+    // });
+
+    // await wallet.callMethod({
+    //   contractId: process.env.NEXT_PUBLIC_REGISTRY_ID as string,
+    //   method: "register",
+    //   args: {},
+    // });
+
+    // await wallet.callMethod({
+    //   contractId: "nearhorizon.near",
+    //   method: "add_project",
+    //   args: {
+    //     account_id: wallet.accountId,
+    //   },
+    // });
+
+    // await wallet.wallet?.signAndSendTransactions()
   };
 
   const handleSelectCategory = (e: any) => {
     setSelecteCategory(new Set([e.target.value]));
   };
 
-  const handleFormChange = (index: number, event: any) => {
+  const onSmartContractChange = (index: number, event: any) => {
     let data: TSmartContract[] = [...smartcontracts];
     data[index][event.target.name as keyof TSmartContract] = event.target.value;
     setSmartContracts(data);
   };
 
   const handleDelete = (key: string) => {
-    setData((prevData) => prevData?.filter((item) => item.key !==key))
-  }
+    setData((prevData) => prevData?.filter((item) => item.key !== key));
+  };
 
   const handleEdit = () => {
-    console.log('asaa')
-  }
+    console.log("asaa");
+  };
 
   return (
     <form>
       <div className="flex flex-col w-full h-full">
-        <AddFundingModal isOpen={isOpen} onOpenChange={onOpenChange} setData={setData} data={data} />
+        <AddFundingModal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          setData={setData}
+          data={data}
+        />
         <div className="w-full h-full flex flex-col sm:flex-row gap-4">
           <div className="w-full sm:w-1/2 gap-4 flex flex-col">
             <div className="font-semibold">Project details</div>
@@ -140,13 +303,7 @@ const CreateProjectTab = () => {
             {!onDao && (
               <div className="flex flex-col gap-2">
                 <div className="font-medium">Project ID</div>
-                <Input
-                  size="sm"
-                  type="text"
-                  placeholder="Project ID"
-                  value={walletId}
-                  disabled
-                />
+                <Input size="sm" type="text" value={accountId} disabled />
               </div>
             )}
             <div className="flex flex-col gap-2">
@@ -202,80 +359,11 @@ const CreateProjectTab = () => {
           </div>
         </div>
         {!!onSmartContract && (
-          <>
-            <Divider className="my-4" />
-            <div className="w-full h-full flex flex-col sm:flex-row gap-4">
-              <div className="w-full sm:w-1/2 gap-4 flex flex-col">
-                <div className="font-semibold">Smart Contracts</div>
-                <div>
-                  Add smart contracts from different chains that belong to your
-                  application. (You checked it on the product details)
-                </div>
-              </div>
-              <div className="w-full sm:w-1/2 gap-6 flex flex-col">
-                {smartcontracts.map((item, index) => (
-                  <div className="w-full gap-6 flex flex-row" key={index}>
-                    <div className="flex flex-col gap-2 w-[25%]">
-                      <div className="font-medium">Add chain</div>
-                      <Select
-                        size="sm"
-                        name="chain"
-                        placeholder="Select chain"
-                        items={SELECTiTEMS}
-                        onChange={(event) => handleFormChange(index, event)}
-                        value={item.chain}
-                      >
-                        {(options) => (
-                          <SelectItem key={options.value} value={options.value}>
-                            {options.label}
-                          </SelectItem>
-                        )}
-                      </Select>
-                    </div>
-                    <div className="flex flex-col gap-2 w-[75%]">
-                      <div className="font-medium">Contact address</div>
-                      <Input
-                        size="sm"
-                        type="text"
-                        name="contactAddress"
-                        placeholder="Contact address"
-                        onChange={(event) => handleFormChange(index, event)}
-                        value={item.contactAddress}
-                      />
-                    </div>
-                  </div>
-                ))}
-
-                <div className="flex justify-between gap-2">
-                  <Button
-                    color="danger"
-                    variant="light"
-                    startContent={<IconPlus />}
-                    onClick={() =>
-                      setSmartContracts((prev) => [
-                        ...prev,
-                        { chain: undefined, contactAddress: undefined },
-                      ])
-                    }
-                  >
-                    Add more contracts
-                  </Button>
-                  {!!smartcontracts.length && (
-                    <Button
-                      color="default"
-                      variant="light"
-                      startContent={<IconDelete />}
-                      onClick={() =>
-                        setSmartContracts((prev) => [...prev].slice(0, -1))
-                      }
-                    >
-                      Remove Contract
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </>
+          <SmartContractForm
+            smartcontracts={smartcontracts}
+            setSmartContracts={setSmartContracts}
+            onSmartContractChange={onSmartContractChange}
+          />
         )}
         {!!onFundingSources && (
           <>
@@ -297,30 +385,38 @@ const CreateProjectTab = () => {
               <Table>
                 <TableHeader>
                   <TableColumn key="fundingSource">Funding Source</TableColumn>
-                  <TableColumn key="description" width={350}>Description</TableColumn>
-                  <TableColumn key="amount" allowsSorting={true} >Amount</TableColumn>
-                  <TableColumn key="action"><div></div></TableColumn>
+                  <TableColumn key="description" width={350}>
+                    Description
+                  </TableColumn>
+                  <TableColumn key="amount" allowsSorting={true}>
+                    Amount
+                  </TableColumn>
+                  <TableColumn key="action">
+                    <div></div>
+                  </TableColumn>
                 </TableHeader>
                 <TableBody items={data}>
-                {(item) => (
-                  <TableRow key={item.key}>
-                    {(columnKey) => (
-                      <TableCell>
-                        {columnKey === "action" ? (
-                          <div className="flex gap-[20px] cursor-pointer">
-                            <div onClick={onOpen}><IconEdit /></div>
-                            <div onClick={() => handleDelete(item.key)}>
-                            <IconDelete />
+                  {(item) => (
+                    <TableRow key={item.key}>
+                      {(columnKey) => (
+                        <TableCell>
+                          {columnKey === "action" ? (
+                            <div className="flex gap-[20px] cursor-pointer">
+                              <div onClick={onOpen}>
+                                <IconEdit />
+                              </div>
+                              <div onClick={() => handleDelete(item.key)}>
+                                <IconDelete />
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          getKeyValue(item, columnKey)
-                        )}
-                      </TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableBody>
+                          ) : (
+                            getKeyValue(item, columnKey)
+                          )}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  )}
+                </TableBody>
               </Table>
             </div>
             <div>

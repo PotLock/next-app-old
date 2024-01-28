@@ -1,28 +1,41 @@
-'use client'
-import IconArrowDownFull from '@/assets/icons/IconArrowDownFull';
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from '@nextui-org/react';
-import Image from 'next/image';
-import IconNear from "../../../../../assets/images/IconNear.png"
-import React from 'react'
+"use client";
+import IconArrowDownFull from "@/assets/icons/IconArrowDownFull";
+import {
+  Button,
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+} from "@nextui-org/react";
+import Image from "next/image";
+import IconNear from "../../../../../assets/images/IconNear.png";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 type Inputs = {
-  fundingSource: string,
-  description: string,
-  amount?: number,
+  fundingSource: string;
+  description: string;
+  amount?: number;
   // editKey?: any;
-}
+};
 
 interface IAppFunding {
   isOpen: boolean;
   onOpenChange: () => void;
   setData: any;
-  data: any
+  data: any;
 }
 
 const AddFundingModal = (props: IAppFunding) => {
-
-  const { isOpen, onOpenChange, setData, data } = props
+  const { isOpen, onOpenChange, setData, data } = props;
   const {
     register,
     watch,
@@ -39,20 +52,23 @@ const AddFundingModal = (props: IAppFunding) => {
     };
     setData((prevData: any) => [...prevData, newData]);
     console.log("👋  data:", formData);
-  }
+  };
 
   const handleEdit = (key: string, editedData: Inputs) => {
-    console.log('edit')
-    setData((prevData : any) =>
-      prevData.map((item : any) => (item.key === key ? { ...item, ...editedData } : item))
+    setData((prevData: any) =>
+      prevData.map((item: any) =>
+        item.key === key ? { ...item, ...editedData } : item,
+      ),
     );
   };
 
   return (
     <Modal
-      size='2xl'
-      className='text-sm'
-      isOpen={isOpen} onOpenChange={onOpenChange}>
+      size="2xl"
+      className="text-sm"
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+    >
       <ModalContent>
         {(onClose) => (
           <form>
@@ -61,8 +77,13 @@ const AddFundingModal = (props: IAppFunding) => {
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-col gap-2">
-                <div className="font-medium">Name  of investor</div>
-                <Input size="sm" type="text" placeholder="Placeholder" {...register("fundingSource")} />
+                <div className="font-medium">Name of investor</div>
+                <Input
+                  size="sm"
+                  type="text"
+                  placeholder="Placeholder"
+                  {...register("fundingSource")}
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <div className="font-medium">Description</div>
@@ -71,16 +92,16 @@ const AddFundingModal = (props: IAppFunding) => {
                   placeholder="Type description"
                   {...register("description")}
                 />
-                <div className='flex justify-end w-full text-[#7B7B7B]'>
+                <div className="flex justify-end w-full text-[#7B7B7B]">
                   0/320
                 </div>
               </div>
-              <div className='flex flex-col gap-2'>
+              <div className="flex flex-col gap-2">
                 <div className="font-medium">Amount</div>
 
                 <div className="border rounded-md flex items-center justify-between ">
                   <Dropdown>
-                    <DropdownTrigger >
+                    <DropdownTrigger>
                       <Button
                         className="p-4   flex gap-6 items-center"
                         variant="light"
@@ -119,7 +140,7 @@ const AddFundingModal = (props: IAppFunding) => {
               </div>
             </ModalBody>
             <ModalFooter>
-            {/* {watch("editKey") ? (
+              {/* {watch("editKey") ? (
                   <Button
                     onPress={() => handleEdit(watch("editKey"), watch())}
                     className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20"
@@ -132,7 +153,14 @@ const AddFundingModal = (props: IAppFunding) => {
                 Add
               </Button>
                 )} */}
-              <Button isDisabled={watch("fundingSource") && watch("description") ? false : true} color="danger" onPress={onClose} onClick={handleSubmit(onSubmit)}>
+              <Button
+                isDisabled={
+                  watch("fundingSource") && watch("description") ? false : true
+                }
+                color="danger"
+                onPress={onClose}
+                onClick={handleSubmit(onSubmit)}
+              >
                 Add
               </Button>
               {/* <Button
@@ -147,7 +175,7 @@ const AddFundingModal = (props: IAppFunding) => {
         )}
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};
 
-export default AddFundingModal
+export default AddFundingModal;

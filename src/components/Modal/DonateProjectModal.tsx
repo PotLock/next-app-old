@@ -22,8 +22,7 @@ import { Wallet } from "@/configs/nearWallet";
 import { utils } from "near-api-js";
 import axios from "axios";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-
-type TCurrency = "near" | "usdc";
+import { TCurrency } from "@/types";
 
 export default function DonateProjectModal({
   isOpen,

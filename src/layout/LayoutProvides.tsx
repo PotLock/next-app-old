@@ -11,7 +11,12 @@ export interface ILayoutProvidesProps {
 export const CartContext = React.createContext<any>(null);
 
 export default function LayoutProvides({ children }: ILayoutProvidesProps) {
-  const [cart, setCart] = React.useState<any[]>([]);
+  const projectsCart: any =
+    typeof window !== "undefined"
+      ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
+      : [];
+
+  const [cart, setCart] = React.useState<any[]>(projectsCart);
   const updateCart = (data: any) => {
     if (!cart.length) {
       setCart([...cart, data]);

@@ -1,12 +1,17 @@
 "use client";
 import {
   IconArrowDown,
+  IconArrowDownFull,
   IconArrowUp,
   IconCoinT,
   IconCoinX,
   IconDelete,
+  IconEdit,
 } from "@/assets/icons";
-import { OPTIONS } from "@/constant/cart";
+import IconNear from "@/assets/images/IconNear.png";
+import IconUSDC from "@/assets/images/IconUSDC.png";
+import { getConfigCart } from "@/services";
+import { TCurrency } from "@/types";
 import {
   Button,
   Card,
@@ -15,42 +20,66 @@ import {
   CardHeader,
   Checkbox,
   Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Image,
-  Input,
-  Select,
-  SelectItem,
 } from "@nextui-org/react";
-import { useState } from "react";
+import ImageNext from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 export interface ICartPageProps {}
 
+export type TConfigCart = {
+  owner: string;
+  protocol_fee_basis_points: number;
+  referral_fee_basis_points: number;
+  protocol_fee_recipient_account: string;
+};
+
 export default function CartPage(props: ICartPageProps) {
   const projectsCart: any =
     typeof window !== "undefined"
       ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
       : [];
-
   const [itemCart, setItemsCart] = useState<any[]>(projectsCart);
-  const [selectedCity, setSelectedCity] = useState(
-    new Set([OPTIONS[0]["value"]]),
-  );
-  const [showBreakdown, setShowBreakdown] = useState(false);
+  const [config, setConfig] = useState<TConfigCart>({
+    owner: "",
+    protocol_fee_basis_points: 0,
+    referral_fee_basis_points: 0,
+    protocol_fee_recipient_account: "",
+  });
 
-  const handleSelectionChange = (e: any) => {
-    setSelectedCity(new Set([e.target.value]));
+  const getConfig = async () => {
+    try {
+      let { data } = await getConfigCart();
+      const newConfig = {
+        ...data,
+        protocol_fee_basis_points: data.protocol_fee_basis_points / 100,
+        referral_fee_basis_points: data.referral_fee_basis_points / 100,
+      };
+      setConfig(newConfig as TConfigCart);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleHideShowBreakdown = (id: number, index: number) => {
-    const newItems: any[] = [...itemCart];
-    newItems[index] = {
-      ...newItems[index],
-      showBreakDown: !newItems[index].showBreakDown,
-    };
-    setItemsCart(newItems);
-  };
+  useEffect(() => {
+    const listProject = projectsCart.map((item: any) => ({
+      ...item,
+      note: "",
+      isOpenNote: false,
+      currency: "near",
+      amount: 1,
+      showBreakdown: false,
+    }));
+    setItemsCart(listProject);
+    getConfig();
+  }, []);
 
   const COIN = [183, 138];
 
@@ -64,12 +93,59 @@ export default function CartPage(props: ICartPageProps) {
     return Math.round(total);
   };
 
+  const renderCurrency = (currency: TCurrency) => {
+    if (currency === "near")
+      return (
+        <ImageNext src={IconNear} alt="near-logo" width={16} height={16} />
+      );
+    return <ImageNext src={IconUSDC} alt="usdc-logo" width={16} height={16} />;
+  };
+
+  const onChangeProjectCart = (index: number, key: string, value: any) => {
+    const newItems: any[] = [...itemCart];
+    newItems[index] = {
+      ...newItems[index],
+      [key]: value,
+    };
+    setItemsCart(newItems);
+  };
+
+  const total = useMemo(() => {
+    const initialValue = 0;
+    const sumWithInitial = itemCart.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.amount,
+      initialValue,
+    );
+    return sumWithInitial;
+  }, [itemCart]);
+
+  const percent = (
+    amount: number,
+    percentProtocal: number,
+    percentReferral: number,
+  ) => {
+    const allocatePercent = 100 - (percentProtocal + percentReferral);
+
+    const protocalAmount = ((amount / 100) * percentProtocal).toFixed(2);
+    const referralAmount = ((amount / 100) * percentReferral).toFixed(2);
+    const allocateAmount = (
+      amount -
+      (+protocalAmount + +referralAmount)
+    ).toFixed(2);
+
+    return { allocatePercent, protocalAmount, referralAmount, allocateAmount };
+  };
+
+  const onDonate = async () => {
+    console.log("cart", itemCart);
+  };
+
   return (
     <div className="flex w-full max-lg:flex-wrap-reverse p-[42px] max-lg:p-[24px]">
       <div className="w-[45%] mr-[140px] max-lg:mr-0 max-lg:w-full max-lg:mt-[24px]">
         <div className="">
           <div className="text-[44px] font-normal pb-[21px]">
-            Donation Cart <strong>2</strong>
+            Donation Cart <strong>{itemCart.length ?? 0}</strong>
           </div>
           <h1 className="text-md font-semibold mb-6">Breakdown Summary</h1>
           <div className="w-[100%] ">
@@ -136,8 +212,11 @@ export default function CartPage(props: ICartPageProps) {
               </div>
             </div>
           </div>
-          <Button className="mt-6 px-[16px] py-[12px] font-medium text-sm bg-[#DD3345]  border border-black rounded-md shadow-[0px_2px_2px]">
-            <p className="text-white">Donate $110.52</p>
+          <Button
+            className="mt-6 px-[16px] py-[12px] font-medium text-sm bg-[#DD3345]  border border-black rounded-md shadow-[0px_2px_2px]"
+            onClick={onDonate}
+          >
+            <p className="text-white">Donate</p>
           </Button>
         </div>
       </div>
@@ -190,14 +269,9 @@ export default function CartPage(props: ICartPageProps) {
               <div className="flex justify-center items-start pt-2 w-[10%]">
                 <Checkbox
                   isSelected={item.checked}
-                  onChange={(e) => {
-                    const newItems = [...itemCart];
-                    newItems[index] = {
-                      ...newItems[index],
-                      checked: e.target.checked,
-                    };
-                    setItemsCart(newItems);
-                  }}
+                  onChange={(e) =>
+                    onChangeProjectCart(index, "checked", e.target.checked)
+                  }
                 ></Checkbox>
               </div>
               <div className="w-[90%]">
@@ -229,51 +303,102 @@ export default function CartPage(props: ICartPageProps) {
                 </CardHeader>
                 <CardBody>
                   <div className="text-sm font-medium pb-2">Amount</div>
-                  <div className="flex w-[100%] rounded-lg">
-                    <Select
-                      className="w-[25%] max-lg:w-[45%]"
-                      radius="none"
-                      size="sm"
-                      items={OPTIONS}
-                      selectedKeys={selectedCity}
-                      onChange={handleSelectionChange}
-                      renderValue={(items) => {
-                        return items?.map((item) => {
-                          return item.rendered;
-                        });
-                      }}
-                      defaultSelectedKeys={selectedCity}
-                    >
-                      {(options) => (
-                        <SelectItem key={options.value} value={options.value}>
-                          {options.label}
-                        </SelectItem>
-                      )}
-                    </Select>
-                    <Input
-                      // isDisabled={true}
-                      className="border-l-2"
-                      size="sm"
-                      radius="none"
-                      endContent={
-                        <div className="pointer-events-none flex items-center">
-                          <span className="text-default-400 text-small">
-                            {[...selectedCity][0]}
-                          </span>
-                        </div>
+                  <div className="border rounded-md flex items-center justify-between ">
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <Button
+                          className="flex gap-6 items-center border-r"
+                          variant="light"
+                          radius="none"
+                        >
+                          <div className="flex gap-2 items-center">
+                            {renderCurrency(item.currency ?? "near")}
+                            <p className="uppercase">
+                              {item.currency ?? "near"}
+                            </p>
+                          </div>
+                          <IconArrowDownFull />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu aria-label="Static Actions">
+                        <DropdownItem
+                          className="uppercase"
+                          key="near"
+                          onClick={() =>
+                            onChangeProjectCart(index, "currency", "near")
+                          }
+                        >
+                          near
+                        </DropdownItem>
+                        <DropdownItem
+                          className="uppercase"
+                          key="usdc"
+                          onClick={() =>
+                            onChangeProjectCart(index, "currency", "usdc")
+                          }
+                        >
+                          usdc
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                    <input
+                      onChange={(e) =>
+                        onChangeProjectCart(index, "amount", e.target.value)
                       }
+                      value={item.amount ?? 1}
+                      className="w-full h-full p-2 focus:border-none focus:outline-none rounded-none"
+                      type="number"
                     />
+                  </div>
+                  <div className="border-t py-4 ">
+                    {!item.isOpenNote ? (
+                      <button
+                        onClick={() =>
+                          onChangeProjectCart(index, "isOpenNote", true)
+                        }
+                        className="flex items-center gap-2 font-medium"
+                      >
+                        <IconEdit />
+                        <p>Add Note</p>
+                      </button>
+                    ) : (
+                      <div className="flex gap-2 items-start flex-col font-medium">
+                        <button
+                          onClick={() =>
+                            onChangeProjectCart(index, "isOpenNote", false)
+                          }
+                        >
+                          Note
+                        </button>
+                        <textarea
+                          placeholder="Add a note for the project"
+                          rows={6}
+                          onChange={(e) =>
+                            onChangeProjectCart(index, "note", e.target.value)
+                          }
+                          value={item.note}
+                          className={`w-full border rounded-md p-4 resize-none ${item.note?.length && item.note?.length > 320 ? "border-red-500" : ""}`}
+                        />
+                        <div className="flex justify-end w-full">
+                          <p
+                            className={`text-[#7B7B7B] ${item.note?.length && item.note?.length > 320 ? "text-red-500" : ""}`}
+                          >
+                            {item.note?.length ?? 0}/320
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </CardBody>
                 <CardFooter
                   className="flex w-[100%] pb-6 justify-end"
-                  onClick={() => setShowBreakdown(!showBreakdown)}
+                  // onClick={() => setShowBreakdown(!showBreakdown)}
                 >
                   {!item.showBreakDown ? (
                     <button
                       className="flex gap-2 justify-end"
                       onClick={() => {
-                        handleHideShowBreakdown(item.id, index);
+                        onChangeProjectCart(index, "showBreakDown", true);
                       }}
                     >
                       <p className="font-medium">Show breakdown</p>
@@ -284,23 +409,52 @@ export default function CartPage(props: ICartPageProps) {
                       <button
                         className="flex gap-2 justify-end"
                         onClick={() => {
-                          handleHideShowBreakdown(item.id, index);
+                          onChangeProjectCart(index, "showBreakDown", false);
                         }}
                       >
                         <p className="font-medium">Hide breakdown</p>
                         <IconArrowUp />
                       </button>
-
                       <div className="w-[100%] p-[16px] bg-[#F0F0F0] rounded-lg mt-1">
-                        {item.breakdown?.map((list: any) => (
-                          <div
-                            className="flex justify-between py-1"
-                            key={list.id}
-                          >
-                            <div className="text-[#7B7B7B]">{list.title}</div>
-                            <div>{list.value}</div>
+                        <div className="flex justify-between py-1">
+                          <div className="text-[#7B7B7B]">{`Project allocation (${percent(item.amount, config?.protocol_fee_basis_points, config?.referral_fee_basis_points).allocatePercent}%) `}</div>
+                          <div className="flex gap-1 items-center">
+                            {
+                              percent(
+                                item.amount,
+                                config?.protocol_fee_basis_points,
+                                config?.referral_fee_basis_points,
+                              ).allocateAmount
+                            }
+                            <div>{renderCurrency(item.currency ?? "near")}</div>
                           </div>
-                        ))}
+                        </div>
+                        <div className="flex justify-between py-1">
+                          <div className="text-[#7B7B7B]">{`Protocol fees (${config?.protocol_fee_basis_points}%) `}</div>
+                          <div className="flex gap-1 items-center">
+                            {
+                              percent(
+                                item.amount,
+                                config?.protocol_fee_basis_points,
+                                config?.referral_fee_basis_points,
+                              ).protocalAmount
+                            }
+                            <div>{renderCurrency(item.currency ?? "near")}</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between py-1">
+                          <div className="text-[#7B7B7B]">{`Referral fees (${config?.referral_fee_basis_points}%) `}</div>
+                          <div className="flex gap-1 items-center">
+                            {
+                              percent(
+                                item.amount,
+                                config?.protocol_fee_basis_points,
+                                config?.referral_fee_basis_points,
+                              ).referralAmount
+                            }
+                            <div>{renderCurrency(item.currency ?? "near")}</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}

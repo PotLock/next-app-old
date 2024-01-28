@@ -21,6 +21,9 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { useState } from "react";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 export interface ICartPageProps {}
 
@@ -29,22 +32,8 @@ export default function CartPage(props: ICartPageProps) {
     typeof window !== "undefined"
       ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
       : [];
-  // const projectsCart = typeof window !== "undefined"
-  // ? (() => {
-  //     const storedData = localStorage?.getItem("projects_in_cart") || "";
 
-  //     try {
-  //       // Attempt to parse the JSON data
-  //       return JSON.parse(storedData) || [];
-  //     } catch (error) {
-  //       // Handle JSON parsing error
-  //       console.error("Error parsing JSON:", error);
-  //       return [];
-  //     }
-  //   })()
-  // : [];
-
-  const [itemCart, setItemsCart] = useState<any[]>([]);
+  const [itemCart, setItemsCart] = useState<any[]>(projectsCart);
   const [selectedCity, setSelectedCity] = useState(
     new Set([OPTIONS[0]["value"]]),
   );
@@ -228,6 +217,12 @@ export default function CartPage(props: ICartPageProps) {
                   <div className="pl-2">
                     <h1 className="text-md font-semibold">{item.title}</h1>
                     <div className="text-[#7B7B7B] font-normal text-[14px] overflow-ellipsis line-clamp-2">
+                      <Markdown
+                        remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[rehypeRaw]}
+                      >
+                        {item?.description}
+                      </Markdown>
                       {item.description}
                     </div>
                   </div>
@@ -256,7 +251,7 @@ export default function CartPage(props: ICartPageProps) {
                       )}
                     </Select>
                     <Input
-                      isDisabled={true}
+                      // isDisabled={true}
                       className="border-l-2"
                       size="sm"
                       radius="none"

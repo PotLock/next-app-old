@@ -18,12 +18,12 @@ const items = [
     subLabel: "",
   },
   {
-    key: "dateCreated",
+    key: "-_id",
     label: "New to Old",
     subLabel: "Time",
   },
   {
-    key: "-dateCreated",
+    key: "_id",
     label: "Old to New",
     subLabel: "Time",
   },
@@ -81,7 +81,7 @@ const Search = ({ onSearch, totalProject }: any) => {
         type="search"
         value={search}
         className="block w-[90%] p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
-        placeholder={`Search (${totalProject || '0'}) projects...`}
+        placeholder={`Search (${totalProject || "0"}) projects...`}
       />
       <Dropdown>
         <DropdownTrigger>

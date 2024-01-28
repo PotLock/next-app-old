@@ -121,19 +121,19 @@ export const LISTCHECK = [
 
 export const URLINFOR = [
   {
-    label: "Twitter",
+    label: "twitter",
     href: "twitter.com/",
   },
   {
-    label: "Telegram",
+    label: "telegram",
     href: "t.me/",
   },
   {
-    label: "Github",
+    label: "github",
     href: "github.com/",
   },
   {
-    label: "Website",
+    label: "website",
     href: "https://",
   },
 ];

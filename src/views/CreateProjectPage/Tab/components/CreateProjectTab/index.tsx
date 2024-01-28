@@ -1,73 +1,278 @@
 "use client";
-import React, { useState } from "react";
+import { IconDelete, IconPlus, IconEdit } from "@/assets/icons";
+import IconAdd from "@/assets/icons/IconAdd";
+import { URLINFOR } from "@/constant";
+import { CreateProjectContext } from "@/contexts/CreateProjectContext";
+import useTags from "@/hooks/useTags";
 import {
   Button,
-  Card,
-  CardBody,
   Checkbox,
   CheckboxGroup,
   Divider,
   Input,
   Select,
   SelectItem,
-  Tab,
-  Tabs,
   Textarea,
   useDisclosure,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableCell,
+  TableRow,
+  getKeyValue,
 } from "@nextui-org/react";
-import { SELECTiTEMS, URLINFOR } from "@/constant";
-import IconAdd from "@/assets/icons/IconAdd";
+import { useContext, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import AddFundingModal from "../Modal/AddFundingModal";
-import { useForm, SubmitHandler } from "react-hook-form"
+import { Transaction, Wallet } from "@/configs/nearWallet";
+import SmartContractForm from "./SmartContractForm";
 
 type Inputs = {
-  projectName: string
-  overview: string
-  contractAddress: string
-  Twitter: string
-  linkTelegram: string
-  linkGithub: string
-  linkWebsite: string
-  DAOAddress: string
-}
+  projectName: string;
+  projectId?: string;
+  overview: string;
+  contractAddress: string;
+  twitter: string;
+  telegram: string;
+  github: string;
+  website: string;
+  DAOAddress: string;
+  fileBanner: File;
+  fileAvatar: File;
+};
+type TSmartContract = { chain?: string; contactAddress?: string };
 
+const rows = [
+  {
+    key: "1",
+    fundingSource: "Web3 Open Source Software",
+    description: (
+      <div className="overflow-ellipsis line-clamp-1">
+        Lorem ipsum dolor sit amet consectetur. Vel sit nunc in nunc. Viverra
+        arcu eu sed consequat.
+      </div>
+    ),
+    amount: "$ 30",
+    action: (
+      <div className="flex gap-[20px]">
+        <IconEdit /> <IconDelete />
+      </div>
+    ),
+  },
+];
+
+
+// TODO: Need handle that project should create or update
 const CreateProjectTab = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [onSmartContract, setOnSmartContract] = useState(false);
   const [onFundingSources, setOnFundingSources] = useState(false);
   const [onDao, setOnDao] = useState(false);
-  const [selectCategory, setSelecteCategory] = useState("");
-  const [selectChain, setSelecteChain] = useState("");
-  const [selectSmartContract, setSelecteSmartContract] = useState("");
+  const [data, setData] = useState(rows);
+  const [selectCategory, setSelecteCategory] = useState(new Set());
+  const [smartcontracts, setSmartContracts] = useState<TSmartContract[]>([
+    { chain: undefined, contactAddress: undefined },
+  ]);
 
+  const { bannerImage, avatarImage, members } =
+    useContext(CreateProjectContext);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const listTags = useTags();
+  const [accountId, setAccountId] = useState<string>("");
+
+  useEffect(() => {
+    const getAccountId = async () => {
+      const wallet = new Wallet({
+        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+        network: "mainnet",
+      });
+      await wallet.startUp();
+      const accountId = wallet.accountId;
+      if (accountId) setAccountId(accountId);
+    };
+
+    getAccountId();
+  }, []);
 
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>()
+  } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data: any) => {
-    data.Twitter = `twitter.com/${data.Twitter}`;
-    data.Telegram = `t.me/${data.Telegram}`
-    data.Github = `github.com/${data.Github}`
-    data.Website = `https://${data.Website}`
-    data.category = [...selectCategory]
-    const listData = { ...data }
-    console.log("👋  listData:", listData)
-  }
+  const onSubmit: SubmitHandler<Inputs> = async (data: any) => {
+    console.log(data);
+    data.twitter = data.twitter ? `twitter.com/${data.twitter}` : "";
+    data.telegram = data.telegram ? `t.me/${data.telegram}` : "";
+    data.github = data.github ? `github.com/${data.github}` : "";
+    data.website = data.website ? `https://${data.website}` : "";
+    data.category = [...selectCategory];
+    data.backgroundImage = bannerImage;
+    data.profileImage = avatarImage;
+    data.members = members;
+    if (smartcontracts.some((item) => item.chain && item.contactAddress)) {
+      data.smartcontract = smartcontracts.filter((item) => item.chain);
+    }
+
+    const socialArgs = {
+      data: {
+        [accountId]: {
+          profile: {
+            name: data.projectName,
+            category: data.category,
+            description: data.overview,
+            linktree: {
+              website: data.website,
+              twitter: data.twitter,
+              telegram: data.telegram,
+              github: data.github,
+            },
+            team: data.members.reduce(
+              (acc: any, tm: any) => ({
+                ...acc,
+                [tm.accountId]: tm.remove ? null : "",
+              }),
+              {},
+            ),
+            backgroundImage: {
+              ipfs_cid: "cid from ipfs",
+            },
+            image: {
+              ipfs_cid: "cid from ipfs",
+            },
+          },
+          index: {
+            star: {
+              key: {
+                type: "social",
+                path: "potlock.near/widget/Index",
+              },
+              value: {
+                type: "star",
+              },
+            },
+            notify: {
+              key: "potlock.near",
+              value: {
+                type: "star",
+                item: {
+                  type: "social",
+                  path: "potlock.near/widget/Index",
+                },
+              },
+            },
+          },
+          graph: {
+            star: {
+              "potlock.near": {
+                widget: {
+                  Index: "",
+                },
+              },
+            },
+            follow: {
+              "potlock.near": "",
+            },
+          },
+        },
+      },
+    };
+
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+
+    await wallet.startUp();
+    const socialTransaction: Transaction = {
+      receiverId: "social.near",
+      functionCalls: [
+        {
+          methodName: "set",
+          args: socialArgs,
+          // amount: utils.format
+          //   .parseNearAmount(
+          //     (JSON.stringify(socialArgs).length * 0.00003).toString(),
+          //   )
+          //   ?.toString(),
+          amount: (JSON.stringify(socialArgs).length * 0.00003).toString(),
+        },
+      ],
+    };
+
+    const registerTransaction: Transaction = {
+      receiverId: process.env.NEXT_PUBLIC_REGISTRY_ID as string,
+      functionCalls: [
+        {
+          methodName: "register",
+          args: {},
+        },
+      ],
+    };
+
+    const addProjectTransaction: Transaction = {
+      receiverId: "nearhorizon.near",
+      functionCalls: [
+        {
+          methodName: "add_project",
+          args: { account_id: wallet.accountId },
+        },
+      ],
+    };
+
+    await wallet.callMultiMethod([
+      socialTransaction,
+      registerTransaction,
+      addProjectTransaction,
+    ]);
+    // await wallet.callMethod({
+    //   contractId: "social.near",
+    //   method: "set",
+    //   args: socialArgs,
+    //   deposit: utils.format
+    //     .parseNearAmount(
+    //       (JSON.stringify(socialArgs).length * 0.00003).toString(),
+    //     )
+    //     ?.toString(),
+    // });
+
+    // await wallet.callMethod({
+    //   contractId: process.env.NEXT_PUBLIC_REGISTRY_ID as string,
+    //   method: "register",
+    //   args: {},
+    // });
+
+    // await wallet.callMethod({
+    //   contractId: "nearhorizon.near",
+    //   method: "add_project",
+    //   args: {
+    //     account_id: wallet.accountId,
+    //   },
+    // });
+
+    // await wallet.wallet?.signAndSendTransactions()
+  };
 
   const handleSelectCategory = (e: any) => {
-    setSelecteCategory(e.target.value);
-    setSelecteChain(e.target.value);
-    setSelecteSmartContract(e.target.value);
-  }
+    setSelecteCategory(new Set([e.target.value]));
+  };
+
+  const onSmartContractChange = (index: number, event: any) => {
+    let data: TSmartContract[] = [...smartcontracts];
+    data[index][event.target.name as keyof TSmartContract] = event.target.value;
+    setSmartContracts(data);
+  };
 
   return (
     <form>
       <div className="flex flex-col w-full h-full">
-        <AddFundingModal isOpen={isOpen} onOpenChange={onOpenChange} />
+        <AddFundingModal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          setData={setData}
+          data={data}
+        />
         <div className="w-full h-full flex flex-col sm:flex-row gap-4">
           <div className="w-full sm:w-1/2 gap-4 flex flex-col">
             <div className="font-semibold">Project details</div>
@@ -75,30 +280,60 @@ const CreateProjectTab = () => {
             <div className="text-[#DB521B]">Required</div>
           </div>
           <div className="w-full sm:w-1/2 gap-6 flex flex-col">
-            <Checkbox onClick={() => setOnDao(!onDao)}>Register as DAO</Checkbox>
+            <Checkbox onClick={() => setOnDao(!onDao)}>
+              Register as DAO
+            </Checkbox>
             {!!onDao && (
               <div className="flex flex-col gap-2">
                 <div className="font-medium">DAO Address</div>
-                <Input size="sm" type="text" placeholder="Placeholder" {...register("DAOAddress")} />
+                <Input
+                  size="sm"
+                  type="text"
+                  placeholder="Placeholder"
+                  {...register("DAOAddress")}
+                />
+              </div>
+            )}
+            {!onDao && (
+              <div className="flex flex-col gap-2">
+                <div className="font-medium">Project ID</div>
+                <Input size="sm" type="text" value={accountId} disabled />
               </div>
             )}
             <div className="flex flex-col gap-2">
               <div className="font-medium">Project name</div>
-              <Input size="sm" type="text" placeholder="Placeholder" {...register("projectName")} />
+              <Input
+                size="sm"
+                type="text"
+                placeholder="Placeholder"
+                {...register("projectName")}
+              />
             </div>
             <div className="flex flex-col gap-2">
               <div className="font-medium">Overview</div>
-              <Textarea labelPlacement="outside" placeholder="Type description" {...register("overview")} />
-              <div className="flex justify-end w-full text-[#7B7B7B]">0/320</div>
+              <Textarea
+                labelPlacement="outside"
+                placeholder="Type description"
+                {...register("overview")}
+              />
+              <div className="flex justify-end w-full text-[#7B7B7B]">
+                0/320
+              </div>
             </div>
 
             <div className="flex flex-col gap-2">
               <div className="font-medium">Select category</div>
-              <Select size="sm" selectionMode="multiple" items={SELECTiTEMS} selectedKeys={selectCategory} onChange={handleSelectCategory}>
-                {(options) => <SelectItem key={options.value} value={options.value}>
-                  {options.label}
-                </SelectItem>
-                }
+              <Select
+                size="sm"
+                selectionMode="multiple"
+                items={listTags}
+                onChange={handleSelectCategory}
+              >
+                {(options) => (
+                  <SelectItem key={options.value} value={options.value}>
+                    {options.text}
+                  </SelectItem>
+                )}
               </Select>
             </div>
             <CheckboxGroup>
@@ -118,73 +353,58 @@ const CreateProjectTab = () => {
           </div>
         </div>
         {!!onSmartContract && (
-          <>
-            <Divider className="my-4" />
-            <div className="w-full h-full flex flex-col sm:flex-row gap-4">
-              <div className="w-full sm:w-1/2 gap-4 flex flex-col">
-                <div className="font-semibold">Smart Contracts</div>
-                <div>
-                  Add smart contracts from different chains that belong to your
-                  application. (You checked it on the product details)
-                </div>
-              </div>
-              <div className="w-full sm:w-1/2 gap-6 flex flex-col">
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-1">
-                    <div className="font-medium">
-                      Does your project have smart contracts?{" "}
-                    </div>
-                    <div className="text-[#7B7B7B]">(optional)</div>
-                  </div>
-                  <Select size="sm" placeholder="Yes, my project is a dapp and has smart contracts"
-                    selectionMode="multiple" items={SELECTiTEMS} selectedKeys={selectSmartContract} onChange={handleSelectCategory}>
-                    {(options) => <SelectItem key={options.value} value={options.value}>
-                      {options.label}
-                    </SelectItem>
-                    }
-                  </Select>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="font-medium">Add chain</div>
-
-                  <Select size="sm" placeholder="Select chain" selectionMode="multiple" items={SELECTiTEMS} selectedKeys={selectChain} onChange={handleSelectCategory}>
-                    {(options) => <SelectItem key={options.value} value={options.value}>
-                      {options.label}
-                    </SelectItem>
-                    }
-                  </Select>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="font-medium">Contact address</div>
-                  <Input size="sm" type="text" placeholder="Placeholder" {...register("contractAddress")} />
-                </div>
-              </div>
-            </div>
-          </>
+          <SmartContractForm
+            smartcontracts={smartcontracts}
+            setSmartContracts={setSmartContracts}
+            onSmartContractChange={onSmartContractChange}
+          />
         )}
         {!!onFundingSources && (
           <>
             <Divider className="my-4" />
-            <div className="w-full h-full flex flex-col sm:flex-row gap-4">
+            <div className="w-full h-full flex flex-col sm:flex-row gap-4 justify-between">
+              <div className="font-semibold">Funding Sources</div>
+              <div className="flex gap-1">
+                <div className="font-medium">$2027.23</div>
+                <div className="text-[#7B7B7B]">Total Funding</div>
+              </div>
+            </div>
+            <div className="w-full h-full flex flex-col sm:flex-row gap-4 mt-[16px]">
               <div className="w-full sm:w-1/2 gap-4 flex flex-col">
-                <div className="font-semibold">Funding Sources</div>
-                <div>
-                  Add the funding sources that you currently have before
-                  registering to Potlock (You checked it on the product details)
-                </div>
-                <div>
-                  <Button onPress={onOpen} color="danger" variant="light">
-                    <IconAdd />
-                    <p>Add source</p>
-                  </Button>
-                </div>
+                Add the funding sources that you currently have before
+                registering to Potlock (You checked it on the product details)
               </div>
-              <div className="w-full sm:w-1/2 gap-6 flex flex-col">
-                <div className="flex gap-1">
-                  <div className="font-medium">$2027.23</div>
-                  <div className="text-[#7B7B7B]">Total Funding</div>
-                </div>
-              </div>
+            </div>
+            <div className="my-[12px]">
+              <Table>
+                <TableHeader>
+                  <TableColumn key="fundingSource">Funding Source</TableColumn>
+                  <TableColumn key="description" width={350}>
+                    Description
+                  </TableColumn>
+                  <TableColumn key="amount" allowsSorting={true}>
+                    Amount
+                  </TableColumn>
+                  <TableColumn key="action">
+                    <div></div>
+                  </TableColumn>
+                </TableHeader>
+                <TableBody items={data}>
+                  {(item) => (
+                    <TableRow key={item.key}>
+                      {(columnKey) => (
+                        <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                      )}
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+            <div>
+              <Button onPress={onOpen} color="danger" variant="light">
+                <IconAdd />
+                <p>Add source</p>
+              </Button>
             </div>
           </>
         )}
@@ -218,8 +438,15 @@ const CreateProjectTab = () => {
                 />
               </div>
             ))}
-            <Button isDisabled={watch('projectName') && watch('overview') ? false : true} color="danger" onClick={handleSubmit(onSubmit)}>Create new project</Button>
-
+            <Button
+              isDisabled={
+                watch("projectName") && watch("overview") ? false : true
+              }
+              color="danger"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Create new project
+            </Button>
           </div>
         </div>
       </div>

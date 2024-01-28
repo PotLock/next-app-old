@@ -1,7 +1,4 @@
-/* A helper file that simplifies using the wallet selector */
-
-// near api js
-import { providers } from "near-api-js";
+import { providers, utils } from "near-api-js";
 
 // wallet selector UI
 import "@near-wallet-selector/modal-ui/styles.css";
@@ -32,6 +29,7 @@ import { setupXDEFI } from "@near-wallet-selector/xdefi";
 import { setupRamperWallet } from "@near-wallet-selector/ramper-wallet";
 import { setupNearMobileWallet } from "@near-wallet-selector/near-mobile-wallet";
 import { setupMintbaseWallet } from "@near-wallet-selector/mintbase-wallet";
+import { Transaction as WSTransaction } from "@near-wallet-selector/core";
 
 const THIRTY_TGAS = "30000000000000";
 export const NO_DEPOSIT = "0";
@@ -40,6 +38,21 @@ type WalletProps = {
   createAccessKeyFor?: string;
   network?: NetworkId | Network;
 };
+
+interface ViewFunctionOptions {
+  methodName: string;
+  args?: object;
+}
+
+interface FunctionCallOptions extends ViewFunctionOptions {
+  gas?: string;
+  amount?: string;
+}
+
+export interface Transaction {
+  receiverId: string;
+  functionCalls: FunctionCallOptions[];
+}
 
 // Wallet that simplifies using the wallet selector
 export class Wallet {
@@ -192,12 +205,14 @@ export class Wallet {
     args = {},
     gas = THIRTY_TGAS,
     deposit = NO_DEPOSIT,
+    callbackURL,
   }: {
     contractId: string;
     method: string;
     args?: Record<string, unknown>;
     gas?: string;
     deposit?: string;
+    callbackURL?: string;
   }) {
     if (!this.wallet) {
       this.signIn();
@@ -207,6 +222,7 @@ export class Wallet {
       return await this.wallet.signAndSendTransaction({
         signerId: this.accountId,
         receiverId: contractId,
+        callbackUrl: callbackURL,
         actions: [
           {
             type: "FunctionCall",
@@ -220,5 +236,31 @@ export class Wallet {
         ],
       });
     }
+  }
+
+  async callMultiMethod(transactions: Transaction[], callbackUrl?: string) {
+    const wstransactions: WSTransaction[] = [];
+    transactions.forEach((transaction) => {
+      wstransactions.push({
+        signerId: this.accountId as string,
+        receiverId: transaction.receiverId,
+        actions: transaction.functionCalls.map((fc) => {
+          return {
+            type: "FunctionCall",
+            params: {
+              methodName: fc.methodName,
+              args: fc.args ?? {},
+              gas: THIRTY_TGAS,
+              deposit: utils.format.parseNearAmount(fc.amount || "0")!,
+            },
+          };
+        }),
+      });
+    });
+
+    return await this.wallet?.signAndSendTransactions({
+      transactions: wstransactions,
+      callbackUrl,
+    });
   }
 }

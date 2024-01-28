@@ -1,10 +1,11 @@
 "use client";
 import { DATA_SOCIALS } from "@/constant/socials";
 import { ProjectDetail } from "@/contexts";
-import { Image } from "@nextui-org/react";
+import { Image, useDisclosure } from "@nextui-org/react";
 import { ReactNode, useContext, useEffect, useState } from "react";
 import IndividualPage from "./components/Individual";
 import NavbarPage from "./components/Navbar";
+import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 
 export interface IProjectPageProps {
   children?: ReactNode;
@@ -13,6 +14,7 @@ export interface IProjectPageProps {
 export default function ProjectPage(props: IProjectPageProps) {
   const { children } = props;
   const { data } = useContext(ProjectDetail);
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const [imageUrl, setImageUrl] = useState("");
   const [logo, setLogo] = useState("");
@@ -33,6 +35,11 @@ export default function ProjectPage(props: IProjectPageProps) {
 
   return (
     <div className="mx-[32px]">
+      <DonateProjectModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+      />
       <div className="w-full relative">
         <div className="w-full relative">
           {!!data?.bannerImageUrl ? (
@@ -74,7 +81,7 @@ export default function ProjectPage(props: IProjectPageProps) {
           <NavbarPage />
         </div>
         <div className="w-[80%] mx-[36px]">
-          <IndividualPage />
+          <IndividualPage openModal={onOpen} />
         </div>
       </div>
       <div className=" w-full flex border-t-2 ">

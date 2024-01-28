@@ -1,3 +1,5 @@
+export const IPFS_BASE_URL = "https://nftstorage.link/ipfs/";
+
 export const MENUITEMS = [
   {
     title: "POTS",
@@ -76,38 +78,6 @@ export const PROJECTS = [
   },
 ];
 
-export const TABS = [
-  {
-    id: "desci",
-    label: "DeSci",
-  },
-  {
-    id: "open",
-    label: "Open Source",
-  },
-  {
-    id: "non",
-    label: "NonProfit",
-  },
-  {
-    id: "social",
-    label: "Social Impact",
-  },
-  { id: "climate", label: "Climate" },
-  {
-    id: "public",
-    label: "Public Good",
-  },
-  {
-    id: "community",
-    label: "Community",
-  },
-  {
-    id: "education",
-    label: "Education",
-  },
-];
-
 export const ITEMSBANNER = [
   {
     number: "69",
@@ -151,19 +121,19 @@ export const LISTCHECK = [
 
 export const URLINFOR = [
   {
-    label: "Twitter",
+    label: "twitter",
     href: "twitter.com/",
   },
   {
-    label: "Telegram",
+    label: "telegram",
     href: "t.me/",
   },
   {
-    label: "Github",
+    label: "github",
     href: "github.com/",
   },
   {
-    label: "Website",
+    label: "website",
     href: "https://",
   },
 ];

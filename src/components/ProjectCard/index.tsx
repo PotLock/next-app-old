@@ -15,6 +15,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
   const [logo, setLogo] = useState("");
   const router = useRouter();
   const { updateCart } = useContext(CartContext);
+
   useEffect(() => {
     if (data.bannerImageUrl) {
       setImageUrl(`https://nftstorage.link/ipfs/${data?.bannerImageUrl}`);
@@ -25,7 +26,7 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
   }, [data]);
 
   const openModal = () => {
-    localStorage.setItem("receipientId", data?.project_id);
+    localStorage.setItem("recipientId", data?.project_id);
     onOpen();
   };
 

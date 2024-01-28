@@ -4,7 +4,7 @@ import ProjectCard from "../../../components/ProjectCard";
 
 import Pagination from "@/components/Panigation";
 import { getProjectFeatured } from "@/services";
-import DonateProjectModel from "@/views/HomePage/Donate/DonateProjectModal";
+import DonateProjectModel from "@/components/Modal/DonateProjectModal";
 import { useDisclosure } from "@nextui-org/react";
 import { useMediaQuery } from "react-responsive";
 import Slider from "react-slick";

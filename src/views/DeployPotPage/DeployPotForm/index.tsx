@@ -1,7 +1,7 @@
 "use client";
 import IconInfo from "@/assets/icons/IconInfo";
 import { Wallet } from "@/configs/nearWallet";
-import { getWhiteListAccountWallet } from "@/services";
+import { getApiCommitHash, getWhiteListAccountWallet } from "@/services";
 import {
   Button,
   Input,
@@ -20,7 +20,8 @@ const DeployPotForm = () => {
   const route = useRouter();
   const [account, setAccount] = useState<any | null>(null);
   const [listAccount, setListAccount] = useState<any | null>(null);
-  const [count, setCount] = useState("0.02");
+  const [count, setCount] = useState("0.6");
+  const [commitHash, setCommitHash] = useState();
 
   const {
     register,
@@ -52,12 +53,17 @@ const DeployPotForm = () => {
     }
     return new Date(localDateTime).getTime();
   };
+
+  const getCommitHash = async() => {
+    const res = await getApiCommitHash();
+    if(!!res) setCommitHash(res?.data[0].sha)
+
+  }
   const onSubmit: SubmitHandler<any> = async (data: any) => {
-  
-   
-  const deployArgs = {
+
+    const deployArgs = {
     owner: account,
-    admins: [], 
+    admins: [], // TODO: CHANGE TO TAKE FROM STATE
     chef: data?.chef,
     pot_name: data?.name,
     pot_description: data?.description,
@@ -66,22 +72,21 @@ const DeployPotForm = () => {
     application_end_ms: convertToUTCTimestamp(data?.applicationEndDate),
     public_round_start_ms: convertToUTCTimestamp(data?.matchingRoundStartDate),
     public_round_end_ms: convertToUTCTimestamp(data?.matchingRoundEndDate),
-    registry_provider: data?.registry,
-    sybil_wrapper_provider: process.env.DEFAULT_SYBIL_WRAPPER_PROVIDER,
-    custom_sybil_checks: null,
+    registry_provider: process.env.NEXT_PUBLIC_DEFAULT_REGISTRY_PROVIDER,
+    sybil_wrapper_provider: process.env.NEXT_PUBLIC_DEFAULT_SYBIL_WRAPPER_PROVIDER,
+    custom_sybil_checks: null, // not necessary to include null values but doing so for clarity
     custom_min_threshold_score: null,
-    referral_fee: data?.referrerFee,
-    protocol_fee: '2',
-    chef_fee_basis_points: data?.chefFeeBasisPoints,
-    protocol_config_provider: process.env.DEFAULT_PROTOCOL_CONFIG_PROVIDER, 
+    referral_fee_matching_pool_basis_points: 0,
+    referral_fee_public_round_basis_points: 0,
+    chef_fee_basis_points: parseInt(data?.chefFeeBasisPoints),
+    protocol_config_provider: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER, // TODO: this should not be passed in here, as it's too easy to override. Should be set by factory contract when deploying.
     source_metadata: {
-      version: process.env.CURRENT_SOURCE_CODE_VERSION,
-      commit_hash: data?.latestSourceCodeCommitHash,
-      link: process.env.SOURCE_CODE_LINK,
+      version: process.env.NEXT_PUBLIC_CURRENT_SOURCE_CODE_VERSION,
+      commit_hash: commitHash,
+      link:  process.env.NEXT_PUBLIC_SOURCE_CODE_LINK,
     },
   };
-
-  
+   
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
       network: "mainnet",
@@ -89,7 +94,7 @@ const DeployPotForm = () => {
     await wallet.startUp();
     
       await wallet.callMethod({
-        contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
+        contractId: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER as string,
         method: "deploy_pot",
         args: {
           pot_args: deployArgs,
@@ -113,6 +118,7 @@ const DeployPotForm = () => {
     };
     startUpWallet();
     getApiWhiteListAccountWallet();
+    getCommitHash();
   }, []);
 
   return (
@@ -306,6 +312,7 @@ const DeployPotForm = () => {
         <Button
           disabled={isCheckAccount()}
           onClick={handleSubmit(onSubmit)}
+         
           color="danger"
         >
           Deploy

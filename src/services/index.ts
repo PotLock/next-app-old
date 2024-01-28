@@ -1,4 +1,5 @@
 import axiosInstance from "@/configs/axios.config";
+import axiosGithub from "@/configs/axiosGithub.config";
 
 export const getProjectGeneral = () => {
   return axiosInstance.get(`/project/general`);
@@ -57,4 +58,8 @@ export const getPotsGeneral = () => {
 
 export const getWhiteListAccountWallet = () => {
   return axiosInstance.get('/pots/white-listed-accounts')
+}
+
+export const getApiCommitHash = () => {
+  return axiosGithub.get('/repos/PotLock/core/commits')
 }

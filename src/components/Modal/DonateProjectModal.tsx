@@ -24,6 +24,7 @@ import axios from "axios";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { TCurrency } from "@/types";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
+import { getApiProjectRandom } from "@/services";
 
 export default function DonateProjectModal({
   isOpen,
@@ -82,7 +83,15 @@ export default function DonateProjectModal({
     );
   };
 
+  const getProjectRandom = async () => {
+    if (!!isRandom) {
+      const res = await getApiProjectRandom();
+      return res?.data?._id;
+    }
+  };
+
   const donate = useCallback(async () => {
+    const projectIdRandom = await getProjectRandom();
     const setDepositOnCurrency = (currency: TCurrency, amount: number) => {
       switch (currency) {
         case "near":
@@ -97,7 +106,9 @@ export default function DonateProjectModal({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
         network: "mainnet",
       });
-      const recipientId = id ?? localStorage.getItem("recipientId");
+      const recipientId = !!isRandom
+        ? projectIdRandom
+        : id ?? localStorage.getItem("recipientId");
       await wallet.startUp();
       if (recipientId) {
         await wallet.callMethod({

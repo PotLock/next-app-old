@@ -15,7 +15,7 @@ export const getProjectDetail = (id: any) => {
 
 export const searchProjectName = ({ page, limit, sort, title, tags }: any) => {
   return axiosInstance.get(
-    `/project?${title ? "title=" + title : ""}&page=${
+    `/project?status=Approved&${title ? "title=" + title : ""}&page=${
       page ?? 1
     }&limit=${limit}${sort ? "&sort=" + sort : ""}${tags.length ? "&tags=" + tags?.toString() : ""}`,
   );
@@ -63,4 +63,8 @@ export const getApiCommitHash = () => {
 
 export const getConfigCart = () => {
   return axiosInstance.get("/donation/donation-config");
+};
+
+export const getApiProjectRandom = () => {
+  return axiosInstance.get("/project/random");
 };

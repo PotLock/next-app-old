@@ -56,7 +56,7 @@ const PotCard = ({ data }: any) => {
             <div
               className={`${data?.timeTags?.matchingRoundDayEnd > data?.timeTags?.applicationDayEnd ? "bg-[#9ADD33] " : "bg-[#33DDCB]"} border py-[6px] px-2 rounded`}
             >
-              {data?.timeTags?.matchingRoundDayEnd <
+              {data?.timeTags?.matchingRoundDayEnd <=
               data?.timeTags?.applicationDayEnd
                 ? data?.timeTags?.matchingRoundDayEnd + " day left for Matching"
                 : data?.timeTags?.applicationDayEnd + "day left to Apply"}

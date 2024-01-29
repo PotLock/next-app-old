@@ -12,7 +12,7 @@ export const CartContext = React.createContext<any>(null);
 
 export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   const projectsCart: any =
-    typeof window !== "undefined"
+    typeof window !== "undefined" && localStorage?.getItem("projects_in_cart")
       ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
       : [];
 

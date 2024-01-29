@@ -10,7 +10,7 @@ import TabAllProject from "./components/Tab";
 import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 
 const AllProject = () => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpen } = useDisclosure();
   const [projects, setProjects] = useState<any[]>([]);
   const [data, setData] = useState<any>();
   const [searchFilter, setSearchFilter] = useState({ page: 1, limit: 1000 });
@@ -18,15 +18,6 @@ const AllProject = () => {
   const sort = search.get("sort");
   const title = search.get("title");
   const [tags, setTags] = useState<string[]>([]);
-
-  const getDataDetail = async () => {
-    try {
-      const { data } = await getProjectGeneral();
-      setData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     const getDataDetail = async () => {
@@ -69,7 +60,7 @@ const AllProject = () => {
 
   return (
     <div className="flex flex-col w-full h-full mb-[120px] gap-5 ">
-      <DonateProjectModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <DonateProjectModal isOpen={isOpen} />
       <div className="flex flex-col  sm:flex-row sm:items-center sm:justify-between  mx-4 sm:mx-0 gap-1">
         <div className="font-semibold text-sm sm:text-[22px]">ALL PROJECTS</div>
         <div className="flex h-5 items-center space-x-4 text-small">

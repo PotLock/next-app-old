@@ -20,7 +20,6 @@ import IconLogoCart from "@/assets/images/Logo.png";
 import IconArrowDownFull from "@/assets/icons/IconArrowDownFull";
 import { Wallet } from "@/configs/nearWallet";
 import { utils } from "near-api-js";
-import axios from "axios";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { TCurrency } from "@/types";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
@@ -33,7 +32,7 @@ export default function DonateProjectModal({
   isRandom,
 }: {
   isOpen: boolean;
-  onOpenChange: () => void;
+  onOpenChange?: () => void;
   onClose?: () => void;
   isRandom?: true;
 }) {
@@ -83,12 +82,12 @@ export default function DonateProjectModal({
     );
   };
 
-  const getProjectRandom = async () => {
+  const getProjectRandom = useCallback(async () => {
     if (!!isRandom) {
       const res = await getApiProjectRandom();
       return res?.data?._id;
     }
-  };
+  }, [isRandom]);
 
   const donate = useCallback(async () => {
     const projectIdRandom = await getProjectRandom();
@@ -136,6 +135,8 @@ export default function DonateProjectModal({
     searchParams,
     selectedCurrency,
     pathname,
+    getProjectRandom,
+    isRandom,
   ]);
 
   const renderCurrency = (currency: TCurrency) => {

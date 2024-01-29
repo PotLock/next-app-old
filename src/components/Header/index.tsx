@@ -134,7 +134,7 @@ const Header = () => {
                   <div className="bg-[#F0F0F0] p-[10px] rounded-full">
                     {profile && profile?.image && profile?.image?.ipfs_cid ? (
                       <Image
-                        src={profile.image.ipfs_cid}
+                        src={`https://near.social/ipfs/${profile.image.ipfs_cid}`}
                         alt="avatar"
                         width={24}
                         height={24}

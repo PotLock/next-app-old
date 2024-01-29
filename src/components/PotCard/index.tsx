@@ -8,24 +8,7 @@ import {
 import React from "react";
 
 const PotCard = ({ data }: any) => {
-  const convertToPositive = (inputNumber: any) => {
-    const parsedNumber = parseFloat(inputNumber);
 
-    if (!isNaN(parsedNumber)) {
-      const positiveNumber = Math.abs(parsedNumber);
-      return positiveNumber;
-    } else {
-      return null;
-    }
-  };
-
-  const checkNumber = (number: any) => {
-    if (number > 0) {
-      return number;
-    } else {
-      return;
-    }
-  };
   return (
     <Card className="max-w-[400px] m-1 " radius="none">
       <CardHeader>

@@ -20,7 +20,7 @@ const DeployPotForm = () => {
   const route = useRouter();
   const [account, setAccount] = useState<any | null>(null);
   const [listAccount, setListAccount] = useState<any | null>(null);
-  const [count, setCount] = useState("0.6");
+  const [count, setCount] = useState("0.02");
   const [commitHash, setCommitHash] = useState();
 
   const {
@@ -88,7 +88,7 @@ const DeployPotForm = () => {
   };
    
     const wallet = new Wallet({
-      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      createAccessKeyFor: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
       network: "mainnet",
     });
     await wallet.startUp();
@@ -105,7 +105,7 @@ const DeployPotForm = () => {
   };
   useEffect(() => {
     const wallet = new Wallet({
-      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      createAccessKeyFor: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
       network: "mainnet",
     });
 

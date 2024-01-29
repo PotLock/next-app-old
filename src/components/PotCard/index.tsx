@@ -18,6 +18,14 @@ const PotCard = ({data}: any) => {
       return null
     }
   };
+
+  const checkNumber = (number: any) => {
+    if(number > 0) {
+      return number
+    }else {
+      return 
+    }
+  }
   return (
     <Card className="max-w-[400px] m-1 " 
     
@@ -40,9 +48,15 @@ const PotCard = ({data}: any) => {
           <p className="font-semibold">{data?.totalAmount || '1,369.69 NEAR'} </p>
           <p className="text-[#7B7B7B]">{data?.totalMatchingPool } Matched</p>
         </div>
-        <div className={`${data?.timeTags?.matchingRoundDayEnd  > data?.timeTags?.applicationDayEnd ? 'bg-[#9ADD33] ' : 'bg-[#33DDCB]'} border py-[6px] px-2 rounded`}>
-          {data?.timeTags?.matchingRoundDayEnd  > data?.timeTags?.applicationDayEnd ? convertToPositive(data?.timeTags?.matchingRoundDayEnd) + ' day left for Matching'   : convertToPositive(data?.timeTags?.applicationDayEnd) + ' day left to Apply' } 
-        </div>
+
+        {
+          data?.timeTags?.matchingRoundDayEnd > 0 && data?.timeTags?.applicationDayEnd  > 0 && (
+            <div className={`${data?.timeTags?.matchingRoundDayEnd  > data?.timeTags?.applicationDayEnd ? 'bg-[#9ADD33] ' : 'bg-[#33DDCB]'} border py-[6px] px-2 rounded`}>
+            {data?.timeTags?.matchingRoundDayEnd  > data?.timeTags?.applicationDayEnd ? data?.timeTags?.matchingRoundDayEnd + ' day left for Matching'   : data?.timeTags?.applicationDayEnd + ' day left to Apply' } 
+          </div>
+          )
+        }
+       
       </CardFooter>
     </Card>
   );

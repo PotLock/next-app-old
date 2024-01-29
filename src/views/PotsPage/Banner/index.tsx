@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@nextui-org/react'
+import { Button, Tooltip } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -24,9 +24,12 @@ const BannerPots = () => {
             
           Deploy Pot
           </Button>
+          <Tooltip content='Coming soon'>
           <Button 
          
-          variant="bordered">Learn More</Button>
+         variant="bordered">Learn More</Button>
+          </Tooltip>
+          
         </div>
       
       </div>

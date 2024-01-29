@@ -126,7 +126,7 @@ const DeployPotForm = () => {
       {/* Pot details */}
       <div className="w-full h-full flex flex-col sm:flex-row gap-4">
         <div className="w-full sm:w-1/2 gap-4 flex flex-col">
-          <div className="font-semibold">Pot details {account}</div>
+          <div className="font-semibold">Pot details</div>
         </div>
         <div className="w-full sm:w-1/2 gap-2 flex flex-col">
           <div className="flex flex-col gap-2">

@@ -16,6 +16,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  Tooltip,
 } from "@nextui-org/react";
 import React, { useContext, useEffect, useState } from "react";
 import ModelCart from "./components/ModelCart";
@@ -109,11 +110,23 @@ const Header = () => {
       <NavbarContent className="w-full" justify="end">
         {MENUITEMS.map((item, index) => (
           <NavbarItem key={index} className="hidden sm:flex gap-4">
-            <Link href={item.href}>
-              <p className={`${currentPath === item.href && "font-semibold"}`}>
-                {item.title}
-              </p>
-            </Link>
+            {item.href === "/pots" && !account ? (
+              <Tooltip content="You are not logged in">
+                <p
+                  className={`${currentPath === item.href && "font-semibold"} cursor-pointer`}
+                >
+                  {item.title}
+                </p>
+              </Tooltip>
+            ) : (
+              <Link href={item.href}>
+                <p
+                  className={`${currentPath === item.href && "font-semibold"}`}
+                >
+                  {item.title}
+                </p>
+              </Link>
+            )}
           </NavbarItem>
         ))}
 

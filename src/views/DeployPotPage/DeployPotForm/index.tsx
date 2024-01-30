@@ -39,12 +39,12 @@ const DeployPotForm = () => {
   const isCheckAccount = () => {
     if (account && listAccount) {
       const isInArray: boolean = listAccount.includes(account);
-    
-      if (!!isInArray) {
-        return false;
-      } else {
-        return true;
-      }
+      return isInArray;
+      // if (!!isInArray) {
+      //   return false;
+      // } else {
+      //   return true;
+      // }
     }
   };
   const convertToUTCTimestamp = (localDateTime: any) => {
@@ -54,58 +54,62 @@ const DeployPotForm = () => {
     return new Date(localDateTime).getTime();
   };
 
-  const getCommitHash = async() => {
+  const getCommitHash = async () => {
     const res = await getApiCommitHash();
-    if(!!res) setCommitHash(res?.data[0].sha)
-
-  }
-  const onSubmit: SubmitHandler<any> = async (data: any) => {
-
-    const deployArgs = {
-    owner: account,
-    admins: [], // TODO: CHANGE TO TAKE FROM STATE
-    chef: data?.chef,
-    pot_name: data?.name,
-    pot_description: data?.description,
-    max_projects: parseInt(data?.maxProjects),
-    application_start_ms: convertToUTCTimestamp(data?.applicationStartDate),
-    application_end_ms: convertToUTCTimestamp(data?.applicationEndDate),
-    public_round_start_ms: convertToUTCTimestamp(data?.matchingRoundStartDate),
-    public_round_end_ms: convertToUTCTimestamp(data?.matchingRoundEndDate),
-    registry_provider: process.env.NEXT_PUBLIC_DEFAULT_REGISTRY_PROVIDER,
-    sybil_wrapper_provider: process.env.NEXT_PUBLIC_DEFAULT_SYBIL_WRAPPER_PROVIDER,
-    custom_sybil_checks: null, // not necessary to include null values but doing so for clarity
-    custom_min_threshold_score: null,
-    referral_fee_matching_pool_basis_points: 0,
-    referral_fee_public_round_basis_points: 0,
-    chef_fee_basis_points: parseInt(data?.chefFeeBasisPoints),
-    protocol_config_provider: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER, // TODO: this should not be passed in here, as it's too easy to override. Should be set by factory contract when deploying.
-    source_metadata: {
-      version: process.env.NEXT_PUBLIC_CURRENT_SOURCE_CODE_VERSION,
-      commit_hash: commitHash,
-      link:  process.env.NEXT_PUBLIC_SOURCE_CODE_LINK,
-    },
+    if (!!res) setCommitHash(res?.data[0].sha);
   };
-   
+  const onSubmit: SubmitHandler<any> = async (data: any) => {
+    const deployArgs = {
+      owner: account,
+      admins: [], // TODO: CHANGE TO TAKE FROM STATE
+      chef: data?.chef,
+      pot_name: data?.name,
+      pot_description: data?.description,
+      max_projects: parseInt(data?.maxProjects),
+      application_start_ms: convertToUTCTimestamp(data?.applicationStartDate),
+      application_end_ms: convertToUTCTimestamp(data?.applicationEndDate),
+      public_round_start_ms: convertToUTCTimestamp(
+        data?.matchingRoundStartDate,
+      ),
+      public_round_end_ms: convertToUTCTimestamp(data?.matchingRoundEndDate),
+      registry_provider: process.env.NEXT_PUBLIC_DEFAULT_REGISTRY_PROVIDER,
+      sybil_wrapper_provider:
+        process.env.NEXT_PUBLIC_DEFAULT_SYBIL_WRAPPER_PROVIDER,
+      custom_sybil_checks: null, // not necessary to include null values but doing so for clarity
+      custom_min_threshold_score: null,
+      referral_fee_matching_pool_basis_points: 0,
+      referral_fee_public_round_basis_points: 0,
+      chef_fee_basis_points: parseInt(data?.chefFeeBasisPoints),
+      protocol_config_provider:
+        process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER, // TODO: this should not be passed in here, as it's too easy to override. Should be set by factory contract when deploying.
+      source_metadata: {
+        version: process.env.NEXT_PUBLIC_CURRENT_SOURCE_CODE_VERSION,
+        commit_hash: commitHash,
+        link: process.env.NEXT_PUBLIC_SOURCE_CODE_LINK,
+      },
+    };
+
     const wallet = new Wallet({
-      createAccessKeyFor: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
+      createAccessKeyFor:
+        process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
       network: "mainnet",
     });
     await wallet.startUp();
-    
-      await wallet.callMethod({
-        contractId: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER as string,
-        method: "deploy_pot",
-        args: {
-          pot_args: deployArgs,
-        },
-        deposit: utils.format.parseNearAmount(count.toString())?.toString(),
-      });
-    
+
+    await wallet.callMethod({
+      contractId: process.env
+        .NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER as string,
+      method: "deploy_pot",
+      args: {
+        pot_args: deployArgs,
+      },
+      deposit: utils.format.parseNearAmount(count.toString())?.toString(),
+    });
   };
   useEffect(() => {
     const wallet = new Wallet({
-      createAccessKeyFor: process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
+      createAccessKeyFor:
+        process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
       network: "mainnet",
     });
 
@@ -183,26 +187,42 @@ const DeployPotForm = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-between">
             <div className="flex flex-col gap-2  w-full sm:w-1/2">
               <div className="font-medium ">Application start date</div>
-              <Input size="sm" type="date" {...register("applicationStartDate")} />
+              <Input
+                size="sm"
+                type="date"
+                {...register("applicationStartDate")}
+              />
             </div>
 
             <div className="flex flex-col gap-2  w-full sm:w-1/2">
               <div className="font-medium ">Application end date</div>
 
-              <Input size="sm" type="date" {...register("applicationEndDate")} />
+              <Input
+                size="sm"
+                type="date"
+                {...register("applicationEndDate")}
+              />
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-between">
             <div className="flex flex-col gap-2  w-full sm:w-1/2">
               <div className="font-medium ">Matching round start date</div>
-              <Input size="sm" type="date" {...register("matchingRoundStartDate")} />
+              <Input
+                size="sm"
+                type="date"
+                {...register("matchingRoundStartDate")}
+              />
             </div>
 
             <div className="flex flex-col gap-2  w-full sm:w-1/2">
               <div className="font-medium ">Matching round end date</div>
 
-              <Input size="sm" type="date" {...register("matchingRoundEndDate")} />
+              <Input
+                size="sm"
+                type="date"
+                {...register("matchingRoundEndDate")}
+              />
             </div>
           </div>
         </div>
@@ -305,18 +325,19 @@ const DeployPotForm = () => {
 
       {/* Button deploy */}
       <div className="flex w-full justify-end gap-6">
-        <Button
-        onClick={() => route.push('/pots')}
-        >Cancel</Button>
+        <Button onClick={() => route.push("/pots")}>Cancel</Button>
 
-        <Button
-          disabled={isCheckAccount()}
-          onClick={handleSubmit(onSubmit)}
-         
-          color="danger"
-        >
-          Deploy
-        </Button>
+        {!isCheckAccount() ? (
+          <Tooltip content="Your account does not have permissions">
+            <Button disabled={true} color="danger">
+              Deploy
+            </Button>
+          </Tooltip>
+        ) : (
+          <Button onClick={handleSubmit(onSubmit)} color="danger">
+            Deploy
+          </Button>
+        )}
       </div>
     </div>
   );

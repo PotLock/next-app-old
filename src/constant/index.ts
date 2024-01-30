@@ -2,13 +2,14 @@ export const IPFS_BASE_URL = "https://nftstorage.link/ipfs/";
 
 export const MENUITEMS = [
   {
-    title: "POTS",
-    href: "/pots",
-  },
-  {
     title: "PROJECTS",
     href: "/",
   },
+  {
+    title: "POTS",
+    href: "/pots",
+  },
+
   {
     title: "FEED",
     href: "#",

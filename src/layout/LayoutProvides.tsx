@@ -20,10 +20,9 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   const router = useRouter();
 
   const projectsCart: any =
-    typeof window !== "undefined"
-      ? ""
-      : // ? JSON.parse(localStorage?.getItem("projects_in_cart") ?? "")
-        [];
+    typeof window !== "undefined" && localStorage?.getItem("projects_in_cart")
+      ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
+      : [];
 
   const [cart, setCart] = React.useState<any[]>(projectsCart);
   const updateCart = (data: any) => {

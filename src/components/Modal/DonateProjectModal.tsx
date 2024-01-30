@@ -24,6 +24,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { TCurrency } from "@/types";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
 import { getApiProjectRandom } from "@/services";
+import axios from "axios";
 
 export default function DonateProjectModal({
   isOpen,
@@ -38,7 +39,6 @@ export default function DonateProjectModal({
 }) {
   const { id } = useParams();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
 
   const [donateAmount, setDonateAmount] = useState<number>(0);
   const [openNote, setOpenNote] = useState<boolean>(false);
@@ -85,7 +85,7 @@ export default function DonateProjectModal({
   const getProjectRandom = useCallback(async () => {
     if (!!isRandom) {
       const res = await getApiProjectRandom();
-      return res?.data?._id;
+      return res?.data?.project_id;
     }
   }, [isRandom]);
 
@@ -113,7 +113,6 @@ export default function DonateProjectModal({
         await wallet.callMethod({
           contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
           method: "donate",
-          callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}${pathname}?donate-success`,
           args: {
             recipient_id: recipientId,
             message: note,
@@ -134,7 +133,6 @@ export default function DonateProjectModal({
     id,
     searchParams,
     selectedCurrency,
-    pathname,
     getProjectRandom,
     isRandom,
   ]);

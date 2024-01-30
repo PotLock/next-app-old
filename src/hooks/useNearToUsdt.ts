@@ -10,7 +10,7 @@ export default function useNearToUsdt() {
         .get(
           "https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd",
         )
-        .then((res) => {
+        .then((res: any) => {
           setPriceUsdt(res.data.near.usd);
         });
     };

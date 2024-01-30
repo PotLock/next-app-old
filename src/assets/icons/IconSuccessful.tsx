@@ -33,7 +33,7 @@ export default function IconSuccessful(props: IIconSuccessfulProps) {
           width="64"
           height="64"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix" />
           <feBlend
@@ -68,7 +68,7 @@ export default function IconSuccessful(props: IIconSuccessfulProps) {
           width="34.3848"
           height="29.6152"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix" />
           <feColorMatrix

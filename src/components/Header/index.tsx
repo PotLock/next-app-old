@@ -81,6 +81,7 @@ const Header = () => {
       const accountId = wallet.accountId;
       if (accountId) {
         setAccount(wallet.accountId);
+        localStorage.setItem("accountId", accountId);
       }
     };
     getAccount();

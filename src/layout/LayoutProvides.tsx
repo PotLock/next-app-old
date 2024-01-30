@@ -5,7 +5,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import * as React from "react";
 import { useDisclosure } from "@nextui-org/react";
 import DonateProjectModal from "@/components/Modal/DonateProjectModal";
-import DonateSucessModal from "@/components/Modal/DonateSuccessModal";
+import DonateSuccessModal from "@/components/Modal/DonateSuccessModal";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export interface ILayoutProvidesProps {
@@ -55,7 +55,7 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   };
 
   React.useEffect(() => {
-    if (searchParams && searchParams?.get("transactionHash")) {
+    if (searchParams && searchParams?.get("transactionHashes")) {
       onOpen();
     }
   }, [onOpen, searchParams]);
@@ -64,7 +64,7 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
     <NextUIProvider>
       <WalletProvider>
         <CartContext.Provider value={{ cart, updateCart }}>
-          <DonateSucessModal isOpen={isOpen} onClose={handleCloseModal} />
+          <DonateSuccessModal isOpen={isOpen} onClose={handleCloseModal} />
           <Header />
           {children}
         </CartContext.Provider>

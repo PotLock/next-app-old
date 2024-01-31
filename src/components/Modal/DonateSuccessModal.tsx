@@ -4,23 +4,20 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
-  ModalHeader,
 } from "@nextui-org/react";
 import Image from "next/image";
 import IconNear from "@/assets/images/IconNear.png";
-import IconUSDC from "@/assets/images/IconUSDC.png";
-import IconArrowDown from "@/assets/icons/IconArrowDown";
-import IconLogoCart from "@/assets/images/Logo.png";
 import { useCallback, useEffect, useState } from "react";
 import IconDollar from "@/assets/icons/IconDollars";
 import IconProfile from "@/assets/icons/IconProfile";
 import { IconTelegram, IconTwitter } from "@/assets/icons";
 import IconLinkedIn from "@/assets/icons/IconLinkedIn";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
 import axios from "axios";
 import { utils } from "near-api-js";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
+import Link from "next/link";
 
 export default function DonateSuccessModal({
   isOpen,
@@ -31,14 +28,19 @@ export default function DonateSuccessModal({
   onClose?: () => void;
   onOpenChange?: () => void;
 }) {
-  const searchParams = useSearchParams();
+  // State
   const [openBreakDown, setOpenBreakDown] = useState<boolean>(true);
   const [donateData, setDonateData] = useState<any>(null);
+  const [donorData, setDonorData] = useState<any>(null);
+  const [recipientData, setRecipientData] = useState<any>(null);
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referrerFee, setReferrerFee] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
+  // function
+  const searchParams = useSearchParams();
   const { priceUsdt } = useNearToUsdt();
+  const router = useRouter();
 
   useEffect(() => {
     let data = JSON.stringify({
@@ -97,6 +99,48 @@ export default function DonateSuccessModal({
         console.log(error);
       });
   }, [searchParams]);
+
+  useEffect(() => {
+    const getRecipientData = async (account: string) => {
+      const wallet = new Wallet({
+        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+        network: "mainnet",
+      });
+      await wallet.startUp();
+      const state = await wallet.viewMethod({
+        contractId: "social.near",
+        method: "get",
+        args: { keys: [`${account}/profile/**`] },
+      });
+      if (Object.keys(state).length !== 0) {
+        setRecipientData(state[account].profile);
+      }
+    };
+
+    const getDonorData = async (account: string) => {
+      const wallet = new Wallet({
+        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+        network: "mainnet",
+      });
+      await wallet.startUp();
+      const state = await wallet.viewMethod({
+        contractId: "social.near",
+        method: "get",
+        args: { keys: [`${account}/profile/**`] },
+      });
+      if (Object.keys(state).length !== 0) {
+        setDonorData(state[account].profile);
+      }
+    };
+
+    if (donateData) {
+      getRecipientData(donateData.recipient_id);
+      getDonorData(donateData.donor_id);
+    }
+  }, [donateData]);
+
+  console.log("recipient: ", recipientData);
+  console.log("donor: ", donorData);
 
   const toggleBreakdown = useCallback(() => {
     setOpenBreakDown((prev) => !prev);
@@ -187,12 +231,21 @@ export default function DonateSuccessModal({
               </div>
 
               <div className="flex gap-6">
-                <Button variant="solid" className="w-full px-4 py-3">
+                <Button
+                  variant="solid"
+                  className="w-full px-4 py-3"
+                  onClick={() =>
+                    router.push(`/project/${donateData?.recipient_id}`)
+                  }
+                >
                   Do it again
                 </Button>
                 <Button
                   variant="solid"
                   className="w-full bg-[#C02031] text-white px-4 py-3"
+                  onClick={() =>
+                    router.push(`/project/${donateData?.recipient_id}`)
+                  }
                 >
                   Explore projects
                 </Button>
@@ -213,11 +266,27 @@ export default function DonateSuccessModal({
               </div>
 
               {/*  */}
+              <Link
+                className="p-2 mx-auto text-sm w-48 truncate border border-[#7B7B7B] rounded-lg"
+                href={`https://nearblocks.io/txns/${searchParams.get("transactionHashes")}`}
+                target="_blank"
+              >
+                <span className="text-[#7B7B7B]">Txn Hash</span>
+                <span>{searchParams.get("transactionHashes")}</span>
+              </Link>
+
+              {/*  */}
               <div className="flex py-2 mx-auto gap-2 items-center">
                 <p className="text-sm font-semibold text-[#7B7B7B]">Share to</p>
-                <IconTwitter />
-                <IconTelegram />
-                <IconLinkedIn />
+                <Link href={"https://twitter.com/home?lang=en"} target="_blank">
+                  <IconTwitter />
+                </Link>
+                <Link href={"https://web.telegram.org/"} target="_blank">
+                  <IconTelegram />
+                </Link>
+                <Link href={"https://en.linkedin.com/"} target="_blank">
+                  <IconLinkedIn />
+                </Link>
               </div>
             </ModalFooter>
           </>

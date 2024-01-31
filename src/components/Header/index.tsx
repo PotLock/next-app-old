@@ -141,10 +141,14 @@ const Header = () => {
                         height={24}
                       />
                     ) : (
-                      <IconProfile />
+                      <div className="w-6 h-6">
+                        <IconProfile />
+                      </div>
                     )}
                   </div>
-                  <div className="text-sm font-medium">{account}</div>
+                  <div className="text-sm font-medium w-[215px] truncate">
+                    {account}
+                  </div>
                 </div>
                 <div className="text-sm p-2 cursor-pointer">My Profile</div>
                 <div className="text-sm p-2 cursor-pointer">Add Money</div>

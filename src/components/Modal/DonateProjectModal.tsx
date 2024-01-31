@@ -20,11 +20,10 @@ import IconLogoCart from "@/assets/images/Logo.png";
 import IconArrowDownFull from "@/assets/icons/IconArrowDownFull";
 import { Wallet } from "@/configs/nearWallet";
 import { utils } from "near-api-js";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { TCurrency } from "@/types";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
 import { getApiProjectRandom } from "@/services";
-import axios from "axios";
 
 export default function DonateProjectModal({
   isOpen,
@@ -255,14 +254,14 @@ export default function DonateProjectModal({
                     </p>
                     <div className="flex items-center gap-2">
                       <p>{projectAllocation}</p>
-                      <Image width={20} height={20} src={IconNear} alt="" />
+                      {renderCurrency(selectedCurrency)}
                     </div>
                   </div>
                   <div className="flex w-full items-center justify-between">
                     <p>Protocol fees (5%) </p>
                     <div className="flex items-center gap-2">
                       <p>{protocolFee}</p>
-                      <Image width={20} height={20} src={IconNear} alt="" />
+                      {renderCurrency(selectedCurrency)}
                     </div>
                   </div>
                   <div className="flex w-full items-center justify-between">
@@ -275,7 +274,7 @@ export default function DonateProjectModal({
                     </p>
                     <div className="flex items-center gap-2">
                       <p>{referralFee}</p>
-                      <Image width={20} height={20} src={IconNear} alt="" />
+                      {renderCurrency(selectedCurrency)}
                     </div>
                   </div>
                 </div>

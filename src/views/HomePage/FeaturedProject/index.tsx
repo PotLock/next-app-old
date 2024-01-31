@@ -17,7 +17,7 @@ const FeaturedProject = () => {
 
   const settings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: mobileWiew ? 1 : 3,
     slidesToScroll: mobileWiew ? 1 : 3,

@@ -1,4 +1,5 @@
 "use client";
+import { IconCopyAddress } from "@/assets/icons";
 import { DATA_PROFILE } from "@/constant/project";
 import { ProjectDetail } from "@/contexts";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
@@ -17,12 +18,15 @@ export default function IndividualPage(props: IProfilePageProps) {
         <div className="my-2 text-[44px] font-normal text-[#292929]">
           {data?.name || "User Name"}
         </div>
-        <div className="my-2 text-[17px] font-normal text-[#7B7B7B]">
+        <div className="flex items-center gap-1 my-2 text-[17px] font-normal text-[#7B7B7B]">
           @{data?.project_id}
+          <IconCopyAddress
+            onClick={() => navigator.clipboard.writeText(data?.project_id)}
+          />
         </div>
         <div className="flex gap-[12px] my-4">
           <Chip radius="sm" size="lg">
-            {data?.tags?.map((item : string) => item)}
+            {data?.tags?.map((item: string) => item)}
           </Chip>
         </div>
         <div className="flex items-center justify-between my-4">
@@ -31,13 +35,21 @@ export default function IndividualPage(props: IProfilePageProps) {
               <div className="flex">
                 <div className="text-[14px] text-[#292929] font-medium mr-[24px]">
                   Followers
-                  <a href={data?.follower} target="_blank" className="text-[#7B7B7B] pl-2">
+                  <a
+                    href={data?.follower}
+                    target="_blank"
+                    className="text-[#7B7B7B] pl-2"
+                  >
                     {data?.numFollowers || "0"}
                   </a>
                 </div>
                 <div className="text-[14px] text-[#292929] font-medium">
                   Following
-                  <a href={data?.following} target="_blank" className="text-[#7B7B7B] pl-2">
+                  <a
+                    href={data?.following}
+                    target="_blank"
+                    className="text-[#7B7B7B] pl-2"
+                  >
                     {data?.numFollowing || "0"}
                   </a>
                 </div>

@@ -15,6 +15,7 @@ import { utils } from "near-api-js";
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { validateNearAddress } from "@/utils";
 
 const DeployPotForm = () => {
   const route = useRouter();
@@ -22,11 +23,16 @@ const DeployPotForm = () => {
   const [listAccount, setListAccount] = useState<any | null>(null);
   const [count, setCount] = useState("0.02");
   const [commitHash, setCommitHash] = useState();
+  const [messageAppDate, setMessageAppDate] = useState("");
+  const [messageMatchingDate, setMessageMatchingDate] = useState("");
+  const [messageDate, setMessageDate] = useState("");
+  const [messageChef, setMessageChef] = useState("");
 
   const {
     register,
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<any>();
   const getApiWhiteListAccountWallet = async () => {
@@ -59,6 +65,51 @@ const DeployPotForm = () => {
     if (!!res) setCommitHash(res?.data[0].sha);
   };
   const onSubmit: SubmitHandler<any> = async (data: any) => {
+    const currentDate = new Date();
+    const applicationStartDate = new Date(data.applicationStartDate);
+    const applicationEndDate = new Date(data.applicationEndDate);
+    const matchingRoundStartDate = new Date(data.matchingRoundStartDate);
+    const matchingRoundEndDate = new Date(data.matchingRoundEndDate);
+
+    if (
+      applicationStartDate > applicationEndDate ||
+      applicationStartDate.getDay() < currentDate.getDay()
+    ) {
+      setMessageAppDate(
+        "The start date must be greater than or equal to the current date and less than the end date",
+      );
+      return;
+    } else {
+      setMessageAppDate("");
+    }
+
+    if (
+      matchingRoundStartDate > matchingRoundEndDate ||
+      matchingRoundStartDate.getDay() < currentDate.getDay()
+    ) {
+      setMessageMatchingDate(
+        "The start date must be greater than or equal to the current date and less than the end date",
+      );
+      return;
+    } else {
+      setMessageMatchingDate("");
+    }
+
+    if (applicationEndDate > matchingRoundEndDate) {
+      setMessageDate(
+        "Application end date cannot go past matching round end date",
+      );
+      return;
+    } else {
+      setMessageDate("");
+    }
+
+    if (!validateNearAddress(data?.chef)) {
+      setMessageChef("Not near wallet address");
+      return;
+    } else {
+      setMessageChef("");
+    }
     const deployArgs = {
       owner: account,
       admins: [], // TODO: CHANGE TO TAKE FROM STATE
@@ -139,16 +190,28 @@ const DeployPotForm = () => {
               size="sm"
               type="text"
               placeholder="Placeholder"
-              {...register("name")}
+              {...register("name", {
+                required: "Name is required",
+              })}
             />
+            {errors?.name && (
+              <p className="text-[11px] text-red-500">Name is required.</p>
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <div className="font-medium">Description</div>
             <Textarea
               labelPlacement="outside"
               placeholder="Type description"
-              {...register("description")}
+              {...register("description", {
+                required: "Description is required",
+              })}
             />
+            {errors?.description && (
+              <p className="text-[11px] text-red-500">
+                Description is required.
+              </p>
+            )}
             <div className="flex justify-end w-full text-[#7B7B7B]">0/320</div>
           </div>
 
@@ -190,8 +253,20 @@ const DeployPotForm = () => {
               <Input
                 size="sm"
                 type="date"
-                {...register("applicationStartDate")}
+                {...register(
+                  "applicationStartDate",
+
+                  { required: "Application start date is required" },
+                )}
               />
+              {errors?.applicationStartDate && (
+                <p className="text-[11px] text-red-500">
+                  Application start date is required.
+                </p>
+              )}
+              {!!messageAppDate && (
+                <p className="text-[11px] text-red-500">{messageAppDate}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2  w-full sm:w-1/2">
@@ -200,8 +275,18 @@ const DeployPotForm = () => {
               <Input
                 size="sm"
                 type="date"
-                {...register("applicationEndDate")}
+                {...register("applicationEndDate", {
+                  required: "Application end date is required",
+                })}
               />
+              {errors?.applicationEndDate && (
+                <p className="text-[11px] text-red-500">
+                  Application end date is required.
+                </p>
+              )}
+              {!!messageDate && (
+                <p className="text-[11px] text-red-500">{messageDate}</p>
+              )}
             </div>
           </div>
 
@@ -211,8 +296,20 @@ const DeployPotForm = () => {
               <Input
                 size="sm"
                 type="date"
-                {...register("matchingRoundStartDate")}
+                {...register("matchingRoundStartDate", {
+                  required: "Matching round start date is required",
+                })}
               />
+              {errors?.matchingRoundStartDate && (
+                <p className="text-[11px] text-red-500">
+                  Matching round start date is required.
+                </p>
+              )}
+              {!!messageMatchingDate && (
+                <p className="text-[11px] text-red-500">
+                  {messageMatchingDate}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2  w-full sm:w-1/2">
@@ -221,8 +318,15 @@ const DeployPotForm = () => {
               <Input
                 size="sm"
                 type="date"
-                {...register("matchingRoundEndDate")}
+                {...register("matchingRoundEndDate", {
+                  required: "Matching round end date is required",
+                })}
               />
+              {errors?.matchingRoundEndDate && (
+                <p className="text-[11px] text-red-500">
+                  Matching round end date is required.
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -243,6 +347,9 @@ const DeployPotForm = () => {
                 placeholder="Eg defi center"
                 {...register("chef")}
               />
+               {!!messageChef && (
+                <p className="text-[11px] text-red-500">{messageChef}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2  w-full sm:w-1/2 ">
@@ -257,6 +364,7 @@ const DeployPotForm = () => {
                 placeholder="% 0"
                 {...register("chefFeeBasisPoints")}
               />
+             
             </div>
           </div>
         </div>
@@ -305,7 +413,7 @@ const DeployPotForm = () => {
           <Controller
             name="radioGroup"
             control={control}
-            defaultValue=""
+            defaultValue="nadaBot"
             // rules={{ required: "Please select an option" }}
             render={({ field }) => (
               <RadioGroup {...field} orientation="horizontal">

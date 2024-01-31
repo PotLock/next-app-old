@@ -3,6 +3,7 @@ import { IconCopyAddress, IconTick } from "@/assets/icons";
 import { DATA_PROFILE } from "@/constant/project";
 import { ProjectDetail } from "@/contexts";
 import useWallet from "@/hooks/useWallet";
+import { CartContext } from "@/layout/LayoutProvides";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
@@ -12,6 +13,8 @@ export interface IProfilePageProps {
 }
 
 export default function IndividualPage(props: IProfilePageProps) {
+  const { updateCart } = useContext(CartContext);
+
   const [isCopied, setIsCopied] = useState(false);
   const currentPageUrl =
     typeof window !== "undefined" ? window.location.href : "";
@@ -89,7 +92,9 @@ export default function IndividualPage(props: IProfilePageProps) {
             >
               Donate
             </Button>
-            <Button radius="sm">Add to cart</Button>
+            <Button radius="sm" onClick={() => updateCart(data)}>
+              Add to cart
+            </Button>
           </div>
         </div>
       </div>

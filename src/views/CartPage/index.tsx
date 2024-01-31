@@ -141,7 +141,7 @@ export default function CartPage(props: ICartPageProps) {
         {
           methodName: "donate",
           args: {
-            recipient_id: item.id,
+            recipient_id: item.project_id,
             referrer_id: null,
             message: item.note,
           },

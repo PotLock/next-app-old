@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import ProjectCard from "../../../components/ProjectCard";
 
+import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 import Search from "@/components/Search";
 import { getProjectGeneral, searchProjectName } from "@/services";
 import { Divider, useDisclosure } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
 import TabAllProject from "./components/Tab";
-import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 
 const AllProject = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -18,15 +18,6 @@ const AllProject = () => {
   const sort = search.get("sort");
   const title = search.get("title");
   const [tags, setTags] = useState<string[]>([]);
-
-  const getDataDetail = async () => {
-    try {
-      const { data } = await getProjectGeneral();
-      setData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     const getDataDetail = async () => {
@@ -99,6 +90,26 @@ const AllProject = () => {
             <ProjectCard key={index} onOpen={onOpen} data={project} />
           ))}
         </div>
+        {/* <InfiniteScroll
+          dataLength={projects.length}
+          next={() => {
+            if (projects.length) {
+              setSearchFilter({
+                ...searchFilter,
+                page: searchFilter.page + 1,
+              });
+            }
+          }}
+          hasMore={true} // Replace with a condition based on your data source
+          loader={<p>No more data to load.</p>}
+          endMessage={<p>No more data to load.</p>}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-8  sm:mx-0  gap-x-8 min-h-[400px]"
+          // inverse={true}
+        >
+          {projects.map((project, index) => (
+            <ProjectCard key={index} onOpen={onOpen} data={project} />
+          ))}
+        </InfiniteScroll> */}
       </div>
     </div>
   );

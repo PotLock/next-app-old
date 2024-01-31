@@ -1,17 +1,23 @@
 "use client";
-import { IconCopyAddress } from "@/assets/icons";
+import { IconCopyAddress, IconTick } from "@/assets/icons";
 import { DATA_PROFILE } from "@/constant/project";
 import { ProjectDetail } from "@/contexts";
+import useWallet from "@/hooks/useWallet";
 import { Button, Chip, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 export interface IProfilePageProps {
   openModal: () => void;
 }
 
 export default function IndividualPage(props: IProfilePageProps) {
+  const [isCopied, setIsCopied] = useState(false);
+  const currentPageUrl =
+    typeof window !== "undefined" ? window.location.href : "";
+
   const { data } = useContext(ProjectDetail);
+  const { account } = useWallet();
   return (
     <div>
       <div>
@@ -20,9 +26,20 @@ export default function IndividualPage(props: IProfilePageProps) {
         </div>
         <div className="flex items-center gap-1 my-2 text-[17px] font-normal text-[#7B7B7B]">
           @{data?.project_id}
-          <IconCopyAddress
-            onClick={() => navigator.clipboard.writeText(data?.project_id)}
-          />
+          {isCopied ? (
+            <IconTick />
+          ) : (
+            <IconCopyAddress
+              onClick={() =>
+                navigator.clipboard
+                  .writeText(currentPageUrl + `?referrerId=${account}`)
+                  .then(() => {
+                    setIsCopied(true);
+                    setTimeout(() => setIsCopied(false), 2000);
+                  })
+              }
+            />
+          )}
         </div>
         <div className="flex gap-[12px] my-4">
           <Chip radius="sm" size="lg">

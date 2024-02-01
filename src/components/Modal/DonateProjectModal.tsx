@@ -20,8 +20,7 @@ import IconLogoCart from "@/assets/images/Logo.png";
 import IconArrowDownFull from "@/assets/icons/IconArrowDownFull";
 import { Wallet } from "@/configs/nearWallet";
 import { utils } from "near-api-js";
-import axios from "axios";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { TCurrency } from "@/types";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
 import { getApiProjectRandom } from "@/services";
@@ -33,13 +32,12 @@ export default function DonateProjectModal({
   isRandom,
 }: {
   isOpen: boolean;
-  onOpenChange: () => void;
+  onOpenChange?: () => void;
   onClose?: () => void;
   isRandom?: true;
 }) {
   const { id } = useParams();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
 
   const [donateAmount, setDonateAmount] = useState<number>(0);
   const [openNote, setOpenNote] = useState<boolean>(false);
@@ -83,12 +81,12 @@ export default function DonateProjectModal({
     );
   };
 
-  const getProjectRandom = async () => {
+  const getProjectRandom = useCallback(async () => {
     if (!!isRandom) {
       const res = await getApiProjectRandom();
-      return res?.data?._id;
+      return res?.data?.project_id;
     }
-  };
+  }, [isRandom]);
 
   const donate = useCallback(async () => {
     const projectIdRandom = await getProjectRandom();
@@ -114,7 +112,6 @@ export default function DonateProjectModal({
         await wallet.callMethod({
           contractId: process.env.NEXT_PUBLIC_DONATION_ID as string,
           method: "donate",
-          callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}${pathname}?donate-success`,
           args: {
             recipient_id: recipientId,
             message: note,
@@ -135,7 +132,8 @@ export default function DonateProjectModal({
     id,
     searchParams,
     selectedCurrency,
-    pathname,
+    getProjectRandom,
+    isRandom,
   ]);
 
   const renderCurrency = (currency: TCurrency) => {
@@ -256,14 +254,14 @@ export default function DonateProjectModal({
                     </p>
                     <div className="flex items-center gap-2">
                       <p>{projectAllocation}</p>
-                      <Image width={20} height={20} src={IconNear} alt="" />
+                      {renderCurrency(selectedCurrency)}
                     </div>
                   </div>
                   <div className="flex w-full items-center justify-between">
                     <p>Protocol fees (5%) </p>
                     <div className="flex items-center gap-2">
                       <p>{protocolFee}</p>
-                      <Image width={20} height={20} src={IconNear} alt="" />
+                      {renderCurrency(selectedCurrency)}
                     </div>
                   </div>
                   <div className="flex w-full items-center justify-between">
@@ -276,7 +274,7 @@ export default function DonateProjectModal({
                     </p>
                     <div className="flex items-center gap-2">
                       <p>{referralFee}</p>
-                      <Image width={20} height={20} src={IconNear} alt="" />
+                      {renderCurrency(selectedCurrency)}
                     </div>
                   </div>
                 </div>

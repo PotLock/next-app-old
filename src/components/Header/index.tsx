@@ -82,6 +82,7 @@ const Header = () => {
       const accountId = wallet.accountId;
       if (accountId) {
         setAccount(wallet.accountId);
+        localStorage.setItem("accountId", accountId);
       }
     };
     getAccount();
@@ -147,16 +148,20 @@ const Header = () => {
                   <div className="bg-[#F0F0F0] p-[10px] rounded-full">
                     {profile && profile?.image && profile?.image?.ipfs_cid ? (
                       <Image
-                        src={profile.image.ipfs_cid}
+                        src={`https://near.social/ipfs/${profile.image.ipfs_cid}`}
                         alt="avatar"
                         width={24}
                         height={24}
                       />
                     ) : (
-                      <IconProfile />
+                      <div className="w-6 h-6">
+                        <IconProfile />
+                      </div>
                     )}
                   </div>
-                  <div className="text-sm font-medium">{account}</div>
+                  <div className="text-sm font-medium w-[215px] truncate">
+                    {account}
+                  </div>
                 </div>
                 <div className="text-sm p-2 cursor-pointer">My Profile</div>
                 <div className="text-sm p-2 cursor-pointer">Add Money</div>

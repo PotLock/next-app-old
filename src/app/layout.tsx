@@ -10,7 +10,14 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "PotLock",
-  description: "Bringing public goods funding to the table. Powered by NEAR Protocol.",
+  description:
+    "Potlock, is bringing new funding mechanisms to the table for public goods, built on NEAR Protocol",
+  openGraph: {
+    title: "Potlock",
+    description:
+      "Potlock, is bringing new funding mechanisms to the table for public goods, built on NEAR Protocol",
+      images: '/Potlock.png'
+  },
 };
 
 export default function RootLayout({

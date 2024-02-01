@@ -15,33 +15,28 @@ const items = [
   {
     key: "-totalDonation",
     label: "Most to Least Donations",
-
   },
   {
     key: "totalDonation",
     label: "Least to Most Donations",
-
-  },
-  {
-    key: "totalMatchingPool",
-    label: "Least to Most Matching Pool",
-
   },
   {
     key: "-totalMatchingPool",
     label: "Most to Least Matching Pool",
-
   },
   {
-    key: "public_donations_count",
-    label: "Least to Most # Donors",
-    
+    key: "totalMatchingPool",
+    label: "Least to Most Matching Pool",
   },
   {
     key: "-public_donations_count",
     label: "Most to Least # Donors",
-   
+  },  
+  {
+    key: "public_donations_count",
+    label: "Least to Most # Donors",
   },
+  
 ];
 const SearchPots = ({ onSearch, totalPots }: any) => {
   const [filter, setFilter] = useState("");
@@ -86,7 +81,7 @@ const SearchPots = ({ onSearch, totalPots }: any) => {
         type="search"
         value={search}
         className="block w-[90%] p-4 ps-12 text-sm text-gray-900 rounded-sm bg-[#F0F0F0]  focus:outline-none "
-        placeholder={`Search (${totalPots || '0'}) pots...`}
+        placeholder={`Search (${totalPots || "0"}) pots...`}
       />
       <Dropdown>
         <DropdownTrigger>
@@ -115,7 +110,6 @@ const SearchPots = ({ onSearch, totalPots }: any) => {
                   )}
                   {item.label}
                 </div>
-                
               </div>
             </DropdownItem>
           )}

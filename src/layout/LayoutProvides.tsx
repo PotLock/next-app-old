@@ -4,9 +4,8 @@ import WalletProvider from "@/contexts/WalletContext";
 import { NextUIProvider } from "@nextui-org/react";
 import * as React from "react";
 import { useDisclosure } from "@nextui-org/react";
-import DonateProjectModal from "@/components/Modal/DonateProjectModal";
 import DonateSuccessModal from "@/components/Modal/DonateSuccessModal";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export interface ILayoutProvidesProps {
   children: React.ReactNode;
@@ -16,7 +15,6 @@ export const CartContext = React.createContext<any>(null);
 
 export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const router = useRouter();
 
   const projectsCart: any =
@@ -49,9 +47,11 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleCloseModal = () => {
-    router.push(pathname);
+  const handleCloseModal = (path: string, donateAgain: boolean) => {
     onClose();
+    router.push(path);
+    // if (donateAgain) {
+    // }
   };
 
   React.useEffect(() => {
@@ -64,7 +64,12 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
     <NextUIProvider>
       <WalletProvider>
         <CartContext.Provider value={{ cart, updateCart }}>
-          <DonateSuccessModal isOpen={isOpen} onClose={handleCloseModal} />
+          <DonateSuccessModal
+            isOpen={isOpen}
+            onClose={(path: string, donateAgain: boolean) => {
+              handleCloseModal(path, donateAgain);
+            }}
+          />
           <Header />
           {children}
         </CartContext.Provider>

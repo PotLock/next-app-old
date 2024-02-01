@@ -10,9 +10,14 @@ import IconNear from "@/assets/images/IconNear.png";
 import { useCallback, useEffect, useState } from "react";
 import IconDollar from "@/assets/icons/IconDollars";
 import IconProfile from "@/assets/icons/IconProfile";
-import { IconTelegram, IconTwitter } from "@/assets/icons";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconTelegram,
+  IconTwitter,
+} from "@/assets/icons";
 import IconLinkedIn from "@/assets/icons/IconLinkedIn";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
 import axios from "axios";
 import { utils } from "near-api-js";
@@ -25,7 +30,7 @@ export default function DonateSuccessModal({
   onOpenChange,
 }: {
   isOpen: boolean;
-  onClose?: () => void;
+  onClose: (path: string, donateAgain: boolean) => void;
   onOpenChange?: () => void;
 }) {
   // State
@@ -39,6 +44,7 @@ export default function DonateSuccessModal({
 
   // function
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const { priceUsdt } = useNearToUsdt();
   const router = useRouter();
 
@@ -139,18 +145,23 @@ export default function DonateSuccessModal({
     }
   }, [donateData]);
 
-  console.log("recipient: ", recipientData);
-  console.log("donor: ", donorData);
-
   const toggleBreakdown = useCallback(() => {
     setOpenBreakDown((prev) => !prev);
   }, []);
+
+  const onExploreClick = useCallback(() => {
+    onClose(`/project/${donateData?.recipient_id}`, false);
+  }, [donateData?.recipient_id, onClose]);
+
+  const onAgainClick = useCallback(() => {
+    onClose(pathname, true);
+  }, [pathname, onClose]);
 
   return (
     <Modal
       backdrop="blur"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => onClose(pathname, false)}
       onOpenChange={onOpenChange}
       className="bg-white rounded-md border border-[#FAFAFA] text-sm"
       size="2xl"
@@ -182,9 +193,13 @@ export default function DonateSuccessModal({
                     <div className="rounded-full w-4 h-4 flex items-center justify-center">
                       <IconProfile />
                     </div>
-                    <p className="text-sm font-semibold">
+                    <Link
+                      className="text-sm font-semibold"
+                      href={`https://near.social/mob.near/widget/ProfilePage?accountId=${donateData?.recipient_id}`}
+                      target="_blank"
+                    >
                       {donateData?.recipient_id}
-                    </p>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -196,6 +211,7 @@ export default function DonateSuccessModal({
                   onClick={toggleBreakdown}
                 >
                   {openBreakDown ? "Hide breakdown" : "Show breakdown"}
+                  {openBreakDown ? <IconArrowUp /> : <IconArrowDown />}
                 </Button>
                 {openBreakDown && (
                   <div className="text-[#7B7B7B] border-[#DBDBDB]  border p-4 rounded-md flex gap-3 flex-col">
@@ -234,18 +250,14 @@ export default function DonateSuccessModal({
                 <Button
                   variant="solid"
                   className="w-full px-4 py-3"
-                  onClick={() =>
-                    router.push(`/project/${donateData?.recipient_id}`)
-                  }
+                  onClick={onAgainClick}
                 >
                   Do it again
                 </Button>
                 <Button
                   variant="solid"
                   className="w-full bg-[#C02031] text-white px-4 py-3"
-                  onClick={() =>
-                    router.push(`/project/${donateData?.recipient_id}`)
-                  }
+                  onClick={onExploreClick}
                 >
                   Explore projects
                 </Button>
@@ -259,9 +271,13 @@ export default function DonateSuccessModal({
                   <div className="rounded-full w-4 h-4 flex items-center justify-center">
                     <IconProfile />
                   </div>
-                  <p className="text-sm font-semibold">
+                  <Link
+                    className="text-sm font-semibold"
+                    href={`https://near.social/mob.near/widget/ProfilePage?accountId=${donateData?.donor_id}`}
+                    target="_blank"
+                  >
                     {donateData?.donor_id}
-                  </p>
+                  </Link>
                 </div>
               </div>
 

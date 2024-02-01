@@ -21,7 +21,7 @@ const DeployPotForm = () => {
   const route = useRouter();
   const [account, setAccount] = useState<any | null>(null);
   const [listAccount, setListAccount] = useState<any | null>(null);
-  const [count, setCount] = useState("0.02");
+  const [count, setCount] = useState("6");
   const [commitHash, setCommitHash] = useState();
   const [messageAppDate, setMessageAppDate] = useState("");
   const [messageMatchingDate, setMessageMatchingDate] = useState("");
@@ -139,7 +139,7 @@ const DeployPotForm = () => {
         link: process.env.NEXT_PUBLIC_SOURCE_CODE_LINK,
       },
     };
-
+   
     const wallet = new Wallet({
       createAccessKeyFor:
         process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
@@ -154,6 +154,7 @@ const DeployPotForm = () => {
       args: {
         pot_args: deployArgs,
       },
+      gas: "300000000000000",
       deposit: utils.format.parseNearAmount(count.toString())?.toString(),
     });
   };
@@ -433,8 +434,7 @@ const DeployPotForm = () => {
 
       {/* Button deploy */}
       <div className="flex w-full justify-end gap-6">
-        <Button onClick={() => route.push("/pots")}>Cancel</Button>
-
+        <Button onClick={() => route.push("/pots")}>Cancel</Button>  
         {!isCheckAccount() ? (
           <Tooltip content="Your account does not have permissions">
             <Button disabled={true} color="danger">

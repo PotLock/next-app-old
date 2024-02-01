@@ -21,7 +21,7 @@ const DeployPotForm = () => {
   const route = useRouter();
   const [account, setAccount] = useState<any | null>(null);
   const [listAccount, setListAccount] = useState<any | null>(null);
-  const [count, setCount] = useState("0.02");
+  const [count, setCount] = useState("6");
   const [commitHash, setCommitHash] = useState();
   const [messageAppDate, setMessageAppDate] = useState("");
   const [messageMatchingDate, setMessageMatchingDate] = useState("");
@@ -154,6 +154,7 @@ const DeployPotForm = () => {
       args: {
         pot_args: deployArgs,
       },
+      gas: "300000000000000",
       deposit: utils.format.parseNearAmount(count.toString())?.toString(),
     });
   };
@@ -219,8 +220,11 @@ const DeployPotForm = () => {
             <div className="flex flex-col gap-2 w-full sm:w-1/2">
               <div className="font-medium flex flex-row gap-2 items-center">
                 <p>Referee fee</p>
-
-                <IconInfo />
+                <Tooltip content="Coming soon">
+                  <div className="cursor-pointer">
+                    <IconInfo />
+                  </div>
+                </Tooltip>
               </div>
               <Input
                 size="sm"
@@ -234,7 +238,11 @@ const DeployPotForm = () => {
               <div className="font-medium flex flex-row gap-2 items-center">
                 <p>Protocol fee</p>
 
-                <IconInfo />
+                <Tooltip content="Coming soon">
+                  <div className="cursor-pointer">
+                    <IconInfo />
+                  </div>
+                </Tooltip>
               </div>
               <div className="flex gap-2 ">
                 <Input disabled size="sm" type="text" placeholder="% 2" />
@@ -347,7 +355,7 @@ const DeployPotForm = () => {
                 placeholder="Eg defi center"
                 {...register("chef")}
               />
-               {!!messageChef && (
+              {!!messageChef && (
                 <p className="text-[11px] text-red-500">{messageChef}</p>
               )}
             </div>
@@ -356,7 +364,11 @@ const DeployPotForm = () => {
               <div className="font-medium flex flex-row gap-2 items-center">
                 <p>Chef fee</p>
 
-                <IconInfo />
+                <Tooltip content="Coming soon">
+                  <div className="cursor-pointer">
+                    <IconInfo />
+                  </div>
+                </Tooltip>
               </div>
               <Input
                 size="sm"
@@ -364,7 +376,6 @@ const DeployPotForm = () => {
                 placeholder="% 0"
                 {...register("chefFeeBasisPoints")}
               />
-             
             </div>
           </div>
         </div>
@@ -391,7 +402,11 @@ const DeployPotForm = () => {
               <div className="font-medium flex flex-row gap-2 items-center">
                 <p className="font-medium ">Registry Requirement</p>
 
-                <IconInfo />
+                <Tooltip content="Coming soon">
+                  <div className="cursor-pointer">
+                    <IconInfo />
+                  </div>
+                </Tooltip>
               </div>
               <Input
                 size="sm"
@@ -434,7 +449,6 @@ const DeployPotForm = () => {
       {/* Button deploy */}
       <div className="flex w-full justify-end gap-6">
         <Button onClick={() => route.push("/pots")}>Cancel</Button>
-
         {!isCheckAccount() ? (
           <Tooltip content="Your account does not have permissions">
             <Button disabled={true} color="danger">

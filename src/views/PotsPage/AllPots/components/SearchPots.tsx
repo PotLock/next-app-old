@@ -24,7 +24,7 @@ const items = [
   },
   {
     key: "totalMatchingPool",
-    label: "Least to Least Matching Pool",
+    label: "Least to Most Matching Pool",
 
   },
   {

@@ -12,6 +12,7 @@ import IconNear from "@/assets/images/IconNear.png";
 import IconUSDC from "@/assets/images/IconUSDC.png";
 import { Wallet } from "@/configs/nearWallet";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
+import useWallet from "@/hooks/useWallet";
 import { getConfigCart } from "@/services";
 import { TCurrency } from "@/types";
 import {
@@ -29,6 +30,7 @@ import {
   Image,
 } from "@nextui-org/react";
 import ImageNext from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -56,6 +58,10 @@ export default function CartPage(props: ICartPageProps) {
     referral_fee_basis_points: 0,
     protocol_fee_recipient_account: "",
   });
+
+  const { get } = useSearchParams();
+
+  const { account, handleSignIn } = useWallet();
 
   const { priceUsdt } = useNearToUsdt();
 
@@ -135,6 +141,10 @@ export default function CartPage(props: ICartPageProps) {
   };
 
   const onDonate = async () => {
+    if (!account) {
+      handleSignIn();
+      return;
+    }
     const data = itemCart.map((item) => ({
       receiverId: process.env.NEXT_PUBLIC_DONATION_ID as string,
       functionCalls: [
@@ -142,7 +152,7 @@ export default function CartPage(props: ICartPageProps) {
           methodName: "donate",
           args: {
             recipient_id: item.project_id,
-            referrer_id: null,
+            referrer_id: !!get("referral_id") ? get("referral_id") : null,
             message: item.note,
           },
           amount: item.amount.toString(),

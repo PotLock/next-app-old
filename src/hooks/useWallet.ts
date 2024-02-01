@@ -19,5 +19,16 @@ export default function useWallet() {
     };
     getAccount();
   }, []);
-  return { account };
+
+  const handleSignIn = async () => {
+    const wallet = new Wallet({
+      createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      network: "mainnet",
+    });
+    await wallet.startUp().then(() => {
+      wallet.signIn();
+    });
+  };
+
+  return { account, handleSignIn };
 }

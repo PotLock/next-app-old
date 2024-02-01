@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Potlock",
     description:
       "Potlock, is bringing new funding mechanisms to the table for public goods, built on NEAR Protocol",
-    images: "https://alpha.potlock.org/Potlock.png",
+    images: ["https://alpha.potlock.org/Potlock.png"],
   },
 };
 

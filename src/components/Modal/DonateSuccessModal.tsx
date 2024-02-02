@@ -7,7 +7,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import IconNear from "@/assets/images/IconNear.png";
-import { useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import IconDollar from "@/assets/icons/IconDollars";
 import IconProfile from "@/assets/icons/IconProfile";
 import {
@@ -17,7 +17,7 @@ import {
   IconTwitter,
 } from "@/assets/icons";
 import IconLinkedIn from "@/assets/icons/IconLinkedIn";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
 import axios from "axios";
 import { utils } from "near-api-js";
@@ -41,12 +41,16 @@ export default function DonateSuccessModal({
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referrerFee, setReferrerFee] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [profileImage, setProfileImage] = useState<ReactNode | null>(null);
 
   // function
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { priceUsdt } = useNearToUsdt();
-  const router = useRouter();
+
+  console.log("donateData: ", donateData);
+  console.log("recipientData: ", recipientData);
+  console.log("donorData: ", donorData);
 
   useEffect(() => {
     let data = JSON.stringify({
@@ -157,6 +161,51 @@ export default function DonateSuccessModal({
     onClose(pathname, true);
   }, [pathname, onClose]);
 
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (recipientData && recipientData?.image) {
+        if (recipientData.image.ipfs_cid) {
+          console.log(
+            `https://ipfs.near.social/ipfs/${recipientData.image.ipfs_cid}`,
+          );
+          setProfileImage(
+            <Image
+              src={`https://ipfs.near.social/ipfs/${recipientData.image.ipfs_cid}`}
+              alt="profile image"
+              width={16}
+              height={16}
+            />,
+          );
+        }
+        if (recipientData.image.nft) {
+          let imageUrl: string = "";
+          const wallet = new Wallet({
+            createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
+            network: "mainnet",
+          });
+          await wallet.startUp();
+          await wallet
+            .viewMethod({
+              contractId: recipientData.image.nft.contractId,
+              method: "nft_token",
+              args: {
+                token_id: recipientData.image.nft.tokenId,
+              },
+            })
+            .then((res) => {
+              imageUrl = res.metadata.media;
+            });
+          setProfileImage(
+            <Image src={imageUrl} alt="profile image" width={16} height={16} />,
+          );
+        }
+      } else {
+        setProfileImage(<IconProfile />);
+      }
+    };
+    fetchProfileImage();
+  }, [recipientData]);
+
   return (
     <Modal
       backdrop="blur"
@@ -191,14 +240,14 @@ export default function DonateSuccessModal({
                   <p className="text-sm font-semibold">Has been donated to</p>
                   <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
                     <div className="rounded-full w-4 h-4 flex items-center justify-center">
-                      <IconProfile />
+                      {profileImage}
                     </div>
                     <Link
                       className="text-sm font-semibold"
                       href={`https://near.social/mob.near/widget/ProfilePage?accountId=${donateData?.recipient_id}`}
                       target="_blank"
                     >
-                      {donateData?.recipient_id}
+                      {recipientData?.name}
                     </Link>
                   </div>
                 </div>
@@ -269,10 +318,10 @@ export default function DonateSuccessModal({
                 <p className="text-sm font-semibold">From</p>
                 <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
                   <div className="rounded-full w-4 h-4 flex items-center justify-center">
-                    <IconProfile />
+                    {<IconProfile />}
                   </div>
                   <Link
-                    className="text-sm font-semibold"
+                    className="text-sm font-semibold w-max max-w-52 truncate"
                     href={`https://near.social/mob.near/widget/ProfilePage?accountId=${donateData?.donor_id}`}
                     target="_blank"
                   >

@@ -6,6 +6,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "nftstorage.link",
       },
+      {
+        protocol: "https",
+        hostname: "ipfs.near.social",
+        pathname: "/ipfs/**",
+      },
     ],
   },
 };

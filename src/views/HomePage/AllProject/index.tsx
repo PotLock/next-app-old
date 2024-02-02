@@ -15,7 +15,7 @@ const AllProject = () => {
   const [data, setData] = useState<any>();
   const [searchFilter, setSearchFilter] = useState({ page: 1, limit: 1000 });
   const search = useSearchParams();
-  const sort = search.get("sort");
+  const sort = !!search.get("sort") ? search.get("sort") : "_id";
   const title = search.get("title");
   const [tags, setTags] = useState<string[]>([]);
 

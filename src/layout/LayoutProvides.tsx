@@ -1,17 +1,18 @@
 "use client";
 import Header from "@/components/Header";
+import DonateSuccessModal from "@/components/Modal/DonateSuccessModal";
+import MultiDonateSuccessModal from "@/components/Modal/MultiDonateSuccessModal";
 import WalletProvider from "@/contexts/WalletContext";
 import { NextUIProvider } from "@nextui-org/react";
-import * as React from "react";
 import { useDisclosure } from "@nextui-org/react";
-import DonateSuccessModal from "@/components/Modal/DonateSuccessModal";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export interface ILayoutProvidesProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const CartContext = React.createContext<any>(null);
+export const CartContext = createContext<any>(null);
 
 export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   const searchParams = useSearchParams();
@@ -22,7 +23,7 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
       ? JSON?.parse(localStorage?.getItem("projects_in_cart") ?? "")
       : [];
 
-  const [cart, setCart] = React.useState<any[]>(projectsCart);
+  const [cart, setCart] = useState<any[]>(projectsCart);
   const updateCart = (data: any) => {
     if (!cart.length) {
       setCart([...cart, data]);
@@ -45,29 +46,52 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
     }
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenSingleDonate,
+    onOpen: onOpenSingleDonate,
+    onClose: onCloseSingleDonate,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenMultiDonate,
+    onOpen: onOpenMultiDonate,
+    onClose: onCloseMultiDonate,
+  } = useDisclosure();
 
-  const handleCloseModal = (path: string, donateAgain: boolean) => {
-    onClose();
+  const handleCloseModal = (path: string, donateAgain?: boolean) => {
+    onCloseSingleDonate();
+    onCloseMultiDonate();
     router.push(path);
     // if (donateAgain) {
     // }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (searchParams && searchParams?.get("transactionHashes")) {
-      onOpen();
+      const searchParamsList = searchParams
+        .get("transactionHashes")
+        ?.split(",");
+      if (searchParamsList && searchParamsList?.length > 1) {
+        onOpenMultiDonate();
+      } else {
+        onOpenSingleDonate();
+      }
     }
-  }, [onOpen, searchParams]);
+  }, [onOpenSingleDonate, onOpenMultiDonate, searchParams]);
 
   return (
     <NextUIProvider>
       <WalletProvider>
         <CartContext.Provider value={{ cart, updateCart }}>
           <DonateSuccessModal
-            isOpen={isOpen}
+            isOpen={isOpenSingleDonate}
             onClose={(path: string, donateAgain: boolean) => {
               handleCloseModal(path, donateAgain);
+            }}
+          />
+          <MultiDonateSuccessModal
+            isOpen={isOpenMultiDonate}
+            onClose={(path: string) => {
+              handleCloseModal(path);
             }}
           />
           <Header />

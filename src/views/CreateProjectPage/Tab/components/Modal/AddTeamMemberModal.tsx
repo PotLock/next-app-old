@@ -46,9 +46,11 @@ const AddTeamMemberModal = ({
       };
       const profileSocial = await getProfile(member ?? "");
 
-      profileMember.imageUrl = getImageUrlFromSocialImage(
+      const imageUpdated = await getImageUrlFromSocialImage(
         profileSocial[member]?.profile?.image,
       );
+
+      profileMember.imageUrl = imageUpdated;
 
       setMembers((prev: TMember[]) => [profileMember, ...prev]);
     }

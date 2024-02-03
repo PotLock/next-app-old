@@ -7,7 +7,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import IconNear from "@/assets/images/IconNear.png";
-import { useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import IconDollar from "@/assets/icons/IconDollars";
 import IconProfile from "@/assets/icons/IconProfile";
 import {
@@ -17,12 +17,13 @@ import {
   IconTwitter,
 } from "@/assets/icons";
 import IconLinkedIn from "@/assets/icons/IconLinkedIn";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
 import axios from "axios";
 import { utils } from "near-api-js";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
 import Link from "next/link";
+import { getImageUrlFromSocialImage } from "@/utils";
 
 export default function DonateSuccessModal({
   isOpen,
@@ -41,12 +42,14 @@ export default function DonateSuccessModal({
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referrerFee, setReferrerFee] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [donorProfileImageURL, setDonorProfileImageURL] = useState<string>("");
+  const [recipientProfileImageURL, setRecipientProfileImageURL] =
+    useState<string>("");
 
   // function
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { priceUsdt } = useNearToUsdt();
-  const router = useRouter();
 
   useEffect(() => {
     let data = JSON.stringify({
@@ -157,6 +160,22 @@ export default function DonateSuccessModal({
     onClose(pathname, true);
   }, [pathname, onClose]);
 
+  // Fetch Profile Image URL
+  useEffect(() => {
+    const fetchProfileImage = async (value: any, type: string) => {
+      const url = await getImageUrlFromSocialImage(value);
+      if (type === "donor") setDonorProfileImageURL(url);
+      if (type === "recipient") setRecipientProfileImageURL(url);
+    };
+
+    if (donorData) {
+      fetchProfileImage(donorData?.image, "donor");
+    }
+    if (recipientData) {
+      fetchProfileImage(recipientData?.image, "recipient");
+    }
+  }, [donorData, recipientData]);
+
   return (
     <Modal
       backdrop="blur"
@@ -190,15 +209,24 @@ export default function DonateSuccessModal({
                 <div className="mx-auto flex gap-2 items-center">
                   <p className="text-sm font-semibold">Has been donated to</p>
                   <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
-                    <div className="rounded-full w-4 h-4 flex items-center justify-center">
-                      <IconProfile />
+                    <div className="rounded-full overflow-hidden w-4 h-4 flex items-center justify-center">
+                      {recipientProfileImageURL ? (
+                        <Image
+                          src={recipientProfileImageURL}
+                          alt="profile image"
+                          width={16}
+                          height={16}
+                        />
+                      ) : (
+                        <IconProfile />
+                      )}
                     </div>
                     <Link
                       className="text-sm font-semibold"
                       href={`https://near.social/mob.near/widget/ProfilePage?accountId=${donateData?.recipient_id}`}
                       target="_blank"
                     >
-                      {donateData?.recipient_id}
+                      {recipientData?.name}
                     </Link>
                   </div>
                 </div>
@@ -268,15 +296,26 @@ export default function DonateSuccessModal({
               <div className="mx-auto flex gap-2 items-center">
                 <p className="text-sm font-semibold">From</p>
                 <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
-                  <div className="rounded-full w-4 h-4 flex items-center justify-center">
-                    <IconProfile />
+                  <div className="rounded-full overflow-hidden w-4 h-4 flex items-center justify-center">
+                    {donorProfileImageURL ? (
+                      <Image
+                        src={donorProfileImageURL}
+                        alt="profile image"
+                        width={16}
+                        height={16}
+                      />
+                    ) : (
+                      <IconProfile />
+                    )}
                   </div>
                   <Link
-                    className="text-sm font-semibold"
+                    className="text-sm font-semibold w-max max-w-52 truncate"
                     href={`https://near.social/mob.near/widget/ProfilePage?accountId=${donateData?.donor_id}`}
                     target="_blank"
                   >
-                    {donateData?.donor_id}
+                    {donorData && donorData?.name
+                      ? donorData.name
+                      : donateData?.donor_id}
                   </Link>
                 </div>
               </div>
@@ -287,7 +326,7 @@ export default function DonateSuccessModal({
                 href={`https://nearblocks.io/txns/${searchParams.get("transactionHashes")}`}
                 target="_blank"
               >
-                <span className="text-[#7B7B7B]">Txn Hash</span>
+                <span className="text-[#7B7B7B]">Txn Hash : </span>
                 <span>{searchParams.get("transactionHashes")}</span>
               </Link>
 

@@ -23,6 +23,7 @@ import axios from "axios";
 import { utils } from "near-api-js";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
 import Link from "next/link";
+import { getImageUrlFromSocialImage } from "@/utils";
 
 export default function DonateSuccessModal({
   isOpen,
@@ -41,16 +42,14 @@ export default function DonateSuccessModal({
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referrerFee, setReferrerFee] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
-  const [profileImage, setProfileImage] = useState<ReactNode | null>(null);
+  const [donorProfileImageURL, setDonorProfileImageURL] = useState<string>("");
+  const [recipientProfileImageURL, setRecipientProfileImageURL] =
+    useState<string>("");
 
   // function
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { priceUsdt } = useNearToUsdt();
-
-  console.log("donateData: ", donateData);
-  console.log("recipientData: ", recipientData);
-  console.log("donorData: ", donorData);
 
   useEffect(() => {
     let data = JSON.stringify({
@@ -161,50 +160,21 @@ export default function DonateSuccessModal({
     onClose(pathname, true);
   }, [pathname, onClose]);
 
+  // Fetch Profile Image URL
   useEffect(() => {
-    const fetchProfileImage = async () => {
-      if (recipientData && recipientData?.image) {
-        if (recipientData.image.ipfs_cid) {
-          console.log(
-            `https://ipfs.near.social/ipfs/${recipientData.image.ipfs_cid}`,
-          );
-          setProfileImage(
-            <Image
-              src={`https://ipfs.near.social/ipfs/${recipientData.image.ipfs_cid}`}
-              alt="profile image"
-              width={16}
-              height={16}
-            />,
-          );
-        }
-        if (recipientData.image.nft) {
-          let imageUrl: string = "";
-          const wallet = new Wallet({
-            createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-            network: "mainnet",
-          });
-          await wallet.startUp();
-          await wallet
-            .viewMethod({
-              contractId: recipientData.image.nft.contractId,
-              method: "nft_token",
-              args: {
-                token_id: recipientData.image.nft.tokenId,
-              },
-            })
-            .then((res) => {
-              imageUrl = res.metadata.media;
-            });
-          setProfileImage(
-            <Image src={imageUrl} alt="profile image" width={16} height={16} />,
-          );
-        }
-      } else {
-        setProfileImage(<IconProfile />);
-      }
+    const fetchProfileImage = async (value: any, type: string) => {
+      const url = await getImageUrlFromSocialImage(value);
+      if (type === "donor") setDonorProfileImageURL(url);
+      if (type === "recipient") setRecipientProfileImageURL(url);
     };
-    fetchProfileImage();
-  }, [recipientData]);
+
+    if (donorData) {
+      fetchProfileImage(donorData?.image, "donor");
+    }
+    if (recipientData) {
+      fetchProfileImage(recipientData?.image, "recipient");
+    }
+  }, [donorData, recipientData]);
 
   return (
     <Modal
@@ -239,8 +209,17 @@ export default function DonateSuccessModal({
                 <div className="mx-auto flex gap-2 items-center">
                   <p className="text-sm font-semibold">Has been donated to</p>
                   <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
-                    <div className="rounded-full w-4 h-4 flex items-center justify-center">
-                      {profileImage}
+                    <div className="rounded-full overflow-hidden w-4 h-4 flex items-center justify-center">
+                      {recipientProfileImageURL ? (
+                        <Image
+                          src={recipientProfileImageURL}
+                          alt="profile image"
+                          width={16}
+                          height={16}
+                        />
+                      ) : (
+                        <IconProfile />
+                      )}
                     </div>
                     <Link
                       className="text-sm font-semibold"
@@ -317,15 +296,26 @@ export default function DonateSuccessModal({
               <div className="mx-auto flex gap-2 items-center">
                 <p className="text-sm font-semibold">From</p>
                 <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
-                  <div className="rounded-full w-4 h-4 flex items-center justify-center">
-                    {<IconProfile />}
+                  <div className="rounded-full overflow-hidden w-4 h-4 flex items-center justify-center">
+                    {donorProfileImageURL ? (
+                      <Image
+                        src={donorProfileImageURL}
+                        alt="profile image"
+                        width={16}
+                        height={16}
+                      />
+                    ) : (
+                      <IconProfile />
+                    )}
                   </div>
                   <Link
                     className="text-sm font-semibold w-max max-w-52 truncate"
                     href={`https://near.social/mob.near/widget/ProfilePage?accountId=${donateData?.donor_id}`}
                     target="_blank"
                   >
-                    {donateData?.donor_id}
+                    {donorData && donorData?.name
+                      ? donorData.name
+                      : donateData?.donor_id}
                   </Link>
                 </div>
               </div>
@@ -336,7 +326,7 @@ export default function DonateSuccessModal({
                 href={`https://nearblocks.io/txns/${searchParams.get("transactionHashes")}`}
                 target="_blank"
               >
-                <span className="text-[#7B7B7B]">Txn Hash</span>
+                <span className="text-[#7B7B7B]">Txn Hash : </span>
                 <span>{searchParams.get("transactionHashes")}</span>
               </Link>
 

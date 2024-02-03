@@ -11,6 +11,10 @@ const nextConfig = {
         hostname: "ipfs.near.social",
         pathname: "/ipfs/**",
       },
+      {
+        protocol: "https",
+        hostname: "byzantion.mypinata.cloud",
+      },
     ],
   },
 };

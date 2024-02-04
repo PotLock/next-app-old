@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import DonateSuccessModal from "@/components/Modal/DonateSuccessModal";
 import MultiDonateSuccessModal from "@/components/Modal/MultiDonateSuccessModal";
+import DonateAgainProvider from "@/contexts/DonateAgainContext";
 import WalletProvider from "@/contexts/WalletContext";
 import { NextUIProvider } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/react";
@@ -81,22 +82,24 @@ export default function LayoutProvides({ children }: ILayoutProvidesProps) {
   return (
     <NextUIProvider>
       <WalletProvider>
-        <CartContext.Provider value={{ cart, updateCart }}>
-          <DonateSuccessModal
-            isOpen={isOpenSingleDonate}
-            onClose={(path: string, donateAgain: boolean) => {
-              handleCloseModal(path, donateAgain);
-            }}
-          />
-          <MultiDonateSuccessModal
-            isOpen={isOpenMultiDonate}
-            onClose={(path: string) => {
-              handleCloseModal(path);
-            }}
-          />
-          <Header />
-          {children}
-        </CartContext.Provider>
+        <DonateAgainProvider>
+          <CartContext.Provider value={{ cart, updateCart }}>
+            <DonateSuccessModal
+              isOpen={isOpenSingleDonate}
+              onClose={(path: string, donateAgain: boolean) => {
+                handleCloseModal(path, donateAgain);
+              }}
+            />
+            <MultiDonateSuccessModal
+              isOpen={isOpenMultiDonate}
+              onClose={(path: string) => {
+                handleCloseModal(path);
+              }}
+            />
+            <Header />
+            {children}
+          </CartContext.Provider>
+        </DonateAgainProvider>
       </WalletProvider>
     </NextUIProvider>
   );

@@ -7,7 +7,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import IconNear from "@/assets/images/IconNear.png";
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import IconDollar from "@/assets/icons/IconDollars";
 import IconProfile from "@/assets/icons/IconProfile";
 import {
@@ -24,6 +24,7 @@ import { utils } from "near-api-js";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
 import Link from "next/link";
 import { getImageUrlFromSocialImage } from "@/utils";
+import { DonateAgainContext } from "@/contexts/DonateAgainContext";
 
 export default function DonateSuccessModal({
   isOpen,
@@ -45,6 +46,7 @@ export default function DonateSuccessModal({
   const [donorProfileImageURL, setDonorProfileImageURL] = useState<string>("");
   const [recipientProfileImageURL, setRecipientProfileImageURL] =
     useState<string>("");
+  const { donateAgain, setDonateAgain } = useContext(DonateAgainContext);
 
   // function
   const searchParams = useSearchParams();
@@ -157,6 +159,7 @@ export default function DonateSuccessModal({
   }, [donateData?.recipient_id, onClose]);
 
   const onAgainClick = useCallback(() => {
+    setDonateAgain(true);
     onClose(pathname, true);
   }, [pathname, onClose]);
 

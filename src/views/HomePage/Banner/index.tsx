@@ -1,14 +1,15 @@
 "use client";
 import DonateProjectModal from "@/components/Modal/DonateProjectModal";
+import { DonateAgainContext } from "@/contexts/DonateAgainContext";
 import { getProjectGeneral } from "@/services";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const Banner = () => {
   const route = useRouter();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
+  const { donateAgain, setDonateAgain } = useContext(DonateAgainContext);
   const [data, setData] = useState<any>();
 
   const getDataDetail = async () => {
@@ -37,6 +38,13 @@ const Banner = () => {
   useEffect(() => {
     getDataDetail();
   }, []);
+
+  useEffect(() => {
+    if (donateAgain) {
+      onOpen();
+      setDonateAgain(false);
+    }
+  });
 
   return (
     <div className="w-full  flex items-center justify-center my-[160px] ">

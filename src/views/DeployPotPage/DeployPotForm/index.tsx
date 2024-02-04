@@ -16,6 +16,7 @@ import { utils } from "near-api-js";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { validateNearAddress } from "@/utils";
+import { NetworkId } from "@near-wallet-selector/core";
 
 const DeployPotForm = () => {
   const route = useRouter();
@@ -143,7 +144,7 @@ const DeployPotForm = () => {
     const wallet = new Wallet({
       createAccessKeyFor:
         process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
     await wallet.startUp();
 
@@ -162,7 +163,7 @@ const DeployPotForm = () => {
     const wallet = new Wallet({
       createAccessKeyFor:
         process.env.NEXT_PUBLIC_DEFAULT_PROTOCOL_CONFIG_PROVIDER,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
 
     const startUpWallet = async () => {

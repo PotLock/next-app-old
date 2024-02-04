@@ -13,6 +13,10 @@ export const getProjectDetail = (id: any) => {
   return axiosInstance.get(`/project/detail/${id}`);
 };
 
+export const getSocialProfile = (id: string) => {
+  return axiosInstance.get(`/project/social-profile/${id}`);
+};
+
 export const searchProjectName = ({ page, limit, sort, title, tags }: any) => {
   return axiosInstance.get(
     `/project?status=Approved&${title ? "title=" + title : ""}&page=${

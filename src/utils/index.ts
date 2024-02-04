@@ -1,5 +1,6 @@
 import { Wallet } from "@/configs/nearWallet";
 import { IPFS_BASE_URL } from "@/constant";
+import { NetworkId } from "@near-wallet-selector/core";
 
 const NEAR_ACCOUNT_ID_REGEX =
   /^(?=.{2,64}$)(?!.*\.\.)(?!.*-$)(?!.*_$)[a-z\d._-]+$/i;
@@ -21,7 +22,7 @@ const getImageUrlFromSocialImage = async (image: any) => {
     let imageUrl: string = "";
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
     await wallet.startUp();
     await wallet

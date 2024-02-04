@@ -25,6 +25,7 @@ import useNearToUsdt from "@/hooks/useNearToUsdt";
 import Link from "next/link";
 import { getImageUrlFromSocialImage } from "@/utils";
 import { DonateAgainContext } from "@/contexts/DonateAgainContext";
+import { NetworkId } from "@near-wallet-selector/core";
 
 export default function DonateSuccessModal({
   isOpen,
@@ -46,7 +47,7 @@ export default function DonateSuccessModal({
   const [donorProfileImageURL, setDonorProfileImageURL] = useState<string>("");
   const [recipientProfileImageURL, setRecipientProfileImageURL] =
     useState<string>("");
-  const { donateAgain, setDonateAgain } = useContext(DonateAgainContext);
+  const { setDonateAgain } = useContext(DonateAgainContext);
 
   // function
   const searchParams = useSearchParams();
@@ -67,7 +68,7 @@ export default function DonateSuccessModal({
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "https://rpc.mainnet.near.org",
+      url: process.env.NEXT_PUBLIC_NEAR_RPC_URL,
       headers: {
         "Content-Type": "application/json",
       },
@@ -115,11 +116,11 @@ export default function DonateSuccessModal({
     const getRecipientData = async (account: string) => {
       const wallet = new Wallet({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-        network: "mainnet",
+        network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
       });
       await wallet.startUp();
       const state = await wallet.viewMethod({
-        contractId: "social.near",
+        contractId: process.env.NEXT_PUBLIC_SOCIAL_ID,
         method: "get",
         args: { keys: [`${account}/profile/**`] },
       });
@@ -131,11 +132,11 @@ export default function DonateSuccessModal({
     const getDonorData = async (account: string) => {
       const wallet = new Wallet({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-        network: "mainnet",
+        network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
       });
       await wallet.startUp();
       const state = await wallet.viewMethod({
-        contractId: "social.near",
+        contractId: process.env.NEXT_PUBLIC_SOCIAL_ID,
         method: "get",
         args: { keys: [`${account}/profile/**`] },
       });

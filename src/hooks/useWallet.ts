@@ -1,4 +1,5 @@
 import { Wallet } from "@/configs/nearWallet";
+import { NetworkId } from "@near-wallet-selector/core";
 import { useEffect, useState } from "react";
 
 export default function useWallet() {
@@ -7,7 +8,7 @@ export default function useWallet() {
   useEffect(() => {
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
 
     const getAccount = async () => {
@@ -23,7 +24,7 @@ export default function useWallet() {
   const handleSignIn = async () => {
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
     await wallet.startUp().then(() => {
       wallet.signIn();

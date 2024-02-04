@@ -15,6 +15,7 @@ import useNearToUsdt from "@/hooks/useNearToUsdt";
 import useWallet from "@/hooks/useWallet";
 import { getConfigCart } from "@/services";
 import { TCurrency } from "@/types";
+import { NetworkId } from "@near-wallet-selector/core";
 import {
   Button,
   Card,
@@ -162,7 +163,7 @@ export default function CartPage(props: ICartPageProps) {
     try {
       const wallet = new Wallet({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-        network: "mainnet",
+        network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
       });
       await wallet.startUp();
       await wallet.callMultiMethod([...data]);
@@ -360,7 +361,7 @@ export default function CartPage(props: ICartPageProps) {
                         >
                           near
                         </DropdownItem>
-                        <DropdownItem
+                        {/* <DropdownItem
                           className="uppercase"
                           key="usdc"
                           onClick={() =>
@@ -368,7 +369,7 @@ export default function CartPage(props: ICartPageProps) {
                           }
                         >
                           usdc
-                        </DropdownItem>
+                        </DropdownItem> */}
                       </DropdownMenu>
                     </Dropdown>
                     <input

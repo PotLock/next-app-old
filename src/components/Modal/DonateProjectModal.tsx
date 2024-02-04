@@ -24,6 +24,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { TCurrency } from "@/types";
 import useNearToUsdt from "@/hooks/useNearToUsdt";
 import { getApiProjectRandom } from "@/services";
+import { NetworkId } from "@near-wallet-selector/core";
 
 export default function DonateProjectModal({
   isOpen,
@@ -84,7 +85,6 @@ export default function DonateProjectModal({
   const getProjectRandom = useCallback(async () => {
     if (isRandom) {
       const res = await getApiProjectRandom();
-      console.log(res);
       return res?.data?.randomProject.project_id;
     } else {
       if (id) {
@@ -96,9 +96,7 @@ export default function DonateProjectModal({
   }, [isRandom]);
 
   const donate = useCallback(async () => {
-    console.log("donate run");
     const projectIdRandom = await getProjectRandom();
-    console.log("id: ", projectIdRandom);
     const setDepositOnCurrency = (currency: TCurrency, amount: number) => {
       switch (currency) {
         case "near":
@@ -111,7 +109,7 @@ export default function DonateProjectModal({
     if (donateAmount > 0) {
       const wallet = new Wallet({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-        network: "mainnet",
+        network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
       });
       const recipientId = projectIdRandom;
       await wallet.startUp();

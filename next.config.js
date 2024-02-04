@@ -15,8 +15,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "byzantion.mypinata.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "dev-api-potlock.orasci.site",
+      },
     ],
   },
 };
 
-module.exports = nextConfig;
+https: module.exports = nextConfig;

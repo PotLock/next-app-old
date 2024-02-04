@@ -65,7 +65,7 @@ export class Wallet {
   constructor(
     props: WalletProps = {
       createAccessKeyFor: "donate.potlock.near",
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     },
   ) {
     const { createAccessKeyFor, network } = props;

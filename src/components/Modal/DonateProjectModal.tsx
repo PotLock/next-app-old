@@ -1,4 +1,8 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useState,
+} from "react";
 import {
   Modal,
   ModalContent,
@@ -311,8 +315,6 @@ export default function DonateProjectModal({
             <ModalFooter>
               <Button
                 onPress={() => {
-                  // onClose();
-                  // onOpenFinal();
                   donate();
                 }}
                 color="danger"

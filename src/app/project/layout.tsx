@@ -18,13 +18,13 @@ export default function ProjectLayout({
     if (!!res) setProjectDetail(res?.data);
   };
 
- useEffect(() => {
+  useEffect(() => {
     getProjectDetailApi();
   }, []);
 
   return (
     <ProjectDetail.Provider value={{ data: projectDetail }}>
-          <ProjectPage>{children}</ProjectPage>
-      </ProjectDetail.Provider>
+      <ProjectPage>{children}</ProjectPage>
+    </ProjectDetail.Provider>
   );
 }

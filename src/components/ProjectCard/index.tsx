@@ -18,10 +18,10 @@ const ProjectCard = ({ data, onOpen }: { data: any; onOpen: () => void }) => {
 
   useEffect(() => {
     if (data.bannerImageUrl) {
-      setImageUrl(`https://nftstorage.link/ipfs/${data?.bannerImageUrl}`);
+      setImageUrl(data?.bannerImageProcessed);
     }
     if (data.profileImageUrl) {
-      setLogo(`https://nftstorage.link/ipfs/${data?.profileImageUrl}`);
+      setLogo(data?.profileImageProcessed);
     }
   }, [data]);
 

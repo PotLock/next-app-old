@@ -1,8 +1,4 @@
-import React, {
-  ChangeEvent,
-  useCallback,
-  useState,
-} from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -86,14 +82,23 @@ export default function DonateProjectModal({
   };
 
   const getProjectRandom = useCallback(async () => {
-    if (!!isRandom) {
+    if (isRandom) {
       const res = await getApiProjectRandom();
-      return res?.data?.project_id;
+      console.log(res);
+      return res?.data?.randomProject.project_id;
+    } else {
+      if (id) {
+        return id;
+      } else {
+        return localStorage.getItem("recipientId");
+      }
     }
   }, [isRandom]);
 
   const donate = useCallback(async () => {
+    console.log("donate run");
     const projectIdRandom = await getProjectRandom();
+    console.log("id: ", projectIdRandom);
     const setDepositOnCurrency = (currency: TCurrency, amount: number) => {
       switch (currency) {
         case "near":
@@ -108,9 +113,7 @@ export default function DonateProjectModal({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
         network: "mainnet",
       });
-      const recipientId = !!isRandom
-        ? projectIdRandom
-        : id ?? localStorage.getItem("recipientId");
+      const recipientId = projectIdRandom;
       await wallet.startUp();
       if (recipientId) {
         await wallet.callMethod({
@@ -211,13 +214,13 @@ export default function DonateProjectModal({
                     >
                       near
                     </DropdownItem>
-                    <DropdownItem
+                    {/* <DropdownItem
                       className="uppercase"
                       key="usdc"
                       onClick={() => selectCurrency("usdc")}
                     >
                       usdc
-                    </DropdownItem>
+                    </DropdownItem> */}
                   </DropdownMenu>
                 </Dropdown>
                 <input

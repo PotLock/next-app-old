@@ -10,10 +10,10 @@ export const MENUITEMS = [
     href: "/pots",
   },
 
-  {
-    title: "FEED",
-    href: "#",
-  },
+  // {
+  //   title: "FEED",
+  //   href: "#",
+  // },
 ];
 
 export const PROJECTS = [

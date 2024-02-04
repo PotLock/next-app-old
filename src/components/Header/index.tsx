@@ -28,6 +28,7 @@ import IconProfile from "@/assets/icons/IconProfile";
 import { IconArrowDown } from "@/assets/icons";
 import axios from "axios";
 import Image from "next/image";
+import { NetworkId } from "@near-wallet-selector/core";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -54,7 +55,7 @@ const Header = () => {
   const handleSignIn = async () => {
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
     await wallet.startUp().then(() => {
       wallet.signIn();
@@ -64,7 +65,7 @@ const Header = () => {
   const handleSignOut = async () => {
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
     await wallet.startUp().then(() => {
       wallet.signOut();
@@ -74,7 +75,7 @@ const Header = () => {
   useEffect(() => {
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
 
     const getAccount = async () => {

@@ -51,7 +51,6 @@ const AddFundingModal = (props: IAppFunding) => {
       amount: formData.amount,
     };
     setData((prevData: any) => [...prevData, newData]);
-    console.log("👋  data:", formData);
   };
 
   const handleEdit = (key: string, editedData: Inputs) => {

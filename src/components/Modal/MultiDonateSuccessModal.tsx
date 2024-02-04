@@ -18,6 +18,9 @@ import useNearToUsdt from "@/hooks/useNearToUsdt";
 import Link from "next/link";
 import DonatedProjectCard from "./DonatedProjectCard";
 import { getImageUrlFromSocialImage } from "@/utils";
+import { NetworkId } from "@near-wallet-selector/core";
+import axios from "axios";
+import { utils } from "near-api-js";
 
 export default function MultiDonateSuccessModal({
   isOpen,
@@ -36,15 +39,54 @@ export default function MultiDonateSuccessModal({
   const [donorId, setDonorId] = useState<string>("");
   const [donorProfileImageURL, setDonorProfileImageURL] = useState<string>("");
   const [totalAmountAllProject, setTotalAmountAllProject] = useState<number>(0);
+  const [txReceiptsList, setTxReceiptsList] = useState<any[]>([]);
 
   // function
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { priceUsdt } = useNearToUsdt();
 
-  const sumAmountAllProject = useCallback((amount: number) => {
-    setTotalAmountAllProject((prev) => prev + amount);
-  }, []);
+  useEffect(() => {
+    if (transactionHashesList.length > 0) {
+      try {
+        const requests = transactionHashesList.map((transactionHash: string) =>
+          axios.post(process.env.NEXT_PUBLIC_NEAR_RPC_URL as string, {
+            jsonrpc: "2.0",
+            id: "dontcare",
+            method: "tx",
+            params: [transactionHash, localStorage.getItem("accountId")],
+          }),
+        );
+
+        axios.all(requests).then((responses: any) => {
+          const txReceiptsData: any[] = [];
+          responses.forEach((response: any) => {
+            const jsonString =
+              response.data.result.receipts_outcome[0].outcome.logs[3];
+            const cleanedString = jsonString.replace("EVENT_JSON:", "");
+            const jsonObject = JSON.parse(cleanedString);
+            txReceiptsData.push({
+              ...jsonObject.data[0].donation,
+              transactionHash: response.data.result.transaction.hash,
+            });
+            setTxReceiptsList(txReceiptsData);
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [transactionHashesList]);
+
+  useEffect(() => {
+    let total: number = 0;
+    if (txReceiptsList) {
+      txReceiptsList.forEach((txReceipt: any) => {
+        total += Number(utils.format.formatNearAmount(txReceipt.total_amount));
+      });
+    }
+    setTotalAmountAllProject(total);
+  }, [txReceiptsList]);
 
   useEffect(() => {
     const list = searchParams.get("transactionHashes")?.split(",");
@@ -58,13 +100,13 @@ export default function MultiDonateSuccessModal({
   useEffect(() => {
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
 
     const getDonorData = async (account: string) => {
       await wallet.startUp();
       const state = await wallet.viewMethod({
-        contractId: "social.near",
+        contractId: process.env.NEXT_PUBLIC_SOCIAL_ID,
         method: "get",
         args: { keys: [`${account}/profile/**`] },
       });
@@ -111,10 +153,12 @@ export default function MultiDonateSuccessModal({
               <div className="flex flex-col gap-3">
                 <div className="mx-auto">
                   <div className="flex gap-2 items-center">
-                    <p className=" text-[32px]">{totalAmountAllProject}</p>
+                    <p className="text-[32px]">
+                      {totalAmountAllProject.toFixed(2)}
+                    </p>
                     <Image width={28} height={28} src={IconNear} alt="near" />
                   </div>
-                  <div className="text-sm text-[#7B7B7B]">
+                  <div className="text-sm text-center text-[#7B7B7B]">
                     {(totalAmountAllProject * priceUsdt).toFixed(2)} USDC
                   </div>
                 </div>
@@ -123,18 +167,10 @@ export default function MultiDonateSuccessModal({
                 </p>
               </div>
 
-              <div className="bg-[#FAFAFA] py-3 px-4 flex flex-col rounded-3xl gap-4">
-                {transactionHashesList?.map(
-                  (transactionHash: string, key: Key) => (
-                    <DonatedProjectCard
-                      key={key}
-                      transactionHash={transactionHash}
-                      sumAmountAllProject={(amount: number) =>
-                        sumAmountAllProject(amount)
-                      }
-                    />
-                  ),
-                )}
+              <div className="bg-[#FAFAFA] py-3 px-4 flex flex-col rounded-3xl gap-4 overflow-y-scroll max-h-96">
+                {txReceiptsList?.map((txReceipt: string, key: Key) => (
+                  <DonatedProjectCard key={key} data={txReceipt} />
+                ))}
               </div>
 
               {/*  */}

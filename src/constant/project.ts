@@ -1,19 +1,18 @@
-
 export const DATA_NAVBAR = (id: any) => [
   {
     id: 1,
     name: "Home",
     url: `/project/${id}`,
   },
-  {
-    id: 2,
-    name: "Social feed",
-    url: `/project/${id}/social-feed`,
-  },
+  // {
+  //   id: 2,
+  //   name: "Social feed",
+  //   url: `/project/${id}/social-feed`,
+  // },
   {
     id: 3,
     name: "Pots",
-    url:  `/project/${id}/pots`,
+    url: `/project/${id}/pots`,
   },
   {
     id: 4,
@@ -192,7 +191,6 @@ export const DATA_ITEMS_SEARCH_RAISED = [
   },
 ];
 
-
 export const DONORS_TABLE = [
   {
     id: 1,
@@ -303,35 +301,38 @@ export const DONORS_TABLE = [
     age: "22",
     avatar: "https://i.pravatar.cc/150?img=8",
     email: "brandon.stevens@example.com",
-  }
+  },
 ];
 
 export const DATA_POTS = [
   {
     id: 1,
     title: "GameNetWeb3 Grant: Forging the Future of Web3 Gaming",
-    descripton: "Welcome to the GameNetWeb3 Grant project, where we're paving the way for the future of gaming by weaving together Web3 technology and innovative networking. Our vision is to establish a dynamic network that fosters collaboration, connectivity, and growth among Web3 game developers, enthusiasts, and players.",
+    descripton:
+      "Welcome to the GameNetWeb3 Grant project, where we're paving the way for the future of gaming by weaving together Web3 technology and innovative networking. Our vision is to establish a dynamic network that fosters collaboration, connectivity, and growth among Web3 game developers, enthusiasts, and players.",
     valueNear: "1,347.69 NEAR",
     valueDola: "~$20,123.12",
     status: "Matched",
-    timeOut: "1 day left in round"
+    timeOut: "1 day left in round",
   },
   {
     id: 2,
     title: "Web3 Open Source Software",
-    descripton: "Grants for open-source projects primarily focused on developing on top of, or advancing the broader Ethereum and/or Web3 industry. Applications submitted by November 8th are guaranteed to be reviewed before the start of the round.",
+    descripton:
+      "Grants for open-source projects primarily focused on developing on top of, or advancing the broader Ethereum and/or Web3 industry. Applications submitted by November 8th are guaranteed to be reviewed before the start of the round.",
     valueNear: "200,000 NEAR",
     valueDola: "~$20,123.12",
     status: "Matched",
-    timeOut: "1 day left to apply"
+    timeOut: "1 day left to apply",
   },
   {
     id: 3,
     title: "GameNetWeb3 Grant: Forging the Future of Web3 Gaming",
-    descripton: "Welcome to the GameNetWeb3 Grant project, where we're paving the way for the future of gaming by weaving together Web3 technology and innovative networking. Our vision is to establish a dynamic network that fosters collaboration, connectivity, and growth among Web3 game developers, enthusiasts, and players.",
+    descripton:
+      "Welcome to the GameNetWeb3 Grant project, where we're paving the way for the future of gaming by weaving together Web3 technology and innovative networking. Our vision is to establish a dynamic network that fosters collaboration, connectivity, and growth among Web3 game developers, enthusiasts, and players.",
     valueNear: "1,347.69 NEAR",
     valueDola: "~$20,123.12",
     status: "Matched",
-    timeOut: "1 day left in round"
-  }
-]
+    timeOut: "1 day left in round",
+  },
+];

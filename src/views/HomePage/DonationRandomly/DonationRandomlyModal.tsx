@@ -91,7 +91,7 @@ const DonationRandomlyModel = ({
                       <DropdownItem className="" key="new">
                         NEAR
                       </DropdownItem>
-                      <DropdownItem key="copy">USDC</DropdownItem>
+                      {/* <DropdownItem key="copy">USDC</DropdownItem> */}
                     </DropdownMenu>
                   </Dropdown>
                   <div className="mx-4 text-[#7B7B7B]">0</div>

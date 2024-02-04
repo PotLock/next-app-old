@@ -27,6 +27,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import AddFundingModal from "../Modal/AddFundingModal";
 import { Transaction, Wallet } from "@/configs/nearWallet";
 import SmartContractForm from "./SmartContractForm";
+import { NetworkId } from "@near-wallet-selector/core";
 
 type Inputs = {
   projectName: string;
@@ -83,7 +84,7 @@ const CreateProjectTab = () => {
     const getAccountId = async () => {
       const wallet = new Wallet({
         createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-        network: "mainnet",
+        network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
       });
       await wallet.startUp();
       const accountId = wallet.accountId;
@@ -179,12 +180,12 @@ const CreateProjectTab = () => {
 
     const wallet = new Wallet({
       createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      network: "mainnet",
+      network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
     });
 
     await wallet.startUp();
     const socialTransaction: Transaction = {
-      receiverId: "social.near",
+      receiverId: process.env.NEXT_PUBLIC_SOCIAL_ID as string,
       functionCalls: [
         {
           methodName: "set",
@@ -225,7 +226,7 @@ const CreateProjectTab = () => {
       addProjectTransaction,
     ]);
     // await wallet.callMethod({
-    //   contractId: "social.near",
+    //   contractId: process.env.NEXT_PUBLIC_SOCIAL_ID,
     //   method: "set",
     //   args: socialArgs,
     //   deposit: utils.format

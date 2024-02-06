@@ -37,7 +37,6 @@ export default function MultiDonateSuccessModal({
   );
   const [donorData, setDonorData] = useState<any>(null);
   const [donorId, setDonorId] = useState<string>("");
-  const [donorProfileImageURL, setDonorProfileImageURL] = useState<string>("");
   const [totalAmountAllProject, setTotalAmountAllProject] = useState<number>(0);
   const [txReceiptsList, setTxReceiptsList] = useState<any[]>([]);
 
@@ -120,17 +119,6 @@ export default function MultiDonateSuccessModal({
     getDonorData(accountId as string);
   }, []);
 
-  useEffect(() => {
-    const fetchProfileImage = async (value: any) => {
-      const url = await getImageUrlFromSocialImage(value);
-      setDonorProfileImageURL(url);
-    };
-
-    if (donorData) {
-      fetchProfileImage(donorData?.image);
-    }
-  }, [donorData]);
-
   return (
     <Modal
       backdrop="blur"
@@ -188,16 +176,12 @@ export default function MultiDonateSuccessModal({
                 <p className="text-sm font-semibold">From</p>
                 <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
                   <div className="rounded-full overflow-hidden w-4 h-4 flex items-center justify-center">
-                    {donorProfileImageURL ? (
-                      <Image
-                        src={donorProfileImageURL}
-                        alt="profile image"
-                        width={16}
-                        height={16}
-                      />
-                    ) : (
-                      <IconProfile />
-                    )}
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_SOCIAL_IMAGE_URL}/${donorId}`}
+                      alt="profile image"
+                      width={16}
+                      height={16}
+                    />
                   </div>
                   <Link
                     className="text-sm font-semibold w-max max-w-52 truncate"
@@ -210,18 +194,29 @@ export default function MultiDonateSuccessModal({
               </div>
 
               {/*  */}
-              <div className="flex py-2 mx-auto gap-2 items-center">
-                <p className="text-sm font-semibold text-[#7B7B7B]">Share to</p>
-                <Link href={"https://twitter.com/home?lang=en"} target="_blank">
-                  <IconTwitter />
-                </Link>
-                <Link href={"https://web.telegram.org/"} target="_blank">
-                  <IconTelegram />
-                </Link>
-                <Link href={"https://en.linkedin.com/"} target="_blank">
-                  <IconLinkedIn />
-                </Link>
-              </div>
+              {donorData?.linktree && (
+                <div className="flex py-2 mx-auto gap-2 items-center">
+                  <p className="text-sm font-semibold text-[#7B7B7B]">
+                    Share to
+                  </p>
+                  {donorData.linktree.twitter && (
+                    <Link
+                      href={`https://twitter.com/${donorData.linktree.twitter}`}
+                      target="_blank"
+                    >
+                      <IconTwitter />
+                    </Link>
+                  )}
+                  {donorData.linktree.telegram && (
+                    <Link
+                      href={`https://web.telegram.org/${donorData.linktree.telegram}`}
+                      target="_blank"
+                    >
+                      <IconTelegram />
+                    </Link>
+                  )}
+                </div>
+              )}
             </ModalFooter>
           </>
         )}

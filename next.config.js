@@ -19,6 +19,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "dev-api-potlock.orasci.site",
       },
+      {
+        protocol: "https",
+        hostname: "i.near.social",
+      },
     ],
   },
 };

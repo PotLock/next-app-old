@@ -16,7 +16,6 @@ import {
   IconTelegram,
   IconTwitter,
 } from "@/assets/icons";
-import IconLinkedIn from "@/assets/icons/IconLinkedIn";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Wallet } from "@/configs/nearWallet";
 import axios from "axios";
@@ -26,6 +25,7 @@ import Link from "next/link";
 import { getImageUrlFromSocialImage } from "@/utils";
 import { DonateAgainContext } from "@/contexts/DonateAgainContext";
 import { NetworkId } from "@near-wallet-selector/core";
+import { getProjectDetail } from "@/services";
 
 export default function DonateSuccessModal({
   isOpen,
@@ -44,9 +44,6 @@ export default function DonateSuccessModal({
   const [protocolFee, setProtocolFee] = useState<number>(0);
   const [referrerFee, setReferrerFee] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
-  const [donorProfileImageURL, setDonorProfileImageURL] = useState<string>("");
-  const [recipientProfileImageURL, setRecipientProfileImageURL] =
-    useState<string>("");
   const { setDonateAgain } = useContext(DonateAgainContext);
 
   // function
@@ -113,20 +110,9 @@ export default function DonateSuccessModal({
   }, [searchParams]);
 
   useEffect(() => {
-    const getRecipientData = async (account: string) => {
-      const wallet = new Wallet({
-        createAccessKeyFor: process.env.NEXT_PUBLIC_CONTRACT_ID,
-        network: process.env.NEXT_PUBLIC_NETWORK as NetworkId,
-      });
-      await wallet.startUp();
-      const state = await wallet.viewMethod({
-        contractId: process.env.NEXT_PUBLIC_SOCIAL_ID,
-        method: "get",
-        args: { keys: [`${account}/profile/**`] },
-      });
-      if (Object.keys(state).length !== 0) {
-        setRecipientData(state[account].profile);
-      }
+    const getRecipientData = async (id: string) => {
+      const recipientData = await getProjectDetail(id);
+      setRecipientData(recipientData.data);
     };
 
     const getDonorData = async (account: string) => {
@@ -141,7 +127,7 @@ export default function DonateSuccessModal({
         args: { keys: [`${account}/profile/**`] },
       });
       if (Object.keys(state).length !== 0) {
-        setDonorData(state[account].profile);
+        setDonorData({ donorId: account, ...state[account].profile });
       }
     };
 
@@ -162,23 +148,7 @@ export default function DonateSuccessModal({
   const onAgainClick = useCallback(() => {
     setDonateAgain(true);
     onClose(pathname, true);
-  }, [pathname, onClose]);
-
-  // Fetch Profile Image URL
-  useEffect(() => {
-    const fetchProfileImage = async (value: any, type: string) => {
-      const url = await getImageUrlFromSocialImage(value);
-      if (type === "donor") setDonorProfileImageURL(url);
-      if (type === "recipient") setRecipientProfileImageURL(url);
-    };
-
-    if (donorData) {
-      fetchProfileImage(donorData?.image, "donor");
-    }
-    if (recipientData) {
-      fetchProfileImage(recipientData?.image, "recipient");
-    }
-  }, [donorData, recipientData]);
+  }, [pathname, onClose, setDonateAgain]);
 
   return (
     <Modal
@@ -201,10 +171,10 @@ export default function DonateSuccessModal({
                 {/*  */}
                 <div className="mx-auto">
                   <div className="flex gap-2 items-center">
-                    <p className=" text-[32px]">{totalAmount}</p>
+                    <p className="text-[32px]">{totalAmount}</p>
                     <Image width={28} height={28} src={IconNear} alt="near" />
                   </div>
-                  <div className="text-sm text-[#7B7B7B]">
+                  <div className="text-sm text-center text-[#7B7B7B]">
                     {(totalAmount * priceUsdt).toFixed(2)} USDC
                   </div>
                 </div>
@@ -214,9 +184,9 @@ export default function DonateSuccessModal({
                   <p className="text-sm font-semibold">Has been donated to</p>
                   <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
                     <div className="rounded-full overflow-hidden w-4 h-4 flex items-center justify-center">
-                      {recipientProfileImageURL ? (
+                      {recipientData ? (
                         <Image
-                          src={recipientProfileImageURL}
+                          src={recipientData.profileImageProcessed}
                           alt="profile image"
                           width={16}
                           height={16}
@@ -253,14 +223,16 @@ export default function DonateSuccessModal({
                         {donateData?.referrer_id ? "92.5%" : "95%"})
                       </p>
                       <div className="flex items-center gap-2">
-                        <p>{totalAmount - referrerFee - protocolFee}</p>
+                        <p>
+                          {(totalAmount - referrerFee - protocolFee).toFixed(2)}
+                        </p>
                         <Image width={20} height={20} src={IconNear} alt="" />
                       </div>
                     </div>
                     <div className="flex w-full items-center justify-between">
                       <p>Protocol fees (5%) </p>
                       <div className="flex items-center gap-2">
-                        <p>{protocolFee}</p>
+                        <p>{protocolFee.toFixed(2)}</p>
                         <Image width={20} height={20} src={IconNear} alt="" />
                       </div>
                     </div>
@@ -270,7 +242,7 @@ export default function DonateSuccessModal({
                         )
                       </p>
                       <div className="flex items-center gap-2">
-                        <p>{referrerFee}</p>
+                        <p>{referrerFee.toFixed(2)}</p>
                         <Image width={20} height={20} src={IconNear} alt="" />
                       </div>
                     </div>
@@ -301,16 +273,12 @@ export default function DonateSuccessModal({
                 <p className="text-sm font-semibold">From</p>
                 <div className="rounded-full items-center flex gap-1 bg-[#F0F0F0] py-[2px] px-[6px]">
                   <div className="rounded-full overflow-hidden w-4 h-4 flex items-center justify-center">
-                    {donorProfileImageURL ? (
-                      <Image
-                        src={donorProfileImageURL}
-                        alt="profile image"
-                        width={16}
-                        height={16}
-                      />
-                    ) : (
-                      <IconProfile />
-                    )}
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_SOCIAL_IMAGE_URL}/${donorData?.donorId}`}
+                      alt="profile image"
+                      width={16}
+                      height={16}
+                    />
                   </div>
                   <Link
                     className="text-sm font-semibold w-max max-w-52 truncate"
@@ -335,18 +303,29 @@ export default function DonateSuccessModal({
               </Link>
 
               {/*  */}
-              <div className="flex py-2 mx-auto gap-2 items-center">
-                <p className="text-sm font-semibold text-[#7B7B7B]">Share to</p>
-                <Link href={"https://twitter.com/home?lang=en"} target="_blank">
-                  <IconTwitter />
-                </Link>
-                <Link href={"https://web.telegram.org/"} target="_blank">
-                  <IconTelegram />
-                </Link>
-                <Link href={"https://en.linkedin.com/"} target="_blank">
-                  <IconLinkedIn />
-                </Link>
-              </div>
+              {donorData?.linktree && (
+                <div className="flex py-2 mx-auto gap-2 items-center">
+                  <p className="text-sm font-semibold text-[#7B7B7B]">
+                    Share to
+                  </p>
+                  {donorData.linktree.twitter && (
+                    <Link
+                      href={`https://twitter.com/${donorData.linktree.twitter}`}
+                      target="_blank"
+                    >
+                      <IconTwitter />
+                    </Link>
+                  )}
+                  {donorData.linktree.telegram && (
+                    <Link
+                      href={`https://web.telegram.org/${donorData.linktree.telegram}`}
+                      target="_blank"
+                    >
+                      <IconTelegram />
+                    </Link>
+                  )}
+                </div>
+              )}
             </ModalFooter>
           </>
         )}

@@ -26,7 +26,6 @@ import { Wallet } from "@/configs/nearWallet";
 import { CartContext } from "@/layout/LayoutProvides";
 import IconProfile from "@/assets/icons/IconProfile";
 import { IconArrowDown } from "@/assets/icons";
-import axios from "axios";
 import Image from "next/image";
 import { NetworkId } from "@near-wallet-selector/core";
 
@@ -36,21 +35,6 @@ const Header = () => {
   const currentPath = usePathname();
   const [account, setAccount] = useState<any>(null);
   const { cart } = useContext(CartContext);
-  const [profile, setProfile] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      await axios
-        .get(
-          `${process.env.NEXT_PUBLIC_API_URL}/project/social-profile/${account}`,
-        )
-        .then((res) => setProfile(res.data));
-    };
-
-    if (account) {
-      fetchProfile();
-    }
-  }, [account]);
 
   const handleSignIn = async () => {
     const wallet = new Wallet({
@@ -147,18 +131,18 @@ const Header = () => {
               <PopoverContent className="p-2 flex flex-col items-start gap-2 w-[230px] rounded-md border border-[#292929] shadow-lg">
                 <div className="flex gap-3 items-center justify-center cursor-pointer">
                   <div className="bg-[#F0F0F0] p-[10px] rounded-full">
-                    {profile && profile?.image && profile?.image?.ipfs_cid ? (
-                      <Image
-                        src={`https://ipfs.near.social/ipfs/${profile.image.ipfs_cid}`}
-                        alt="avatar"
-                        width={24}
-                        height={24}
-                      />
-                    ) : (
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_SOCIAL_IMAGE_URL}/{account}`}
+                      alt="avatar"
+                      width={24}
+                      height={24}
+                    />
+                    {/* ) */}
+                    {/* : (
                       <div className="w-6 h-6">
                         <IconProfile />
                       </div>
-                    )}
+                    )} */}
                   </div>
                   <div className="text-sm font-medium w-[215px] truncate">
                     {account}
